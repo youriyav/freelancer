@@ -79,7 +79,7 @@ class PrestataireController extends Controller
 
 
 
-        
+        yavoucko;
 
         return view('prestataire.index',['listeOfTechnologies'=>$listeOfTechnologies,'listeOfPlat'=>$listeOfPlat,"projets"=>$projets]);
     }
