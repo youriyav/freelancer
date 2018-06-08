@@ -1,0 +1,44 @@
+.tmp
+{
+    color: #0d0d0d;
+    font-weight: bold;
+}
+.projet
+{
+    min-height: 150px;border-radius: 5px;
+}
+.alert-info:hover
+{
+    cursor: auto;
+}
+.text-summury{
+    font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1.2em;
+    font-weight: normal;
+    line-height: 1.5;
+    color: #535556;
+    margin-bottom: 8px;
+}
+.competences
+{
+    margin-bottom: 8px;
+}
+.blink_me {
+    animation: blinker 4s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+.myActive
+{
+    background-color: #3c8dbc;
+}
+
+.myActive>a
+{
+  color: white;
+}
