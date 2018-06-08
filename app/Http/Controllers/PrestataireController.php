@@ -78,6 +78,9 @@ class PrestataireController extends Controller
         ]);
 
 
+
+        
+
         return view('prestataire.index',['listeOfTechnologies'=>$listeOfTechnologies,'listeOfPlat'=>$listeOfPlat,"projets"=>$projets]);
     }
     public function detailProjetUser($slug)
