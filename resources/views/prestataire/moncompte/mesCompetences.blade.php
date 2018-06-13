@@ -118,7 +118,6 @@
     <script src="{{url('/js/assets/bootstrap-switch.min.js')}}"></script>
     <script src="{{url('/js/assets/jquery.dualListBox-1.3.min.js')}}"></script>
     <script src="{{url('/js/assets/jquery.autosize.min.js')}}"></script>
-
     <script src="{{url('/js/assets/formsInit.js')}}"></script>
     <script>
         $(function () {
