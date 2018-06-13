@@ -4,7 +4,7 @@
 @endsection
 @section('blingbling')
     <li class="dropdown notifications-menu center-block btnAddAnnonce " >
-        <a href=""  class="">
+        <a href="{{route('nouveauProjet')}}"  class="">
             <span ><i class="fa fa-send fa-2x"></i> Déposer un projet</span>
         </a>
         <span class="blink_add hidden-sm"></span>

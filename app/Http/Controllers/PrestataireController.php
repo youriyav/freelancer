@@ -68,7 +68,6 @@ class PrestataireController extends Controller
     public  $act=0;
     public function index()
     {
-
         $listeOfTechnologies=Technologie::where('isDeleted',0)->get();
         $listeOfPlat=plateforme::where('isDeleted',0)->get();
         $projets=Projet::where('state',1)->get();
@@ -76,11 +75,6 @@ class PrestataireController extends Controller
             'listeOfTechnologies' => $listeOfTechnologies,
             'listeOfPlat' => $listeOfPlat
         ]);
-
-
-
-        yavoucko;
-
         return view('prestataire.index',['listeOfTechnologies'=>$listeOfTechnologies,'listeOfPlat'=>$listeOfPlat,"projets"=>$projets]);
     }
     public function detailProjetUser($slug)

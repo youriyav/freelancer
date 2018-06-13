@@ -9,7 +9,7 @@
 @endsection()
 @isset($message)
 @section('header_content')
-    <div style="border: solid 1px #3c8dbc;width: 350px;border-radius: 10px;margin: auto;margin-top: 30px;padding: 10px; " class="center-align">
+    <div style="border: solid 1px #3c8dbc;" class="col-md-4 col-lg-offset-3">
         <p class="text-center"><i style="color: #3c8dbc" class="fa fa-check-circle fa-3x"></i></p>
         <p class="text-center">
            {!! $message !!}

@@ -61,7 +61,7 @@
                 </div>
                 <div class="form-group">
                     <label>Quand votre projet doit-il démarrer ?</label>
-                    $listeTypeDemarrage
+
                     <select class="form-control" name="demarrage">
                         @foreach($listeTypeDemarrage as $type)
                             <option  value="{{$type->id}}">{{$type->libelle}}</option>
