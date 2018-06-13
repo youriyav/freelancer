@@ -112,17 +112,19 @@ Route::post('send-message', 'PrestataireController@sendMessageText')->name('send
 
 Route::get('test', 'PrestataireController@test')->name('test');
 Route::post('inscription', 'PrestataireController@inscription')->name('inscription');
-                #------------ profil ----------"
-Route::post('update-profil', 'PrestataireController@updateImageProfil')->name('updateImageProfil');
-Route::post('update-name', 'PrestataireController@updateName')->name('updateName');
-Route::post('update-prenom', 'PrestataireController@updatePrenom')->name('updatePrenom');
-Route::post('update-phone', 'PrestataireController@updatePhone')->name('updatePhone');
-Route::post('update-description', 'PrestataireController@updateDescription')->name('updateDescription');
-Route::post('update-password', 'PrestataireController@updatePassword')->name('updatePassword');
-Route::post('update-technologies', 'PrestataireController@updateTechnologies')->name('updateTechnologies');
-Route::post('update-langues', 'PrestataireController@updateLangues')->name('updateLangues');
-                #------------ end profil ----------"
+
+
 Route::middleware(['AuthUser'])->group(function () {
+    #------------ profil ----------"
+        Route::post('update-profil', 'PrestataireController@updateImageProfil')->name('updateImageProfil');
+        Route::post('update-name', 'PrestataireController@updateName')->name('updateName');
+        Route::post('update-prenom', 'PrestataireController@updatePrenom')->name('updatePrenom');
+        Route::post('update-phone', 'PrestataireController@updatePhone')->name('updatePhone');
+        Route::post('update-description', 'PrestataireController@updateDescription')->name('updateDescription');
+        Route::post('update-password', 'PrestataireController@updatePassword')->name('updatePassword');
+        Route::post('update-technologies', 'PrestataireController@updateTechnologies')->name('updateTechnologies');
+        Route::post('update-langues', 'PrestataireController@updateLangues')->name('updateLangues');
+    #------------ end profil ----------"
     Route::get('mon-compte', 'PrestataireController@monCompte')->name('monCompte');
     Route::get('mon-compte/abonnement', 'PrestataireController@abonnement')->name('abonnement');
     Route::post('abonnement/nouveau', 'PrestataireController@nouveauAbonnement')->name('nouveauAbonnement');
@@ -139,6 +141,11 @@ Route::middleware(['AuthUser'])->group(function () {
     Route::get('/loadMessage/{slug}/{id_prestataire}', 'PrestataireController@loadMessage')->name('loadMessage')->where('id_prestataire', '[0-9]+');
     Route::get('/loadMessage-last/{slug}/{id_prestataire}/{lastMessageId}', 'PrestataireController@loadLastMessage')->name('loadLastMessage')->where('id_prestataire', '[0-9]+');
     Route::post('chatt-message', 'PrestataireController@chattMessage')->name('chattMessage');
+    #---------------------------- competences --------------------------------------------------#
+    Route::post('new-url', 'PrestataireController@AddUrl')->name('AddUrl');
+    Route::post('edit-url', 'PrestataireController@editUrl')->name('editUrl');
+    Route::get('delete-url/{idSite}', 'PrestataireController@deleteUrl')->name('deleteUrl');
+    #----------------------------end  competences ----------------------------------------------#
 });
 
 

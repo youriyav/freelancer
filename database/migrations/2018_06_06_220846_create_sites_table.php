@@ -18,6 +18,8 @@ class CreateSitesTable extends Migration
             $table->timestamps();
             $table->string('libelle');
             $table->string('url');
+            $table->integer('prestataire_id')->nullable();
+            $table->integer('agence_id')->nullable();
         });
     }
 

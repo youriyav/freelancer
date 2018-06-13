@@ -20,4 +20,8 @@ class Prestataire extends Model
     {
         return $this->belongsTo('App\User');
     }
+    public function sites()
+    {
+        return $this->hasMany('App\Site');
+    }
 }

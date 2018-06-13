@@ -15,6 +15,7 @@ use App\Photo;
 use App\plateforme;
 use App\Prestataire;
 use App\Projet;
+use App\Site;
 use App\Slug;
 use App\Technologie;
 use App\User;
@@ -1188,13 +1189,39 @@ public function updateDescription(Input $input,Request $request)
         }
         abort(404, 'The resource you are looking for could not be found');
     }
-    function ajouterSite(Input $input,Request $request,$numero)
+    function AddUrl(Input $input,Request $request)
     {
-        $commande=Commande::where("numero",$numero)->first();
-        if($commande)
-        {
-            return view('prestataire.detailCommande',["commande"=>$commande]);
-        }
-        abort(404, 'The resource you are looking for could not be found');
+        $libelle=$input->get('libelle');
+        $url=$input->get('url');
+        $site=new Site();
+        $site->libelle=$libelle;
+        $site->url=$url;
+        $user = Auth::user();
+        $user->prestataire->sites()->save($site);
+        return $site->id;
     }
+    function editUrl(Input $input,Request $request)
+    {
+        $libelle=$input->get('libelle');
+        $url=$input->get('url');
+        $id=$input->get('id');
+        $site=Site::findOrFail($id);
+        $site->libelle=$libelle;
+        $site->url=$url;
+        $site->save();
+        //$user = Auth::user();
+        //$user->prestataire->sites()->save($site);
+        return "good";
+    }
+    function deleteUrl($idSite)
+    {
+        $site=Site::findOrFail($idSite);
+
+        $site->delete();
+        //$user = Auth::user();
+        //$user->prestataire->sites()->save($site);
+        return "good";
+    }
+
+
 }
