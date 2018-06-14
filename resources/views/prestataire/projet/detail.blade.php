@@ -1,7 +1,6 @@
-@extends('prestataire.layout2')
+@extends('prestataire.layout')
 @section("css")
     <link rel="stylesheet" href="{{url('/css/prestataire/index.css')}}">
-    <link rel="stylesheet" href="{{url('/css/prestataire/modal.css')}}" />
     <style>
         .btnAddAnnonce
         {
@@ -19,36 +18,7 @@
     </li>
 @endsection
 @section("mainEntete")
-    <!--div class="col-lg-12 col-md-12" style="min-height: 120px;background: rgba(0,142 ,173 ,1) url('/img/back-header.png') repeat-x center top;" >
-        <h5 class="text-center hidden-xs" style="color: white">Bienvenue sur le</h5>
-        <h2 class="text-center hidden-xs" style="color: white;margin-bottom: 0;margin-top: 0">site N°1 de mise en relation porteur de projet </h2>
-        <h2 class="text-center hidden-xs" style="color: white;margin-top: 0">et prestataire informatique</h2>
 
-        <h5 class="text-center hidden-sm hidden-md hidden-lg" style="color: white">Bienvenue sur le</h5>
-        <h4 class="text-center hidden-sm hidden-md hidden-lg" style="color: white;margin-bottom: 0;margin-top: 0">site N°1 de mise en relation porteur de projet </h4>
-        <h4 class="text-center hidden-sm hidden-md hidden-lg" style="color: white;margin-top: 0">et prestataire informatique</h4>
-
-
-        <p style="background-color: white;padding-top: 8px" class="text-center">
-            <img height="40" width="150" src="{{ url('/img/play-store.png') }}"  alt="Cinque Terre">
-            <img height="40" width="150" src="{{ url('/img/App-Store.jpg') }}"  alt="Cinque Terre">
-        </p>
-        <div  class="row hidden-xs" style="background-color: white">
-            <div class="col-lg-4 col-md-4 col-sm-4 text-center" >
-                <h4 class="tmp"> <i class="fa fa-trophy"></i> 1ère communauté freelance du Sénégal</h4>
-                <h5 style="font-style: italic">plus de 142 757 freelances inscrits</h5>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 text-center" >
-                <h4 class="tmp"> <i class="fa fa-clock-o"></i> Demandez un devis rapide pour votre projet</h4>
-                <h5 style="font-style: italic">plus de 142 757 freelances inscrits</h5>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 text-center" >
-                <h4 class="tmp"> <i class="fa fa-institution"></i> Nos Agences Digitales</h4>
-                <h5 style="font-style: italic">Devenez agence en créant votre propre vitrine en ligne et profitez de nombreux avantages:</h5>
-            </div>
-
-        </div>
-    </div-->
 @endsection
 
 @section("main_content")
@@ -78,16 +48,7 @@
                                 <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
 
                             </div>
-
-                            <!--div class="item">
-                                <img src="{{ url('/img/ban.png') }}" class="img-thumbnail" alt="Cinque Terre">
-                            </div>
-                            <div class="item">
-                                <img src="{{ url('/img/ban.png') }}" class="img-thumbnail" alt="Cinque Terre">
-                            </div-->
                         </div>
-
-                        <!--img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre"-->
                     </div>
                 </div>
             </div>
@@ -160,7 +121,6 @@
                                                 <p>
                                                     <i class="fa fa-clock-o"></i> {{getDureeFromCarbone($offre->created_at)}}
                                                     @if($offre->state==1)<i class="fa fa-check-circle" style="color: green"></i> le client a consulté cette offre @endif
-
                                                 </p>
                                                 <!--a class="btn btn-warning btn-circle text-uppercase" data-toggle="collapse" href="#replyOne"><span class="glyphicon glyphicon-comment"></span> 2 comments</a-->
                                             </div>
@@ -228,38 +188,54 @@
         </div>
 
     </div>
-    <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
-            <div class="loginmodal-container">
-                    <button type="button" class="close btnCancel" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                <h1>Nouvelle offre</h1><br>
-                <form method="post" action="" id="reinitForm">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <label for="libelle">à combien pouvez réaliser ce projet?</label>
-                    <div class="form-group input-group" style="margin-bottom: 0">
-                        <input type="number"  class="form-control" id="montant" name="montant">
-                        <span class="input-group-addon" style="background-color: #aab2bd;color: black;font-weight: bold">Fcfa</span>
-                    </div>
-                    <p style="color: red" id="errorMontant"></p>
-                    <label for="libelle">en combien de jours pouvez réaliser ce projet?</label>
-                    <div class="form-group input-group" style="margin-bottom: 0">
-                        <input type="number"  class="form-control" id="duree" name="duree">
-                        <span class="input-group-addon" style="background-color: #aab2bd;color: black;font-weight: bold">Jours</span>
-                    </div>
-                    <p style="color: red" id="errorDuree"></p>
-                    <label for="libelle">Faite une pétite description par rapport à votre offre</label>
-                    <div class="form-group" style="margin-bottom: 0">
-                        <textarea class="form-control" rows="5" name="description" id="description"></textarea>
-                    </div>
-                    <p style="color: red;margin-top: 0" id="errorDescription"></p>
 
 
-                    <button type="button" style="margin-bottom: 8px"  id="btnValidate" class="btn btn-lg btn-primary col-md-12 col-sm-12 col-xs-12"  data-loading-text="<i class='fa fa-spinner fa-spin '></i>">Valider</button>
-                    <button type="button"  id="btnCancel" class="btn btn-lg btn-danger col-md-12 col-sm-12 col-xs-12 btnCancel" data-dismiss="modal">Annuler</button>
-                </form>
+    <div class="modal fade" tabindex="-1" role="dialog" id="login-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #3c8dbc;color: white;font-size: 1.5em;font-weight: bold">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white">&times;</span>
+                    </button>
+                    <h5 class="modal-title">Nouvelle offre</h5>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="" id="reinitForm">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <label for="libelle">à combien pouvez réaliser ce projet?</label>
+                        <div class="form-group input-group" style="margin-bottom: 0">
+                            <input type="number"  class="form-control" id="montant" name="montant">
+                            <span class="input-group-addon" style="background-color: #aab2bd;color: black;font-weight: bold">Fcfa</span>
+                        </div>
+                        <p style="color: red" id="errorMontant"></p>
+                        <label for="libelle">en combien de jours pouvez réaliser ce projet?</label>
+                        <div class="form-group input-group" style="margin-bottom: 0">
+                            <input type="number"  class="form-control" id="duree" name="duree">
+                            <span class="input-group-addon" style="background-color: #aab2bd;color: black;font-weight: bold">Jours</span>
+                        </div>
+                        <p style="color: red" id="errorDuree"></p>
+                        <label for="libelle">Faite une pétite description par rapport à votre offre</label>
+                        <div class="form-group" style="margin-bottom: 0">
+                            <textarea class="form-control" rows="5" name="description" id="description"></textarea>
+                        </div>
+                        <p style="color: red;margin-top: 0" id="errorDescription"></p>
+                    </form>
+                    <div class="row">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button class="btn btn-primary btn-large" id="btnValidate"  data-loading-text="<i class='fa fa-spinner fa-spin '></i> ...">Valider</button>
+
+                </div>
             </div>
         </div>
     </div>
+
+
+
+
     <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
 
@@ -271,8 +247,6 @@
             </div>
         </div>
     </div>
-
-
     <div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
             <div class="loginmodal-container">

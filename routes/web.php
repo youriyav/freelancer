@@ -144,7 +144,10 @@ Route::middleware(['AuthUser'])->group(function () {
     #---------------------------- competences --------------------------------------------------#
     Route::post('new-url', 'PrestataireController@AddUrl')->name('AddUrl');
     Route::post('edit-url', 'PrestataireController@editUrl')->name('editUrl');
+    Route::post('importer-image-realisation', 'PrestataireController@importerImageRealisation')->name('importerImageRealisation');
+    Route::post('editer-image-realisation', 'PrestataireController@editerImageRealisation')->name('editerImageRealisation');
     Route::get('delete-url/{idSite}', 'PrestataireController@deleteUrl')->name('deleteUrl');
+    Route::get('delete-picture/{idPicture}', 'PrestataireController@deletePicture')->name('deletePicture');
     #----------------------------end  competences ----------------------------------------------#
 });
 

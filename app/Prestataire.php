@@ -24,4 +24,8 @@ class Prestataire extends Model
     {
         return $this->hasMany('App\Site');
     }
+    public function pictures()
+    {
+        return $this->hasMany('App\Photo','realisation_id');
+    }
 }

@@ -1,7 +1,6 @@
-@extends('prestataire.layout2')
+@extends('prestataire.layout')
 @section("css")
     <link rel="stylesheet" href="{{url('/css/prestataire/index.css')}}">
-    <link rel="stylesheet" href="{{url('/css/prestataire/modal.css')}}" />
 @endsection
 @section("mainEntete")
     <div class="col-lg-12 col-md-12" style="min-height: 100px;background-color:  #3c8dbc;" >
@@ -74,7 +73,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal fade" id="l" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
             <div class="loginmodal-container">
                 <h3 id="label" class="text-center" style="margin-bottom: 0">Réinitialier votre mot de passe</h3><br>
@@ -85,26 +84,50 @@
                         <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
                     </svg>
                 </div>
-                <form method="post" action="" id="reinitForm">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <label>Nombre de mois</label>
-                    <div class="form-group input-group">
-                        <select class="form-control" id="nbrMois" name="nbrMois">
-                            <option value="1" selected>1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="6">6</option>
-                            <option value="12">12</option>
-                        </select>
-                        <span class="input-group-addon" id="spanMois">Mois</span>
-                    </div>
-                    <p style="color: red" id="errorLogin"></p>
-                    <h3 class="text-center" id="total"></h3>
-                    <button style="margin-bottom: 10px" type="submit" id="btnAbn"  class="btn btn-lg btn-primary  col-md-12 col-sm-12 col-xs-12" data-loading-text="<i class='fa fa-spinner fa-spin '></i>">S'abonner</button>
-                    <button type="button"  id="btnCancel"       class="btn btn-lg btn-danger col-md-12 col-sm-12 col-xs-12" data-dismiss="modal">Annuler</button>
-                </form>
 
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="login-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #3c8dbc;color: white;font-size: 1.5em;font-weight: bold">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white">&times;</span>
+                    </button>
+                    <h5 class="modal-title">Suppression</h5>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="" id="reinitForm">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <label>Nombre de mois</label>
+                        <div class="form-group input-group">
+                            <select class="form-control" id="nbrMois" name="nbrMois">
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="6">6</option>
+                                <option value="12">12</option>
+                            </select>
+                            <span class="input-group-addon" id="spanMois">Mois</span>
+                        </div>
+                        <p style="color: red" id="errorLogin"></p>
+                        <h3 class="text-center" id="total"></h3>
+
+                    </form>
+                    <div class="row">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button class="btn btn-primary btn-large" id="btnAbn"  data-loading-text="<i class='fa fa-spinner fa-spin '></i> ...">S'abonner</button>
+
+                </div>
             </div>
         </div>
     </div>

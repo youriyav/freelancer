@@ -1213,15 +1213,71 @@ public function updateDescription(Input $input,Request $request)
         //$user->prestataire->sites()->save($site);
         return "good";
     }
+
+    function importerImageRealisation(Input $input,Request $request)
+    {
+        $image=$input->get('image');
+        $user=Auth::user();
+        $data = base64_decode(explode(',',$image)[1]);
+        $nameOfFile='picture_'.$user->prestataire->id.'_'.count($user->prestataire->pictures).'.png';
+        $folder='uploads/prest/'.$user->prestataire->id;
+        if (!file_exists($folder))
+        {
+           $this->createUserForlders($folder);
+        }
+        file_put_contents($folder.'/pictures/'.$nameOfFile,$data);
+        $fichier=Photo::create(['libelle'=>$nameOfFile,'url'=>$folder.'/pictures/'.$nameOfFile]);
+        $user->prestataire->pictures()->save($fichier);
+        return "{\"id\":$fichier->id,\"url\":\"$fichier->url\"}";
+    }
     function deleteUrl($idSite)
     {
         $site=Site::findOrFail($idSite);
-
         $site->delete();
         //$user = Auth::user();
         //$user->prestataire->sites()->save($site);
         return "good";
     }
+    function editerImageRealisation(Input $input,Request $request)
+    {
+        $image=$input->get('image');
+        $id=$input->get('idPicture');
+        $fichier=Photo::findOrFail($id);
+        $user=Auth::user();
+        $data = base64_decode(explode(',',$image)[1]);
+        $folder='uploads/prest/'.$user->prestataire->id;
+        if (!file_exists($folder))
+        {
+            $this->createUserForlders($folder);
+        }
+        if($fichier)
+        {
+            unlink($fichier->url);
+            $nameOfFile=$fichier->libelle;
+        }
+        else
+        {
+            $nameOfFile='picture_'.$user->prestataire->id.'_'.count($user->prestataire->pictures).'.png';
+        }
+        file_put_contents($folder.'/pictures/'.$nameOfFile,$data);
+        $fichier->save();
+        //$user->prestataire->pictures()->save($fichier);
+        return "{\"id\":$fichier->id,\"url\":\"$fichier->url\"}";
+    }
 
+    function deletePicture($idPicture)
+    {
+        $photo=Photo::findOrFail($idPicture);
+        unlink($photo->url);
+        $photo->delete();
+        return "good";
+    }
 
+    function createUserForlders($folder)
+    {
+        mkdir($folder, 0777, true);
+        mkdir($folder.'/pictures', 0777, true);
+        mkdir($folder.'/videos', 0777, true);
+        mkdir($folder.'/files', 0777, true);
+    }
 }

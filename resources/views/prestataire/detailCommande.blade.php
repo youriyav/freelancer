@@ -1,7 +1,6 @@
-@extends('prestataire.layout2')
+@extends('prestataire.layout')
 @section("css")
     <link rel="stylesheet" href="{{url('/css/prestataire/index.css')}}">
-    <link rel="stylesheet" href="{{url('/css/prestataire/modal.css')}}" />
 @endsection
 @section("mainEntete")
     <div class="container col-lg-12 col-md-12" style="min-height: 100px;background-color:  #3c8dbc;" >
@@ -11,7 +10,7 @@
 @endsection
 
 @section("main_content")
-    <section class="content row" style="background-color: white ">
+    <section class="content row" >
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-8">
                 <div class="panel panel-default">

@@ -105,14 +105,42 @@
                     </tbody>
                 </table>
 
-                <table class="table table-striped table-bordered table-hover">
-                    <tbody>
-                    <tr>
-                        <th colspan="2">Images (vous pouvez ajouter des images, des capture d'écran de vos ralisations)<button class="btn btn-sm btn-primary pull-right"><i class="fa fa-upload"></i> Importer</button></th>
-                    </tr>
-
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="2">Images (vous pouvez ajouter des images, des capture d'écran de vos ralisations)<button class="btn btn-sm btn-primary pull-right" id="btnImport"><i class="fa fa-upload"></i> Importer</button></th>
+                                        <input type="file" name="attachement" style="display: none;"  id="attachementImport">
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row" id="container-pictures">
+                                    @foreach(\Illuminate\Support\Facades\Auth::user()->prestataire->pictures as $picture)
+                                        <div class=" col-md-4" id="bloc_{{$picture->id}}">
+                                            <div class="thumbnail">
+                                                <img src="{{$picture->url}}" alt="...">
+                                                <div class="caption">
+                                                    <!--h3>Thumbnail label</h3-->
+                                                    <p>...</p>
+                                                    <p>
+                                                        <button id="btn_edit_{{$picture->id}}"  class="btn btn-edit-picture" style="background-color: transparent;margin-right: 0;padding: 0" role="button"><i class="fa fa-edit " title="editer"></i></button>
+                                                        <button id="btn_del_{{$picture->id}}"  class="btn btn btn-delete-picture" role="button" style="background-color: transparent;margin-left: 5px;padding: 0"><i style="color: red" class="fa fa-trash-o" title="supprimer"></i></button>
+                                                        <a href="{{$picture->url}}" target="_blank" class="btn btn-default pull-right" role="button">Voir</a>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -125,19 +153,43 @@
 @section('compte_js')
     @include('prestataire.moncompte.competence-js')
     <script>
-        function deleteSite($this) {
-            $("#modalDeleteUrl").modal('toggle');
-            idSite=$this.prop("id").split('_')[1];
-        }
-        function editSite($this) {
-            idSite=$this.prop("id").split('_')[1];
-            $libelle=$this.parent().parent().parent().find("td").first().text();
-            $url=$this.parent().parent().find("a").first().text();
-            $("#edit_url_libelle").val($libelle);
-            $("#edit_url_url").val($url);
-            $("#modalEditUrl").modal('toggle');
-        }
+
         var idSite;
+        var actionType;
+        var idPicture;
+        function editPicture($this)
+        {
+            actionType=2;
+            idPicture=$this.prop("id").split('_')[2];
+            $('#attachementImport').click();
+        }
+        function deletePicture($this)
+        {
+            idPicture=$this.prop("id").split('_')[2];
+            $("#modalDeletePicture").modal('toggle');
+        }
+        $("#btnDeletePicture").click(function (e) {
+            $this=$(this);
+            $this.button('loading');
+            $.ajax({
+                url :"/delete-picture/"+idPicture,
+                type : "GET",
+                success : function(json)
+                {
+                    console.log(json);
+                    $this.button('reset');
+                    $("#modalDeletePicture").modal('toggle');
+                    $("#bloc_"+idPicture).fadeOut();
+
+                },
+                error :function(xhr,errmsg,err)
+                {
+                    console.log(xhr);
+                    $this.button('reset');
+                    $("#modalDeletePicture").modal('toggle');
+                }
+            });
+        });
         $(function () {
             formInit();
             $(".chzn-select").change(function () {
@@ -145,6 +197,46 @@
                 $blocBtn=$this.parent().find(".blocBtn");
                 $blocBtn.removeClass('hidden');
             });
+            $uploadCrop = $('#upload-realisation').croppie({
+                viewport: {
+                    width: 250,
+                    height: 250
+                },
+                enforceBoundary: false,
+                enableExif: true
+            });
+
+            $(".btn-edit-picture").click(function () {
+                $this=$(this);
+                editPicture($this);
+            });
+            $(".btn-delete-picture").click(function () {
+                $this=$(this);
+                deletePicture($this);
+            });
+
+            $('#modalImportImage').on('shown.bs.modal', function(){
+                // alert('Shown pop');
+                $uploadCrop.croppie('bind', {
+                    url: rawImg
+                }).then(function(){
+                    console.log('jQuery bind complete');
+                });
+            });
+
+            $('#btnImport').click(function () {
+                actionType=1;
+                $('#attachementImport').click();
+            });
+            $('#attachementImport').on('change', function ()
+            {
+                imageId = $(this).data('id');
+                tempFilename = $(this).val();
+                //$('#cancelCropBtn').data('id', imageId);
+                readFile(this);
+            });
+
+
             $(".btn_delete_url").click(function (e) {
                 $this=$(this);
                 deleteSite($this);
@@ -199,22 +291,22 @@
                                 '<td>' +
                                 '<a href="'+murl+'" target="_blank" id="url_'+json+'">'+murl+'</a>' +
                                 ' <div class="pull-right">' +
-                                '<button id="editsite_'+json+'" class="btn btn-default btn_edit_url" href=""><i class="fa fa-edit"></i></button> ' +
-                                '<button id="delsite_'+json+'" class="btn btn-danger btn_delete_url" href=""><i class="fa fa-trash-o"></i></button>' +
+                                '<button id="editsite_'+json+'" class="btn btn-default btn_edit_url btn_new_edit_url" href=""><i class="fa fa-edit"></i></button> ' +
+                                '<button id="delsite_'+json+'" class="btn btn-danger btn_delete_url btn_new_delete_url" href=""><i class="fa fa-trash-o"></i></button>' +
                                 '</div></td>' +
                                 '</tr>';
                             $("#listSite").append(_html);
-                            $(".btn_delete_url").click(function (e) {
+                            $(".btn_new_delete_url").click(function (e) {
                                 $this=$(this);
                                 deleteSite($this);
                             });
-                            $(".btn_edit_url").click(function (e) {
+                            $(".btn_new_edit_url").click(function (e) {
                                 $this=$(this);
                                 editSite($this)
                             });
-
-
                             $("#modalNewUrl").modal('toggle');
+                            $.notify("Lien ajouté avec succès!", "info");
+
                         },
                         error :function(xhr,errmsg,err)
                         {
@@ -265,6 +357,7 @@
                             {
                                 $("#url_"+idSite).prop("href","http://"+$url);
                             }
+                            $.notify("modification éffectuée avec succès!", "info");
 
                         },
                         error :function(xhr,errmsg,err)
@@ -298,6 +391,7 @@
                         }
                 });
             });
+
             $(".btnCancelEdit").click(function (e) {
                 e.preventDefault();
                 mtype=$(this).attr('id');
@@ -328,9 +422,6 @@
                                 _html+='<option  value="'+listeLangue[j].id+'"  >'+listeLangue[j].libelle+'</option>'
                             }
                     }
-
-
-
                     _html+='</select>';
                     $form.html(_html);
                 }
@@ -374,7 +465,7 @@
 
             });
             $(".btnSaveEdit").click(function (e) {
-                e.preventDefault()
+                e.preventDefault();
                 mtype=$(this).attr('id');
                 var $this = $(this);
                 $select=$this.parent().parent().find('select');
@@ -419,15 +510,113 @@
                 });
             });
 
-        });
+            $('#btnImporter').on('click', function (ev) {
+                var $this = $(this);
+                $uploadCrop.croppie('result', {
+                    type: 'base64',
+                    format: 'jpeg',
+                    size: {width: 1000, height: 1000}
+                }).then(function (resp) {
+                    $('#item-img-output').attr('src', resp);
+                    $this.button('loading');
+                    if(actionType==1)
+                    {
+                        $.ajax({
+                            url :"/importer-image-realisation",
+                            data:{"image":resp,"_token":"<?php echo csrf_token() ?>"},
+                            type : "post",
+                            success : function(json)
+                            {
+                                console.log(json);
+                                _data=JSON.parse(json);
+                                dd(_data);
+                                $this.button('reset');
 
-        function startWith($haystack, $needles) {
-            if($needles !== '' && $needles.substr(0, $haystack.length )==$haystack)
-            {
-                return true;
+                                _html='<div class=" col-md-4" id="bloc_'+_data.id+'">' +
+                                    '<div class="thumbnail">' +
+                                    '<img src="/'+_data.url+'" alt="...">' +
+                                    '<div class="caption">' +
+                                    '<p>...</p>' +
+                                    '<p>' +
+                                    '<button id="btn_edit_'+_data.id+'"  class="btn btn-edit-picture" style="background-color: transparent;margin-right: 0;padding: 0" role="button"><i class="fa fa-edit " title="editer"></i></button>' +
+                                    '<button id="btn_del_'+_data.id+'"  class="btn btn-delete-picture" style="background-color: transparent;margin-right: 0;padding: 0" role="button"><i style="color:red" class="fa fa-trash-o" title="supprimer"></i></button>' +
+                                    '<a href="/'+_data.url+'" target="_blank" class="btn btn-default pull-right" role="button">Voir</a>' +
+                                    '</p>' +
+                                    '</div>' +
+                                    '</div>'+
+                                    '</div>';
+                                $("#container-pictures").append(_html);
+                                $("#btn_edit_"+_data.id).click(function () {
+                                    $this=$(this);
+                                    editPicture($this);
+                                });
+                                $("#btn_del_"+_data.id).click(function () {
+                                    $this=$(this);
+                                    deletePicture($this);
+                                });
+                                $("#bloc_"+_data.id).hide();
+                                $('#modalImportImage').modal('toggle');
+                                $("#bloc_"+_data.id).fadeIn(3000);
+                                $.notify("fichier envoyé avec succès!", "info");
+                            },
+                            error :function(xhr,errmsg,err)
+                            {
+                                console.log(xhr);
+                                $this.button('reset');
+                                $('#modalImportImage').modal('toggle');
+                            }
+                        });
+                    }
+                    else
+                    {
+                        $.ajax({
+                            url :"/editer-image-realisation/",
+                            data:{"idPicture":idPicture,"image":resp,"_token":"<?php echo csrf_token() ?>"},
+                            type : "post",
+                            success : function(json)
+                            {
+                                console.log(json);
+                                _data=JSON.parse(json);
+                                dd(_data);
+                                $this.button('reset');
+                                $('#modalImportImage').modal('toggle');
+                                $("#bloc_"+idPicture).fadeTo("slow",0.1,function () {
+                                    $("#bloc_"+idPicture).find('img').first().attr('src', resp);
+                                    $("#bloc_"+idPicture).fadeTo("slow",1);
+                                });
+                                $.notify("fichier modifié avec succès!", "info");
+                            },
+                            error :function(xhr,errmsg,err)
+                            {
+                                console.log(xhr);
+                                $this.button('reset');
+                                $('#modalImportImage').modal('toggle');
+                            }
+                        });
+
+                    }
+
+
+
+
+                });
+            });
+            function readFile(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('.upload-realisation').addClass('ready');
+                        $('#modalImportImage').modal('toggle');
+                        rawImg = e.target.result;
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+                else {
+                    swal("Sorry - you're browser doesn't support the FileReader API");
+                }
             }
-            return false;
-        }
+
+        });
     </script>
 
 @endsection
