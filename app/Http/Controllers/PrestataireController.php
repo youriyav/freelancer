@@ -80,13 +80,15 @@ class PrestataireController extends Controller
     }
     public function detailProjetUser($slug)
     {
+        $listeOfTechnologies=Technologie::where('isDeleted',0)->get();
+        $listeOfPlat=plateforme::where('isDeleted',0)->get();
         $currentSlug=Slug::where(['content'=>$slug,])->first();
         if($currentSlug)
         {
             $projet=$currentSlug->projet;
             $projet->nbrVue++;
             $projet->save();
-            return view('prestataire.projet.detail',['projet'=>$projet]);
+            return view('prestataire.projet.detail',['listeOfPlat'=>$listeOfPlat,'projet'=>$projet,"listeOfTechnologies"=>$listeOfTechnologies]);
         }
         else
         {

@@ -7,15 +7,7 @@
         <li><a href="{{route('mesCompetences')}}"><i class="fa fa-sitemap"></i> Mes compétences</a></li>
     </ul>
 @endsection()
-@isset($message)
-@section('header_content')
-    <div style="border: solid 1px #3c8dbc;" class="col-md-4 col-lg-offset-3">
-        <p class="text-center"><i style="color: #3c8dbc" class="fa fa-check-circle fa-3x"></i></p>
-        <p class="text-center">
-           {!! $message !!}
-        </p>
-    </div>
-@endsection()@endisset
+
 @section('main_content_compte')
     <div class="row" style="margin-bottom: 10px">
 
@@ -103,3 +95,15 @@
     </div>
 
 @endsection()
+
+@section('compte_js')
+    <script src="{{url('/js/assets/notify.min.js')}}"></script>
+    <script>
+        $(function () {
+            @isset($message)
+                $.notify("votre projet a été créé avec succès", "info");
+            @endisset
+
+        });
+    </script>
+@endsection

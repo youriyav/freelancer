@@ -7,13 +7,13 @@
         <a href="{{route('nouveauProjet')}}"  class="">
             <span ><i class="fa fa-send fa-2x"></i> Déposer un projet</span>
         </a>
-        <span class="blink_add hidden-sm"></span>
+        <span class="blink_add hidden-sm" style="margin-top: -7px"></span>
     </li>
 @endsection
 @section("mainEntete")
-    <div class="col-lg-12 col-md-12" style="background-color:  #3c8dbc;padding-top: 0" >
+    <div class="col-lg-12 col-md-12" style="background-color:  #3c8dbc;padding-top: 15px" >
         <h4 class="text-center hidden-xs" style="color: white">Bienvenue sur le</h4>
-        <h2 class="text-center hidden-xs" style="color: white;margin-bottom: 0;margin-top: 0">site N°1 de mise en relation porteur </h2>
+        <h2 class="text-center hidden-xs" style="color: white;margin-bottom: 0;margin-top: 10px;">site N°1 de mise en relation porteur </h2>
         <h2 class="text-center hidden-xs" style="color: white;margin-top: 0">de projet  et prestataire freeleance</h2>
 
         <h5 class="text-center hidden-sm hidden-md hidden-lg" style="color: white">Bienvenue sur le</h5>
@@ -53,7 +53,7 @@
             </div>
 
         </div>
-        <div  class="row hidden-xs" style="background-color: white;margin-bottom: 0;padding-bottom: 0">
+        <div  class="row hidden-xs" style="background-color: white;margin-bottom: 0;padding-bottom: 0;">
             <a href="">
                 <div class="col-lg-4 col-md-4 col-sm-4 text-center" style="border: solid 1px #3c8dbc" >
                     <h4 class="tmp"> <i class="fa fa-trophy"></i> 1ère communauté freelance du Sénégal</h4>
@@ -61,13 +61,13 @@
                 </div>
             </a>
             <a href="">
-                <div class="col-lg-4 col-md-4 col-sm-4 text-center" style="border: solid 1px #3c8dbc">
-                    <h4 class="tmp"> <i class="fa fa-clock-o"></i> Demandez un devis rapide pour votre projet</h4>
+                <div class="col-lg-4 col-md-4 col-sm-4 text-center" style="border: solid 1px #3c8dbc;">
+                    <h4 class="tmp"> <i class="fa fa-clock-o"></i> Demandez un devis pour votre projet</h4>
                     <h5 style="font-style: italic">plus de 142 757 freelances inscrits</h5>
                 </div>
             </a>
             <a href="">
-                <div class="col-lg-4 col-md-4 col-sm-4 text-center" style="border: solid 1px #3c8dbc">
+                <div class="col-lg-4 col-md-4 col-sm-4 text-center" style="border: solid 1px #3c8dbc;">
                     <h4 class="tmp"> <i class="fa fa-institution"></i> Nos Agences Digitales</h4>
                     <h5 style="font-style: italic">Devenez agence et profitez de nombreux avantages:</h5>
                 </div>
@@ -75,38 +75,15 @@
         </div>
 
     <div style="background-color: white;padding-top: 4px" class="row text-center">
-        <img height="40" width="150" src="{{ url('/img/play-store.png') }}"  alt="Cinque Terre">
-        <img height="40" width="150" src="{{ url('/img/App-Store.jpg') }}"  alt="Cinque Terre">
+        <a href=""><img height="40" width="150" src="{{ url('/img/play-store.png') }}"  alt="Cinque Terre"></a>
+        <a href=""><img height="40" width="150" src="{{ url('/img/App-Store.jpg') }}"  alt="Cinque Terre"></a>
     </div>
     </div>
 @endsection
 
 @section("main_content")
-    <!--div class="row" >
-            <div class="adbox-img " >
-                <div id="transition-timer-carousel" class="carousel slide transition-timer-carousel " data-ride="carousel" style="min-height: 100px;">
-                    <div class="carousel-inner center-block" style="">
-                        <div class="item active">
-                            <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
-                        </div>
-                        <div class="item">
-                            <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
-
-                        </div>
-
-                        <div class="item">
-                            <img src="{{ url('/img/ban.png') }}" class="img-thumbnail" alt="Cinque Terre">
-                        </div>
-                        <div class="item">
-                            <img src="{{ url('/img/ban.png') }}" class="img-thumbnail" alt="Cinque Terre">
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-    </div-->
     <div class="row" style="margin-bottom: 10px;background-color: white">
-        <div class="col-lg-3 col-md-3 hidden-sm hidden-xs" style="padding: 5px" >
+        <div class="col-lg-3 col-md-3 hidden-sm hidden-xs" style="padding: 5px;;margin-top: 15px" >
             <div class="panel panel-primary" >
                 <div class="panel-title panel-heading">
                     <h3 class=" text-center ">Catégorie des projets</h3>
@@ -140,9 +117,10 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-7 col-md-9" style="padding-bottom: 10px">
+        <div class="col-md-6" style="padding-bottom: 10px;margin-top: 15px">
 
             <div class="row" style="margin-top: 20px">
+                <h4>Derniers Projets en freelance</h4>
                 @foreach($projets as $projet )
                     <div class="panel projet col-lg-10 col-lg-offset-1" style="padding-bottom: 10px;padding-top: 10px;border: solid 1px #428bca">
                         <div class="panel-heading" style="margin: 0;padding: 0;padding-left: 5px">
@@ -172,14 +150,37 @@
 
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3 " style="">
             <p class="text-center">
                 <a href="" class="btn " style="background-color: orange;color: white;font-size: 1.3em">Vous êtes une agence,<br>creer votre vitrine</a>
             </p>
+
             <div  style="border: solid 1px cornflowerblue;margin-top: 40px;min-height: 150px">
-                <img src="{{url('img/sen-delivery.png')}}" height="150">
+                <p class="text-center " style="color: red;text-decoration: blink">votre publicité ici</p>
+                <p class="text-center"><img src="{{url('img/sen-delivery.png')}}" height="150"></p>
+                <p class="text-center " style="color: red;text-decoration: blink"><a href="" class="btn btn-primary"><i class=""></i> contacter nous pour vos pubs</a></p>
             </div>
         </div>
+    </div>
+    <div class="row" >
+        <div class="col-md-6 col-md-offset-3" style="max-height: 100px;margin-top: 10px">
+            <div class="adbox-img " >
+                <div id="transition-timer-carousel" class="carousel slide transition-timer-carousel " data-ride="carousel" style="min-height: 100px">
+                    <div class="carousel-inner" style="">
+                        <div class="item active">
+                            <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
+                        </div>
+                        <div class="item">
+                            <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
+                        </div>
+                        <div class="item">
+                            <img src="/img/ban.png" class="img-thumbnail" alt="Cinque Terre">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 @endsection
 @include('footer')

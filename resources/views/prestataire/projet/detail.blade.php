@@ -23,7 +23,7 @@
 
 @section("main_content")
     <div class="row" style="margin-bottom: 10px;">
-        <div class="col-lg-2 col-md-2 hidden-sm hidden-xs"style="padding: 5px" >
+        <div class="col-lg-3 col-md-3 hidden-sm hidden-xs" style="padding: 5px;;margin-top: 15px" >
             <div class="panel panel-primary" >
                 <div class="panel-title panel-heading">
                     <h3 class=" text-center ">Catégorie des projets</h3>
@@ -31,165 +31,163 @@
                 </div>
                 <div class="panel-body ">
                     <ul class="list-group collapse in">
+                        @foreach($listeOfPlat as $plat)
 
+                            <li class="list-group-item ">
+                                <a data-toggle="collapse" class="collapse in " href="#{{$plat->id}}">
+                                    <img class="" src="{{url($plat->logo->url) }}" width="25" height="25"> {{$plat->libelle}}
+                                    <b class="pull-right fa fa-chevron-circle-right"></b>
+                                </a>
+                                <ul id="{{$plat->id}}" class="collapse">
+                                    <li class=""  style="margin-left: 20px">
+                                        <span><a href="@if($plat->slug) {{route('indexPlateFormeUser',['slugPlateforme'=>$plat->slug->content])}} @endif ">Tous les projets</a></span>
+                                    </li>
+                                    @foreach($plat->technologies as $techno)
+                                        <li class=""  style="margin-left: 20px">
+                                            <span><a href="@if($techno->slug) {{route('indexTechnoUser',['slugPlateforme'=>$plat->slug->content,'slugTechno'=>$techno->slug->content])}} @endif ">{{$techno->libelle}}</a></span>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
             </div>
         </div>
-        <div class="col-md-10" style="padding-bottom: 10px;">
-            <div class="row">
-                <div class="adbox-img" >
-                    <div id="transition-timer-carousel" class="carousel slide transition-timer-carousel " data-ride="carousel" style="min-height: 100px">
-                        <div class="carousel-inner" style="">
-                            <div class="item active">
-                                <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
-                            </div>
-                            <div class="item">
-                                <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
+        <div class="col-md-6 col-sm-12 col-xs-12" style="padding-bottom: 10px;">
+            <div class="panel projet col-lg-12" style="padding-bottom: 10px;padding-top: 10px;border: solid 1px #428bca;margin-bottom: 0">
+                <div class="panel-heading" style="margin: 0;padding: 0;padding-left: 5px">
+                    <img src="/uploads/plateformes/plateforme_03.png" width="30" height="30"> <h4  class="text-primary inline">{{$projet->titre}}</h4>
+                </div>
+                <div class="panel-body" style="padding: 5px;color: black;">
+                    <div class="text-summury">{{$projet->description}}</div>
+                    <div class="competences">
+                        <h6>compétences requises</h6>
+                        <div style="margin-left: 15px">
+                            @foreach($projet->competences as $techno )
+                                <button class="alert alert-info" style="padding: 3px;margin: 0">{{$techno->libelle}} </button>
+                            @endforeach</div>
 
-                            </div>
-                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row" style="margin-top: 20px">
-                    <div class="col-lg-8">
-                        <div class="panel projet col-lg-12" style="padding-bottom: 10px;padding-top: 10px;border: solid 1px #428bca;margin-bottom: 0">
-                            <div class="panel-heading" style="margin: 0;padding: 0;padding-left: 5px">
-                                <img src="/uploads/plateformes/plateforme_03.png" width="30" height="30"> <h4  class="text-primary inline">{{$projet->titre}}</h4>
-                            </div>
-                            <div class="panel-body" style="padding: 5px;color: black;">
-                                <div class="text-summury">{{$projet->description}}</div>
-                                <div class="competences">
-                                    <h6>compétences requises</h6>
-                                    <div style="margin-left: 15px">
-                                        @foreach($projet->competences as $techno )
-                                            <button class="alert alert-info" style="padding: 3px;margin: 0">{{$techno->libelle}} </button>
-                                        @endforeach</div>
+                <div class="panel-footer" style="padding-bottom: 0">
+                    <p class="pull-right"><i class="fa fa-eye"></i> {{$projet->nbrVue}} vue(s)&nbsp;&nbsp;<i class="fa fa-hand-o-up"> </i>&nbsp;&nbsp;{{count($projet->offres)}} offre(s)&nbsp;</p>
+                    <table class="table table-bordered" >
+                        <tbody>
+                        <tr style="width: 30%;">
+                            <th>Publié le</th>
+                            <td>{{$projet->created_at}}</td>
+                        </tr>
+                        <tr style="width: 30%">
+                            <th>Budget indicatif</th>
+                            <td>{{$projet->budget->libelle}} Fcfa</td>
+                        </tr>
+                        <tr style="width: 30%">
+                            <th>Auteur</th>
+                            <td>{{$projet->user->name}}</td>
+                        </tr>
+                        <tr style="width: 30%">
+                            <th>Démarrage</th>
+                            <td>{{$projet->demarrage->libelle}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                @if(count($projet->offres)!=0)
+                    <p class="text-center"><button class="btn btn-primary" id="btnOffre"><i class="fa fa-hand-o-up"></i> Faire une Offre</button></p>
 
+                @else
+                    <p class="text-center"><button class="btn btn-primary" id="btnOffre"><i class="fa fa-hand-o-up"></i> soyez le 1er à faire une Offre</button></p>
+
+                @endif
+            </div>
+            <div class="row">
+                @if(count($projet->offres)!=0)
+                    <h3 class="text-primary">Les offres pour ce projet :</h3>
+                    @foreach($projet->offres as $offre)
+                        <div class="col-md-12" style="padding: 5px;margin: 0">
+                            <a class="pull-left" href="#">
+                                <img class="media-object img-circle" height="80" width="80"  src="@if($offre->user->profil)/ @else {{url('img/avatar.png')}} @endif" alt="profile">
+                            </a>
+                            <div class="media-body">
+                                <div class="well well-lg">
+                                    <h4 class="media-heading  reviews">@if($offre->user->id==Auth::user()->id)Moi @else{{$offre->user->login}} @endif</h4>
+
+                                    <p class="text-summury"  style="font-weight: bold;margin:0px">Montant: {{$offre->prix}} Fcfa </p>
+                                    <p class="text-summury"  style="font-weight: bold;margin:0px">Durée d'exécution: {{$offre->duree}} Jours </p>
+
+                                    <p class="media-comment ">
+                                        {{$offre->description}}
+                                    </p>
+                                    <p>
+                                        <i class="fa fa-clock-o"></i> {{getDureeFromCarbone($offre->created_at)}}
+                                        @if($offre->state==1)<i class="fa fa-check-circle" style="color: green"></i> le client a consulté cette offre @endif
+                                    </p>
+                                    <!--a class="btn btn-warning btn-circle text-uppercase" data-toggle="collapse" href="#replyOne"><span class="glyphicon glyphicon-comment"></span> 2 comments</a-->
                                 </div>
                             </div>
-                            <div class="panel-footer" style="padding-bottom: 0">
-                                <p class="pull-right"><i class="fa fa-eye"></i> {{$projet->nbrVue}} vue(s)&nbsp;&nbsp;<i class="fa fa-hand-o-up"> </i>&nbsp;&nbsp;{{count($projet->offres)}} offre(s)&nbsp;</p>
-                                <table class="table table-bordered" >
-                                    <tbody>
-                                    <tr style="width: 30%;">
-                                        <th>Publié le</th>
-                                        <td>{{$projet->created_at}}</td>
-                                    </tr>
-                                    <tr style="width: 30%">
-                                        <th>Budget indicatif</th>
-                                        <td>{{$projet->budget->libelle}} Fcfa</td>
-                                    </tr>
-                                    <tr style="width: 30%">
-                                        <th>Auteur</th>
-                                        <td>{{$projet->user->name}}</td>
-                                    </tr>
-                                    <tr style="width: 30%">
-                                        <th>Démarrage</th>
-                                        <td>{{$projet->demarrage->libelle}}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            @if(count($projet->offres)!=0)
-                                <p class="text-center"><button class="btn btn-primary" id="btnOffre"><i class="fa fa-hand-o-up"></i> Faire une Offre</button></p>
-
-                            @else
-                                <p class="text-center"><button class="btn btn-primary" id="btnOffre"><i class="fa fa-hand-o-up"></i> soyez le 1er à faire une Offre</button></p>
-
-                            @endif
                         </div>
-                        <div class="row">
-                            @if(count($projet->offres)!=0)
-                                <h3 class="text-primary">Les offres pour ce projet :</h3>
-                                @foreach($projet->offres as $offre)
-                                    <div class="col-md-12" style="padding: 5px;margin: 0">
-                                        <a class="pull-left" href="#">
-                                            <img class="media-object img-circle" height="80" width="80"  src="@if($offre->user->profil)/ @else {{url('img/avatar.png')}} @endif" alt="profile">
-                                        </a>
-                                        <div class="media-body">
-                                            <div class="well well-lg">
-                                                <h4 class="media-heading  reviews">@if($offre->user->id==Auth::user()->id)Moi @else{{$offre->user->login}} @endif</h4>
+                    @endforeach
+                @else
+                @endif
+            </div>
+        </div>
+        <div class="col-md-3 hidden-md" style="margin-top: 20px">
+            <div class="">
+            </div>
+            <div class="" style="margin-top: 50px;min-height: 150px;padding-right: 5px">
+                <div class="col-md-12" style="">
+                    <div class="card" style="border: solid 2px #428bca;">
 
-                                                <p class="text-summury"  style="font-weight: bold;margin:0px">Montant: {{$offre->prix}} Fcfa </p>
-                                                <p class="text-summury"  style="font-weight: bold;margin:0px">Durée d'exécution: {{$offre->duree}} Jours </p>
-
-                                                <p class="media-comment ">
-                                                    {{$offre->description}}
-                                                </p>
-                                                <p>
-                                                    <i class="fa fa-clock-o"></i> {{getDureeFromCarbone($offre->created_at)}}
-                                                    @if($offre->state==1)<i class="fa fa-check-circle" style="color: green"></i> le client a consulté cette offre @endif
-                                                </p>
-                                                <!--a class="btn btn-warning btn-circle text-uppercase" data-toggle="collapse" href="#replyOne"><span class="glyphicon glyphicon-comment"></span> 2 comments</a-->
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
+                        <!-- Card image -->
+                        <div class="view overlay">
+                            <p class="text-center">
+                                <img class="responsive-img" height="150" src="https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(67).jpg" width="300" alt="Card image cap">
+                            </p>
+                            @if(Auth::check())
+                                <h4 class="text-center text-primary" style="font-weight: bold">{{Auth::user()->login}}, devenez Membre Pro et contactez ce client !</h4>
                             @else
-
+                                <h4 class="text-center text-primary" style="font-weight: bold">Connectez-vous et contactez ce client !</h4>
                             @endif
-
+                            <a href="#!">
+                                <div class="mask rgba-white-slight"></div>
+                            </a>
                         </div>
-                    </div>
-                <div class="col-md-4" style="margin-top: 50px;min-height: 150px;padding-right: 5px">
-                    <div class="col-md-12" style="">
-                        <div class="card" style="border: solid 2px #428bca;">
 
-                            <!-- Card image -->
-                            <div class="view overlay">
-                               <p class="text-center">
-                                   <img class="responsive-img" height="150" src="https://mdbootstrap.com/img/Mockups/Lightbox/Thumbnail/img%20(67).jpg" width="300" alt="Card image cap">
-                               </p>
-                                @if(Auth::check())
-                                    <h4 class="text-center text-primary" style="font-weight: bold">{{Auth::user()->login}}, devenez Membre Pro et contactez ce client !</h4>
-                                @else
-                                    <h4 class="text-center text-primary" style="font-weight: bold">Connectez-vous et contactez ce client !</h4>
-                                @endif
-                                   <a href="#!">
-                                    <div class="mask rgba-white-slight"></div>
-                                </a>
-                            </div>
+                        <!-- Card content -->
+                        <div class="card-body">
+                            <!-- Title -->
 
-                            <!-- Card content -->
-                            <div class="card-body">
-                                <!-- Title -->
-
-                                <!-- Text -->
-                                @if(Auth::check())
+                            <!-- Text -->
+                            @if(Auth::check())
                                 <p class="text-center">
                                     <i class="fa fa-star fa-2x" style="color: green"></i>
                                     <i class="fa fa-star fa-2x" style="color: orange"></i>
                                     <i class="fa fa-star fa-2x" style="color: red"></i>
 
                                 </p>
-                                @endif
-                                <p class="card-text text-center" style="font-size: 1.3em;color: #3c3c3c">
-                                @if(Auth::check())
-                                    <p class="text-center"><a href="{{route('inscription')}}" class="btn btn-primary">Souscrire</a></p>
-                                @else
-                                    <p class="text-center" style="margin-bottom: 0"><a href="{{route('seConnecter')}}" class="btn btn-primary">Se connecter</a></p>
-                                    <p class="text-center" style="margin-bottom: 0;margin-top: 0">ou </p>
-                                    <p class="text-center"><a href="{{route('inscription')}}" class="btn btn-primary">S'inscrire</a></p>
+                            @endif
+                            <p class="card-text text-center" style="font-size: 1.3em;color: #3c3c3c">
+                            @if(Auth::check())
+                                <p class="text-center"><a href="{{route('inscription')}}" class="btn btn-primary">Souscrire</a></p>
+                            @else
+                                <p class="text-center" style="margin-bottom: 0"><a href="{{route('seConnecter')}}" class="btn btn-primary">Se connecter</a></p>
+                                <p class="text-center" style="margin-bottom: 0;margin-top: 0">ou </p>
+                                <p class="text-center"><a href="{{route('inscription')}}" class="btn btn-primary">S'inscrire</a></p>
                                 @endif
                                 </p>
                                 <!-- Button -->
-
-
-                            </div>
-
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
 
+
+
+
+
     </div>
-
-
     <div class="modal fade" tabindex="-1" role="dialog" id="login-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -232,10 +230,6 @@
             </div>
         </div>
     </div>
-
-
-
-
     <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
 

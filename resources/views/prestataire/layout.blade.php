@@ -13,7 +13,7 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="" >
-    <header class="main-header" style="min-height: 70px;padding-top: 0">
+    <header class="main-header" style="min-height: 70px;padding-top: 0;background-color:  #3c8dbc">
         <nav class="navbar navbar-static-top" >
 
             <a href="" class="brand" style="background-color: #3c8dbc">
