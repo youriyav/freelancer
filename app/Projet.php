@@ -13,6 +13,8 @@ class Projet extends Model
     #state 3=cloturer par l'utisateur
     #state 4=attribuer à un freelancer
     #state 5=projet terminer
+    #localisation 1= à distance
+    #localisation 2= sur place
     public function plateforme()
     {
         return $this->belongsTo('App\plateforme');

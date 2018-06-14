@@ -9,21 +9,55 @@
     </style>
 @endsection
 @section('blingbling')
-    <li class="dropdown notifications-menu center-block btnAddAnnonce " >
-        <a href=""  class="">
-            <span ><i class="fa fa-star"></i> Dévenez Membre Pro</span>
-        </a>
-
-
-    </li>
+    @if(\Illuminate\Support\Facades\Auth::check())
+        <li class="dropdown notifications-menu center-block btnAddAnnonce " >
+            <a href=""  class="">
+                <span ><i class="fa fa-star"></i> Dévenez Membre Pro</span>
+            </a>
+        </li>
+    @endif
 @endsection
 @section("mainEntete")
+    <div class="col-lg-12 col-md-12" style="background-color:  #3c8dbc;padding-top: 15px" >
+        <div class=" top-filter tfilter-box bottom" style="">
+            <div class="container ">
+                <form action="{{route('searchUser')}}" method="post"  class="text-center center-block">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <div   class="" >
+                        <div class="col-sm-4 form-group-lg col-sm-offset-2" style="padding: 5px">
+                            <select data-toggle="tmp" class="form-control" name="slugPlat" id="rubrique">
+                                <option value="0">Toutes les Plateformes</option>
+                                @foreach($listeOfPlat as $plat)
+                                    <option value="{{$plat->id}}">{{$plat->libelle}}</option>
+                                @endforeach
+
+                            </select>
+                        </div>
+                        <div class="col-sm-4 form-group-lg" style="padding: 5px">
+                            <select class="form-control" name="slugTechno" id="techno">
+                                <option value="0">Toutes les technologies</option>
+                                @foreach($listeOfTechnologies as $techno)
+                                    <option value="{{$techno->id}}">{{$techno->libelle}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-sm-12 col-lg-1 form-group-lg " style="">
+                            <button class="btn btn-primary " style="" ><i class="fa fa-search"></i> Rechercher</button>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
 
 @endsection
 
 @section("main_content")
     <div class="row" style="margin-bottom: 10px;">
-        <div class="col-lg-3 col-md-3 hidden-sm hidden-xs" style="padding: 5px;;margin-top: 15px" >
+        <div class="col-lg-3 col-md-3 hidden-sm hidden-xs" style="padding: 5px;margin-top: 15px" >
             <div class="panel panel-primary" >
                 <div class="panel-title panel-heading">
                     <h3 class=" text-center ">Catégorie des projets</h3>
@@ -54,7 +88,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-sm-12 col-xs-12" style="padding-bottom: 10px;">
+        <div class="col-md-6 col-sm-12 col-xs-12" style="padding-bottom: 10px;margin-top: 20px">
             <div class="panel projet col-lg-12" style="padding-bottom: 10px;padding-top: 10px;border: solid 1px #428bca;margin-bottom: 0">
                 <div class="panel-heading" style="margin: 0;padding: 0;padding-left: 5px">
                     <img src="/uploads/plateformes/plateforme_03.png" width="30" height="30"> <h4  class="text-primary inline">{{$projet->titre}}</h4>
@@ -74,7 +108,7 @@
                     <p class="pull-right"><i class="fa fa-eye"></i> {{$projet->nbrVue}} vue(s)&nbsp;&nbsp;<i class="fa fa-hand-o-up"> </i>&nbsp;&nbsp;{{count($projet->offres)}} offre(s)&nbsp;</p>
                     <table class="table table-bordered" >
                         <tbody>
-                        <tr style="width: 30%;">
+                        <tr style="width: 30%;margin: 0">
                             <th>Publié le</th>
                             <td>{{$projet->created_at}}</td>
                         </tr>
@@ -94,10 +128,10 @@
                     </table>
                 </div>
                 @if(count($projet->offres)!=0)
-                    <p class="text-center"><button class="btn btn-primary" id="btnOffre"><i class="fa fa-hand-o-up"></i> Faire une Offre</button></p>
+                    <p class="text-center"><button class="btn btn-primary" id="btnOffre"><i class="fa fa-hand-o-up"></i> Faire un dévis</button></p>
 
                 @else
-                    <p class="text-center"><button class="btn btn-primary" id="btnOffre"><i class="fa fa-hand-o-up"></i> soyez le 1er à faire une Offre</button></p>
+                    <p class="text-center"><button class="btn btn-primary" id="btnOffre"><i class="fa fa-hand-o-up"></i> soyez le 1er à faire un dévis</button></p>
 
                 @endif
             </div>
@@ -195,7 +229,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" style="color: white">&times;</span>
                     </button>
-                    <h5 class="modal-title">Nouvelle offre</h5>
+                    <h5 class="modal-title">Nouveau dévis</h5>
                 </div>
                 <div class="modal-body">
                     <form method="post" action="" id="reinitForm">
@@ -241,7 +275,34 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+
+
+
+            <div class="modal fade" tabindex="-1" role="dialog" id="alert-modal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #3c8dbc;color: white;font-size: 1.5em;font-weight: bold;max-height: 20px;min-height: 60px">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" style="color: white">&times;</span>
+                            </button>
+                            <h5 class="modal-title"> </h5>
+                        </div>
+                        <div class="modal-body">
+                            <p class="text-center text-summury" id="succes-message">Pour faire un dévis, vous devriez vous connecter</p>
+                            <p class="text-center"><a href="{{route('seConnecter')}}" class="btn btn-primary " >Se connecter</a></p>
+                            <p class="text-center"><a href="{{route('inscription')}}" class="btn btn-default">S'inscrire</a></p>
+                            <p class="text-center"><button  class="btn btn-danger btn-large" data-dismiss="modal">Annuler</button></p>
+                            <div class="row">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+    <div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
             <div class="loginmodal-container">
 
@@ -274,6 +335,32 @@
     <script src="{{url('/js/assets/formsInit.js')}}"></script>
     <script>
         $(function () {
+
+            $("#rubrique").change(function () {
+                _html="";
+                if($("#rubrique").val()==0)
+                {
+                    _html='<option value="0">Toutes les technologies</option>';
+                    for(i=0;i<listeOfTechnologies.length;i++)
+                    {
+                        _html+='<option value="'+listeOfTechnologies[i].id+'">'+listeOfTechnologies[i].libelle+'</option>';
+                    }
+
+                }
+                else
+                {
+                    _html+='<option value="">Tout</option>';
+                    for(i=0;i<listeOfTechnologies.length;i++)
+                    {
+                        if(listeOfTechnologies[i].plateforme_id==$("#rubrique").val())
+                        {
+                            _html+='<option value="'+listeOfTechnologies[i].id+'">'+listeOfTechnologies[i].libelle+'</option>';
+                        }
+
+                    }
+                }
+                $("#techno").html(_html);
+            });
             $("#btnValidate").click(function () {
                 var $this = $(this);
                 isError=0;

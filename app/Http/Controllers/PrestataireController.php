@@ -88,6 +88,10 @@ class PrestataireController extends Controller
             $projet=$currentSlug->projet;
             $projet->nbrVue++;
             $projet->save();
+            JavaScript::put([
+                'listeOfTechnologies' => $listeOfTechnologies,
+                'listeOfPlat' => $listeOfPlat
+            ]);
             return view('prestataire.projet.detail',['listeOfPlat'=>$listeOfPlat,'projet'=>$projet,"listeOfTechnologies"=>$listeOfTechnologies]);
         }
         else
@@ -782,6 +786,7 @@ public function updateDescription(Input $input,Request $request)
             $descrip=$input->get('descrip');
             $budget=$input->get('budget');
             $demarrage=$input->get('demarrage');
+            $localisation=$input->get('localisation');
             $budget=Budget::findOrFail($budget);
             $demarrage=DemarrageProjet::findOrFail($demarrage);
             $projet=new Projet();
@@ -789,6 +794,7 @@ public function updateDescription(Input $input,Request $request)
             $projet->nbrVue=0;
             $projet->description=$descrip;
             $projet->titre=$titre;
+            $projet->localisation=$localisation;
             $projet->save();
             $projet->budget()->associate($budget);
             $projet->demarrage()->associate($demarrage);

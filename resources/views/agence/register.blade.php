@@ -1,12 +1,12 @@
 @extends('prestataire.layout2')
 @section("css")
-    <link rel="stylesheet" href="{{url('/css/prestataire/index.css')}}">
+    <link rel="stylesheet" href="{{url('/css/agence/register.css')}}">
 @endsection
 @section("main_content")
     <div class="row" >
         <div class="col-md-8 col-md-offset-2" >
             <div class="adbox-img center-block" >
-                <div id="transition-timer-carousel" class="carousel slide transition-timer-carousel " data-ride="carousel" style="height: 100px">
+                <div id="transition-timer-carousel" class="carousel slide transition-timer-carousel " data-ride="carousel" style="max-height: 100px">
                     <div class="carousel-inner" style="">
                         <div class="item active">
                             <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
@@ -32,11 +32,11 @@
     </div>
     <section class="content row" style="background-color: #fafafa">
         <div class="row" style="margin-bottom: 10px;">
-            <h3 class="text-center text-primary" style="text-decoration: underline;margin-bottom: 20px">Créer un compte gratuitement</h3>
+            <h3 class="text-center text-primary" style="text-decoration: underline;margin-bottom: 20px">Créer votre vitrine</h3>
             <div class="col-lg-3 col-md-3 hidden-sm hidden-xs"style="padding: 5px" >
                 <div class="panel panel-primary" >
                     <div class="panel-title panel-heading">
-                        <h3 class=" text-center ">Pourquoi s'inscrire?</h3>
+                        <h3 class=" text-center ">Pourquoi créer un compte Agence?</h3>
                     </div>
                     <div class="panel-body ">
                         <ul class="list-group">
@@ -52,17 +52,37 @@
                 <div style="background-color: white" class="row">
                     <form id="registerForm" role="form" class="col-lg-8 col-lg-offset-2 form-horizontal" method="post" action="{{route('inscription')}}" >
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <fieldset class="scheduler-border">
+                            <legend class="scheduler-border">Agence</legend>
+                            <div class="form-group">
+                                <label>Raison social *</label>
+                                <input required id="raisonSocial" type="text" class="form-control"  value="@isset($raisonSocial){{$raisonSocial}} @endisset"  placeholder="entrer le nom de votre entreprise" name="raisonSocial" >
+                                <p style="color: red" id="errorRs">@isset($tabError){{$tabError[0]}}@endisset</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Email *</label>
+                                <input required id="email" type="text" class="form-control"  value="@isset($email){{$email}} @endisset"  placeholder="entrer l'email de votre entreprise" name="email" >
+                                <p style="color: red" id="errorEmail">@isset($tabError){{$tabError[1]}}@endisset</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Numero *</label>
+                                <input required id="numero" type="text" class="form-control"  value="@isset($numero){{$numero}} @endisset"  placeholder="entrer le numero de votre entreprise" name="numero" >
+                                <p style="color: red" id="errorNumero">@isset($tabError){{$tabError[1]}}@endisset</p>
+                            </div>
 
-                        <div class="form-group">
-                            <label>Nom</label>
-                            <input required id="nom" type="text" class="form-control"  value="@isset($nom){{$nom}} @endisset"  placeholder="entrer votre nom" name="nom" >
-                            <p style="color: red" id="errorNom">@isset($tabError){{$tabError[0]}}@endisset</p>
-                        </div>
-                        <div class="form-group">
-                            <label>Prenom</label>
-                            <input required id="prenom" type="text" class="form-control"  value="@isset($nom){{$nom}} @endisset"  placeholder="entrer votre prenom" name="prenom" >
-                            <p style="color: red" id="errorPrenom">@isset($tabError){{$tabError[6]}}@endisset</p>
-                        </div>
+                            <div class="form-group">
+                                <label>Boite postale (facultatif)</label>
+                                <input required id="prenom" type="text" class="form-control"  value="@isset($nom){{$nom}} @endisset"  placeholder="entrer votre prenom" name="prenom" >
+                                <p style="color: red" id="errorPrenom">@isset($tabError){{$tabError[6]}}@endisset</p>
+                            </div>
+
+                        </fieldset>
+
+
+
+
+
+
                         <div class="form-group">
                             <label>Email</label>
                             <input required id="email" type="text" class="form-control " value="@isset($nom){{$email}} @endisset" placeholder="entrer votre email" name="email" >

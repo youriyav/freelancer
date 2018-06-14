@@ -30,7 +30,9 @@ class UpdateTablePhoto extends Migration
     public function down()
     {
         Schema::table('photos', function (Blueprint $table) {
-            //
+            $table->dropColumn('plateforme_id');
+            $table->dropColumn('realisation_id');
+            $table->dropColumn('agence_id');
         });
     }
 }

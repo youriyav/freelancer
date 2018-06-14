@@ -150,9 +150,14 @@ Route::middleware(['AuthUser'])->group(function () {
     Route::get('delete-picture/{idPicture}', 'PrestataireController@deletePicture')->name('deletePicture');
     #----------------------------end  competences ----------------------------------------------#
 });
-
-
 #-------------------------------------- END ROUTES PRESTATAIRES ---------------------------------------------
+
+#-------------------------------------- ROUTES AGENCES -------------------------------------------------
+Route::get('nouvelle-agence', 'AgenceController@nouvelleAgence')->name('nouvelleAgence');
+Route::middleware(['AuthUser'])->group(function () {
+
+});
+#-------------------------------------- END ROUTES AGENCES ---------------------------------------------
 
 
 

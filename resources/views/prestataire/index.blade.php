@@ -152,7 +152,7 @@
         </div>
         <div class="col-md-3 " style="">
             <p class="text-center">
-                <a href="" class="btn " style="background-color: orange;color: white;font-size: 1.3em">Vous êtes une agence,<br>creer votre vitrine</a>
+                <a href="{{route("nouvelleAgence")}}" class="btn " style="background-color: orange;color: white;font-size: 1.3em">Vous êtes une agence,<br>creer votre vitrine</a>
             </p>
 
             <div  style="border: solid 1px cornflowerblue;margin-top: 40px;min-height: 150px">
@@ -222,6 +222,7 @@
                 }
                 else
                 {
+                    _html+='<option value="">Tout</option>';
                     for(i=0;i<listeOfTechnologies.length;i++)
                     {
                         if(listeOfTechnologies[i].plateforme_id==$("#rubrique").val())
