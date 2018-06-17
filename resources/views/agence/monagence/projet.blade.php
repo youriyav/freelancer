@@ -1,10 +1,10 @@
-@extends('prestataire.moncompte.layout')
+@extends('agence.monagence.layout')
 @section('menu')
     <ul class="nav nav-list" >
 
-        <li ><a href="{{route('monCompte')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-        <li class="myActive "><a href="{{route('mesProjets')}}"><i class="fa fa-briefcase"></i> Mes Projets</a></li>
-        <li><a href="{{route('mesCompetences')}}"><i class="fa fa-sitemap"></i> Mes compétences</a></li>
+        <li ><a href="{{route('indexAgence')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li class="myActive "><a href="{{route('nosProjets')}}"><i class="fa fa-briefcase"></i> Mes Projets</a></li>
+        <li><a href="{{route('nosServices')}}"><i class="fa fa-sitemap"></i> Mes compétences</a></li>
     </ul>
 @endsection()
 @isset($message)

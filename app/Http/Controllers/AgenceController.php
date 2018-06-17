@@ -6,6 +6,7 @@ use App\Agence;
 use App\Langue;
 use App\Message;
 use App\Notification;
+use App\Photo;
 use App\plateforme;
 use App\Prestataire;
 use App\Slug;
@@ -293,6 +294,41 @@ class AgenceController extends Controller
         }
         return $oldPass;
     }
+    public function updateGpsCoordonne(Input $input,Request $request)
+    {
+        $lng=trim($input->get('lng'));
+        $lat=trim($input->get('lat'));
+        $agence=Auth::user()->agence;
+        $agence->longitude=$lng;
+        $agence->latitude=$lat;
+        $agence->save();
+        return $lat;
+    }
+    public function updateLogo(Input $input,Request $request)
+    {
+        $agence=Auth::user()->agence;
+        $profil=$input->get('profil');
+        $user=Auth::user();
+        $data = base64_decode(explode(',',$profil)[1]);
+        $nameOfFile='logo_'.$agence->slug->content.'.png';
+        $folder='uploads/ag/'.$agence->slug->content;
+        if (!file_exists($folder)) {
+            mkdir($folder, 0777, true);
+            mkdir($folder.'/pictures', 0777, true);
+            mkdir($folder.'/videos', 0777, true);
+            mkdir($folder.'/files', 0777, true);
+        }
+        file_put_contents($folder.'/pictures/'.$nameOfFile,$data);
+        $fichier=Photo::create(['libelle'=>$nameOfFile,'url'=>$folder.'/pictures/'.$nameOfFile]);
+
+        if($agence->logo)
+        {
+            $agence->logo()->delete();
+            $agence->save();
+        }
+        $agence->logo()->save($fichier);
+        return $profil;
+    }
     public function nosServices()
     {
         $listeLangue=Langue::where('isDeleted',0)->get();
@@ -308,6 +344,21 @@ class AgenceController extends Controller
             'listeOfTechnologies' => $listeOfTechnologies
         ]);
         return view('agence.monagence.nosServices',["listeLangue"=>$listeLangue,"listeOfPlat"=>$listeOfPlat]);
+    }
+    public function nosProjets(Input $input,Request $request)
+    {
+        $new=$input->get('new');
+        $projets=Auth::user()->projets;
+        $listeOfPlat=plateforme::where('isDeleted',0)->get();
+        if($new)
+        {
+
+            //dd($listeOfPlat->last()->created_at);
+            //dd(Carbon::now()->diffInSeconds($listeOfPlat->last()->created_at)); // 0);
+
+            return view('agence.monagence.projet',["listeOfPlat"=>$listeOfPlat,"message"=>"Félicitations! <br> votre projet a été créée avec succès! vous serez notifier à chaque fois qu'un freelance vous fait un dévis","projets"=>$projets]);
+        }
+        return view('agence.monagence.projet',["listeOfPlat"=>$listeOfPlat,"projets"=>$projets]);
     }
 
 

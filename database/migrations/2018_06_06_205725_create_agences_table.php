@@ -23,8 +23,8 @@ class CreateAgencesTable extends Migration
             $table->string('numero')->nullable();
             $table->string('pays')->nullable();
             $table->longText('description')->nullable();
-            $table->float('longitude')->nullable();
-            $table->float('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string('latitude')->nullable();
         });
     }
 

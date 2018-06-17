@@ -20,12 +20,12 @@
                         <div class="row" style="margin-top: 20px;">
                             <div class="demo"></div>
                             <div class="col-md-3 col-lg-3" align="" style="margin-left: 5px;">
-                                @if(Auth::user()->profil)
-                                    <p class="text-center"><img alt="User Pic" id="profilImg" src="@if(Auth::user()->profil){{ url(Auth::user()->profil->url) }}@endif" height="100" width="100" class="img-circle" style="border: solid 1px #0088cc"></p>
+                                @if(Auth::user()->agence->logo)
+                                    <p class="text-center"><img alt="User Pic" id="profilImg" src="{{ url(Auth::user()->agence->logo->url) }}" height="100" width="100" class="img-circle" style="border: solid 1px #0088cc"></p>
                                 @else
                                     <p class="text-center"><img alt="User Pic" id="profilImg" src="{{url('img/avatar.png')}}" height="100" width="100" class="img-circle" style="border: solid 1px #0088cc"></p>
                                 @endif
-                                <p class="text-center"><button class="btn btn-primary" id="btnChangeProfil"><i class="fa fa-camera"></i> Modifier</button></p>
+                                <p class="text-center"><button class="btn btn-primary" id="btnChangeProfil" title="modifier"><i class="fa fa-camera"></i> Modifier</button></p>
                                 <input type="file" name="attachement" style="display: none;"  id="attachement">
                             </div>
                             <div class="col-md-3 col-lg-8" >
@@ -39,7 +39,7 @@
                                 <div class="row" >
                                     <div class="col-md-10 col-md-offset-1" style="max-height: 100px;">
                                         <div class="adbox-img " >
-                                            <div id="transition-timer-carousel" class="carousel slide transition-timer-carousel " data-ride="carousel" style="min-height: 100px">
+                                            <div id="transition-timer-carousel" class="carousel slide transition-timer-carousel " data-ride="carousel" style="max-height: 100px">
                                                 <div class="carousel-inner" style="">
                                                     <div class="item active">
                                                         <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
@@ -48,7 +48,7 @@
                                                         <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
                                                     </div>
                                                     <div class="item">
-                                                        <img src="/img/ban.png" class="img-thumbnail" alt="Cinque Terre">
+                                                        <img src="/img/ban.png" class="img-thumbnail" alt="Cinque Terre" style="border: solid;height: 90px;width: 728px">
                                                     </div>
                                                 </div>
                                             </div>
@@ -74,6 +74,10 @@
                                 @yield('main_content_compte')
                             </div>
                             <div class="col-lg-2 " style="border: solid 1px cornflowerblue;margin-top: 50px;min-height: 150px">
+                                <div class="progress-bar-success" style="width: 50%">
+
+                                </div>
+
                                 <img src="{{url('img/sen-delivery.png')}}" height="150">
                             </div>
 
@@ -126,11 +130,6 @@
             </div>
         </div>
     </div>
-
-
-
-
-
     <div id="" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -192,7 +191,6 @@
                     console.log('jQuery bind complete');
                 });
             });
-
             $('#attachement').on('change', function () { imageId = $(this).data('id'); tempFilename = $(this).val();
                 $('#cancelCropBtn').data('id', imageId); readFile(this); });
             $('#cropImageBtn').on('click', function (ev) {
@@ -218,7 +216,7 @@
                 }).then(function (resp) {
                     $('#profilImg').attr('src', resp);
                     $.ajax({
-                        url :"{{route('updateImageProfil')}}",
+                        url :"{{route('updateLogo')}}",
                         data:{"profil":resp,"_token":"<?php echo csrf_token() ?>"},
                         type : "post",
                         success : function(json)

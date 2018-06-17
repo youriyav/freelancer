@@ -165,7 +165,10 @@ Route::middleware(['AuthAdminAgence'])->group(function () {
     Route::post('agence/update-bp', 'AgenceController@updateBoitePostale')->name('updateBoitePostale');
     Route::post('agence/update-description', 'AgenceController@updateDescription')->name('updateDescription');
     Route::post('agence/update-password', 'AgenceController@updatePassword')->name('updatePassword');
+    Route::post('agence/update-logo', 'AgenceController@updateLogo')->name('updateLogo');
     Route::get('nos-services', 'AgenceController@nosServices')->name('nosServices');
+    Route::get('nos-projets', 'AgenceController@nosProjets')->name('nosProjets');
+    Route::post('agence/update-gps-coordonne', 'AgenceController@updateGpsCoordonne')->name('updateGpsCoordonne');
 });
 #-------------------------------------- END ROUTES AGENCES ---------------------------------------------
 

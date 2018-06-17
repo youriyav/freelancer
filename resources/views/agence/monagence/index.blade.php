@@ -1,9 +1,12 @@
 @extends('agence.monagence.layout')
 @section('menu')
     <ul class="nav nav-list" >
-        <li class="myActive"><a href="{{route('monCompte')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-        <li><a href="{{route('mesProjets')}}"><i class="fa fa-briefcase"></i> Nos Projets</a></li>
+        <li class="myActive"><a href="{{route('indexAgence')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li><a href="{{route('nosProjets')}}"><i class="fa fa-briefcase"></i> Nos Projets</a></li>
         <li><a href="{{route('nosServices')}}"><i class="fa fa-sitemap"></i> Nos Services</a></li>
+        <li><a href="{{route('nosServices')}}"><i class="fa fa-envelope"></i> Mes messages</a></li>
+        <li><a href="{{route('nosServices')}}"><i class="fa fa-hand-o-up"></i> Mes dévis</a></li>
+        <li><a href="{{route('nosServices')}}"><i class="fa fa-power-off"></i> Déconnexion</a></li>
     </ul>
 @endsection()
 @section('main_content_compte')
@@ -98,7 +101,6 @@
     <div class="panel panel-default">
         <div class="panel-heading text-primary">
             <h4 class="text-primary">Adresse</h4>
-            <!--a href=""><i class="fa fa-edit pull-right fa-2x"></i></a-->
         </div>
         <div class="panel-body">
             <div class="table-responsive">
@@ -125,7 +127,7 @@
                             @if($agence->longitude==null)
                                 <button  class="btn btn-primary" id="btn-location">Définir la position de votre agence sur google map</button>
                             @else
-                                <button  class="btn btn-primary">Modifier la position de votre agence sur google map</button>
+                                <button  class="btn btn-primary"  id="btn-location">Modifier la position de votre agence sur google map</button>
                             @endif
                         </td>
                     </tr>
@@ -187,14 +189,33 @@
                     <h5 class="modal-title" id="tile-modal-location">Définir la position de votre agence</h5>
                 </div>
                 <div class="modal-body">
-                    <p class="text-center">
-                        Êtes vous certain de vouloir supprimer cet élément?
-                    </p>
+                    <div class="col-xs-12 col-sm-4 ">
+                        <div style="display: block; width: 540px; height: 400px;">
+                            <div id="map" style="height: 100%;">
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
 
                     </div>
                 </div>
                 <div class="modal-footer">
+                        <div class="pull-left" style="margin-top: -15px" >
+                            <div class="row" style="margin: 0">
+                                @if($agence->longitude==null)
+                                    <p>Latitude:<span id="lati">non définie</span></p>
+                                @else
+                                    <p>Latitude:<span id="lati">{{$agence->latitude}}</span></p>
+                                @endif
+                            </div>
+                            <div class="row" style="margin: 0;">
+                                @if($agence->longitude==null)
+                                    <p>Longitude:<span id="longi">non définie</span></p>
+                                @else
+                                    <p>Longitude:<span id="longi">{{$agence->longitude}}</span></p>
+                                @endif
+                            </div>
+                        </div>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
                     <button class="btn btn-primary btn-large" id="btnUpdateLocation"  data-loading-text="<i class='fa fa-spinner fa-spin '></i> Mise à jour...">Mettre à jour</button>
 
@@ -206,15 +227,115 @@
     <a href="#" class="btn btn-primary">Team Sales Performance</a-->
 @endsection()
 @section('compte_js')
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoYTOg7ACi_NsdiRJPeVnPOLs7KkjDw3k&callback=initMap" async defer></script>
+    <script src="{{url('/js/assets/notify.min.js')}}"></script>
     <script>
+        var map;
+        var clickLat;
+        var clickLon;
+        var myEvent=null;
+        var markers = [];
+        var longitude="{{$agence->longitude}}";
+        var latitude="{{$agence->latitude}}";
+        var api_key_map="AIzaSyBoYTOg7ACi_NsdiRJPeVnPOLs7KkjDw3k";
+        var isUpdated=0;
+        function addMarker(location) {
+            var marker = new google.maps.Marker({
+                position: location,
+                map: map
+            });
+            markers.push(marker);
+        }
+        function setMapOnAll(map) {
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(map);
+            }
+        }
+        function clearMarkers() {
+            setMapOnAll(null);
+        }
+        function deleteMarkers() {
+            clearMarkers();
+            markers = [];
+        }
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: 14.7283189, lng: -17.4446152},
+                zoom: 12,
+                gestureHandling: 'greedy'
+            });
+            google.maps.event.addListener(map, 'click', function(event) {
+                deleteMarkers();
+                addMarker(event.latLng);
+                myEvent=event;
+                $("#lati").text(event.latLng.lat());
+                $("#longi").text(event.latLng.lng());
+
+            });
+            if(longitude!="")
+            {
+                var myLatLng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
+                addMarker(myLatLng);
+                //myEvent=myLatLng;
+                console.log(myEvent);
+                isUpdated=1;
+            }
+
+        }
         $(function () {
             var mtype=0;
-            var longitude="{{$agence->longitute}}";
-            $("#btn-location").click(function () {
-                if(longitude=="")
-                    $("#tile-modal-location").text("Définir la position de votre agence");
+            $("#btnUpdateLocation").click(function () {
+                var $this = $(this);
+                console.log(myEvent);
+                if(myEvent!=null)
+                {
+                    $this.button('loading');
+                    _data={"lat":myEvent.latLng.lat(),"lng":myEvent.latLng.lng(),"_token":"<?php echo csrf_token() ?>"};
+                    $.ajax({
+                        url :"/agence/update-gps-coordonne",
+                        data:_data,
+                        type : "post",
+                        success : function(json)
+                        {
+                            console.log(json);
+                            $this.button('reset');
+                            $("#tile-modal-location").text("Modifier la position de votre agence");
+                            $("#modalLocation").modal('toggle');
+                            longitude=myEvent.latLng.lng();
+                            latitude=myEvent.latLng.lat();
+                            $.notify("Mise à jour éffectuée avec succès!", "info");
+                        },
+                        error :function(xhr,errmsg,err)
+                        {
+                            console.log(xhr);
+                            $this.button('reset');
+                            $("#modalLocation").modal('toggle');
+                        }
+                    });
+                }
                 else
+                {
+                    if(isUpdated==1)
+                    {
+                        $("#modalLocation").modal('toggle');
+                    }
+                    else
+                    {
+                        $("#btnUpdateLocation").notify("veuillez définir votre position sur la carte d'abord", "error",{ position:"right" });
+
+                    }
+                }
+            });
+            $("#btn-location").click(function () {
+                myEvent=null;
+                if(longitude=="")
+                {
+                    $("#tile-modal-location").text("Définir la position de votre agence");
+                }
+                else
+                {
                     $("#tile-modal-location").text("Modifier la position de votre agence");
+                }
                 $("#modalLocation").modal('toggle');
             });
             $('.btnEdit').click(function () {

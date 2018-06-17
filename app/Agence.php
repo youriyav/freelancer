@@ -13,6 +13,10 @@ class Agence extends Model
     }
     public function slug()
     {
-        return $this->hasOne('App\Slug');
+        return $this->hasOne('App\Slug','agence_id');
+    }
+    public function logo()
+    {
+        return $this->hasOne('App\Photo','lg_agence');
     }
 }
