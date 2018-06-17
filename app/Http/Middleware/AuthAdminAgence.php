@@ -18,11 +18,12 @@ class AuthAdminAgence
     {
         if(!Auth::check())
         {
-            return redirect()->guest(route('indexAdmin',["next"=>$request->getRequestUri()]));
+            return redirect()->guest(route('seConnecter',["next"=>$request->getRequestUri()]));
         }
-        if(!Auth::check())
+        if(Auth::user()->isAgencyAdmin!=1)
         {
-            return redirect()->guest(route('indexAdmin',["next"=>$request->getRequestUri()]));
+            Auth::logout();
+            return redirect()->guest(route('seConnecter',["next"=>$request->getRequestUri()]));
         }
         return $next($request);
     }

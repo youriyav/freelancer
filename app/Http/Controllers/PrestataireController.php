@@ -438,13 +438,22 @@ public  function seConnecter(Input $input,Request $request,$act=1)
                 if($user->active==1)
                 {
                     $res=Auth::attempt(['email'=>$email,'password'=>$password]);
+
                     if ($res)
                     {
                         if($next!=null)
                         {
                             return redirect($next);
                         }
-                        return redirect()->route('monCompte');
+                        if(Auth::user()->isAgencyAdmin)
+                        {
+                            return redirect()->route('indexAgence');
+                        }
+                        else
+                        {
+                            return redirect()->route('monCompte');
+                        }
+
                     }
                     else
                     {

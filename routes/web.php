@@ -154,8 +154,18 @@ Route::middleware(['AuthUser'])->group(function () {
 
 #-------------------------------------- ROUTES AGENCES -------------------------------------------------
 Route::get('nouvelle-agence', 'AgenceController@nouvelleAgence')->name('nouvelleAgence');
-Route::middleware(['AuthUser'])->group(function () {
+Route::post('nouvelle-agence', 'AgenceController@nouvelleAgence')->name('nouvelleAgence');
+Route::get('agence-afc', 'AgenceController@AfterCreation')->name('AfterCreation');
 
+
+Route::middleware(['AuthAdminAgence'])->group(function () {
+    Route::get('agence', 'AgenceController@indexAgence')->name('indexAgence');
+    Route::post('agence/update-phone', 'AgenceController@updatePhone')->name('updatePhoneAgence');
+    Route::post('agence/update-slogan', 'AgenceController@updateSlogan')->name('updateSlogan');
+    Route::post('agence/update-bp', 'AgenceController@updateBoitePostale')->name('updateBoitePostale');
+    Route::post('agence/update-description', 'AgenceController@updateDescription')->name('updateDescription');
+    Route::post('agence/update-password', 'AgenceController@updatePassword')->name('updatePassword');
+    Route::get('nos-services', 'AgenceController@nosServices')->name('nosServices');
 });
 #-------------------------------------- END ROUTES AGENCES ---------------------------------------------
 

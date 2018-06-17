@@ -1,15 +1,15 @@
-@extends('prestataire.moncompte.layout')
+@extends('agence.monagence.layout')
 @section('menu')
     <ul class="nav nav-list" >
         <li class="myActive"><a href="{{route('monCompte')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
-        <li><a href="{{route('mesProjets')}}"><i class="fa fa-briefcase"></i> Mes Projets</a></li>
-        <li><a href="{{route('mesCompetences')}}"><i class="fa fa-sitemap"></i> Mes compétences</a></li>
+        <li><a href="{{route('mesProjets')}}"><i class="fa fa-briefcase"></i> Nos Projets</a></li>
+        <li><a href="{{route('nosServices')}}"><i class="fa fa-sitemap"></i> Nos Services</a></li>
     </ul>
 @endsection()
 @section('main_content_compte')
     <div class="panel panel-default">
         <div class="panel-heading ">
-            <h4 class="text-primary">Informations personnelles</h4>
+            <h4 class="text-primary">Infos Agence</h4>
             <!--a href=""><i class="fa fa-edit pull-right fa-2x"></i></a-->
         </div>
         <div class="panel-body">
@@ -17,25 +17,15 @@
                 <table class="table table-striped table-bordered table-hover">
                     <tbody>
                     <tr>
-                        <th width="20%">Nom</th>
+                        <th width="20%">Raison Sociale</th>
                         <td>
-                            <span >{{Auth::user()->name}}</span>
-                            <button class="btn btn-sm pull-right btnEdit" id="1">
-                                <i class="fa fa-edit pull-right"></i>
-                            </button>
-                         <div class="hidden editName">
-                             <input type="text" class="form-control input" style="height: 30px;margin-top: 5px"  >
-                             <p style="color: red" class="error"></p>
-                             <button class="btn btn-sm btn-primary pull-right btnSaveEdit"  data-loading-text="<i class='fa fa-spinner fa-spin '></i>"><i class="fa fa-save" style=""></i></button>
-                             <button class="btn btn-sm btn-danger pull-right btnCancelEdit" style="margin-right: 3px" ><i class="fa fa-times" style=""></i></button>&nbsp;
-
-                         </div>
+                            <span >{{$agence->raisonSocial}}</span>
                         </td>
                     </tr>
                     <tr>
-                        <th width="20%">Prenom</th>
+                        <th width="20%">Slogan</th>
                         <td>
-                            <span >{{Auth::user()->prenom}}</span>
+                            <span >{{$agence->slogan}}</span>
                             <button class="btn btn-sm pull-right btnEdit" id="2">
                                 <i class="fa fa-edit pull-right"></i>
                             </button>
@@ -44,19 +34,18 @@
                                 <p style="color: red" class="error"></p>
                                 <button class="btn btn-sm btn-primary pull-right btnSaveEdit"  data-loading-text="<i class='fa fa-spinner fa-spin '></i>"><i class="fa fa-save" style=""></i></button>
                                 <button class="btn btn-sm btn-danger pull-right btnCancelEdit" style="margin-right: 3px" ><i class="fa fa-times" style=""></i></button>&nbsp;
-
                             </div>
                         </td>
 
                     </tr>
                     <tr disabled="">
                         <th>Email <i class="fa fa-envelope pull-right"></i></th>
-                        <td disabled="disabled">yavoucko@yahoo.fr</td>
+                        <td disabled="disabled">{{$agence->email}}</td>
                     </tr>
                     <tr>
                         <th>Téléphone <i class="fa fa-mobile-phone pull-right fa-2x"></i></th>
                         <td>
-                            <span >{{Auth::user()->phone}}</span>
+                            <span >{{$agence->numero}}</span>
                             <button class="btn btn-sm pull-right btnEdit" id="3">
                                 <i class="fa fa-edit pull-right"></i>
                             </button>
@@ -69,18 +58,26 @@
                             </div>
                         </td>
                     </tr>
-                    <!--tr>
-                        <th>Sexe</th>
-                        <td>Mark</td>
-                    </tr-->
-                    <!--tr>
-                        <th>Nationalité</th>
-                        <td>Mark</td>
-                    </tr-->
+                    <tr>
+                        <th>Boite Postale <i class="fa fa-inbox pull-right fa-2x"></i></th>
+                        <td>
+                            <span >{{$agence->boitePostal}}</span>
+                            <button class="btn btn-sm pull-right btnEdit" id="6">
+                                <i class="fa fa-edit pull-right"></i>
+                            </button>
+                            <div class="hidden editName">
+                                <input type="text" class="form-control input" style="height: 30px;margin-top: 5px"  >
+                                <p style="color: red" class="error"></p>
+                                <button class="btn btn-sm btn-primary pull-right btnSaveEdit"  data-loading-text="<i class='fa fa-spinner fa-spin '></i>"><i class="fa fa-save" style=""></i></button>
+                                <button class="btn btn-sm btn-danger pull-right btnCancelEdit" style="margin-right: 3px" ><i class="fa fa-times" style=""></i></button>&nbsp;
+
+                            </div>
+                        </td>
+                    </tr>
                     <tr>
                         <th>Description</th>
                         <td>
-                            <span >{{Auth::user()->prestataire->description}}</span>
+                            <span >{{$agence->description}}</span>
                             <button class="btn btn-sm pull-right btnEdit" id="4">
                                 <i class="fa fa-edit pull-right"></i>
                             </button>
@@ -89,7 +86,6 @@
                                 <p style="color: red" class="error"></p>
                                 <button class="btn btn-sm btn-primary pull-right btnSaveEdit"  data-loading-text="<i class='fa fa-spinner fa-spin '></i>"><i class="fa fa-save" style=""></i></button>
                                 <button class="btn btn-sm btn-danger pull-right btnCancelEdit" style="margin-right: 3px" ><i class="fa fa-times" style=""></i></button>&nbsp;
-
                             </div>
                         </td>
                     </tr>
@@ -101,7 +97,47 @@
 
     <div class="panel panel-default">
         <div class="panel-heading text-primary">
-            <h4 class="text-primary">Informations de connextion
+            <h4 class="text-primary">Adresse</h4>
+            <!--a href=""><i class="fa fa-edit pull-right fa-2x"></i></a-->
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover">
+                    <tbody>
+                    <tr>
+                        <th width="20%">Adresse <i class="fa fa-location-arrow pull-right fa-2x"></i></th>
+                        <td>
+                            <span >{{$agence->adresse}}</span>
+                            <button class="btn btn-sm pull-right btnEdit" id="7">
+                                <i class="fa fa-edit pull-right"></i>
+                            </button>
+                            <div class="hidden editName">
+                                <textarea rows="3" type="text" class="form-control input" style="margin-top: 5px"  ></textarea>
+                                <p style="color: red" class="error"></p>
+                                <button class="btn btn-sm btn-primary pull-right btnSaveEdit"  data-loading-text="<i class='fa fa-spinner fa-spin '></i>"><i class="fa fa-save" style=""></i></button>
+                                <button class="btn btn-sm btn-danger pull-right btnCancelEdit" style="margin-right: 3px" ><i class="fa fa-times" style=""></i></button>&nbsp;
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="20%">Adresse <i class="fa fa-map-marker pull-right fa-2x"></i></th>
+                        <td>
+                            @if($agence->longitude==null)
+                                <button  class="btn btn-primary" id="btn-location">Définir la position de votre agence sur google map</button>
+                            @else
+                                <button  class="btn btn-primary">Modifier la position de votre agence sur google map</button>
+                            @endif
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading text-primary">
+            <h4 class="text-primary">Info de connextion</h4>
             <!--a href=""><i class="fa fa-edit pull-right fa-2x"></i></a-->
         </div>
         <div class="panel-body">
@@ -141,13 +177,46 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="modalLocation">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #3c8dbc;color: white;font-size: 1.5em;font-weight: bold">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white">&times;</span>
+                    </button>
+                    <h5 class="modal-title" id="tile-modal-location">Définir la position de votre agence</h5>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center">
+                        Êtes vous certain de vouloir supprimer cet élément?
+                    </p>
+                    <div class="row">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button class="btn btn-primary btn-large" id="btnUpdateLocation"  data-loading-text="<i class='fa fa-spinner fa-spin '></i> Mise à jour...">Mettre à jour</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
     <!--a href="#" class="btn btn-primary">My Sales Performance</a>
     <a href="#" class="btn btn-primary">Team Sales Performance</a-->
 @endsection()
 @section('compte_js')
     <script>
         $(function () {
-            var mtype=0
+            var mtype=0;
+            var longitude="{{$agence->longitute}}";
+            $("#btn-location").click(function () {
+                if(longitude=="")
+                    $("#tile-modal-location").text("Définir la position de votre agence");
+                else
+                    $("#tile-modal-location").text("Modifier la position de votre agence");
+                $("#modalLocation").modal('toggle');
+            });
             $('.btnEdit').click(function () {
                 mtype=$(this).attr('id');
                 $(this).hide();
@@ -156,9 +225,7 @@
                 {
                     $(this).parent().find(".input").val($(this).parent().find('span').text());
                 }
-
                 $(this).parent().find(".editName").removeClass('hidden');
-
             });
             $('.btnCancelEdit').click(function () {
                 $(this).parent().addClass('hidden');
@@ -177,33 +244,37 @@
                 {
                     route="";
                     data="";
-                    if(mtype==1)
-                    {
-                        route="/update-name";
-                        data={"idPrestataire":{{Auth::user()->id}},"name":_value,"_token":"<?php echo csrf_token() ?>"};
-                    }
                     if(mtype==2)
                     {
-                        route="/update-prenom";
-                        data={"idPrestataire":{{Auth::user()->id}},"name":_value,"_token":"<?php echo csrf_token() ?>"};
+                        route="/agence/update-slogan";
+                        data={"value":_value,"_token":"<?php echo csrf_token() ?>"};
 
                     }
                     if(mtype==3)
                     {
-                        route="/update-phone";
-                        data={"idPrestataire":{{Auth::user()->id}},"name":_value,"_token":"<?php echo csrf_token() ?>"};
+                        route="/agence/update-phone";
+                        data={"value":_value,"_token":"<?php echo csrf_token() ?>"};
                     }
                     if(mtype==4)
                     {
-                        route="/update-description";
-                        data={"idPrestataire":{{Auth::user()->id}},"name":_value,"_token":"<?php echo csrf_token() ?>"};
+                        route="/agence/update-description";
+                        data={"value":_value,"_token":"<?php echo csrf_token() ?>"};
+                    }
+                    if(mtype==6)
+                    {
+                        route="/agence/update-bp";
+                        data={"value":_value,"_token":"<?php echo csrf_token() ?>"};
+                    }
+                    if(mtype==7)
+                    {
+                        route="/agence/update-adresse";
+                        data={"value":_value,"_token":"<?php echo csrf_token() ?>"};
                     }
 
                     $('#errorPass').text("");
                     $('#newPassConf').text("");
                     if(mtype==5)
                     {
-
                         isError=0;
                         if($('#newPass').val()=="")
                         {
@@ -227,8 +298,8 @@
                         {
                             return 0;
                         }
-                        route="/update-password";
-                        data={"idPrestataire":{{Auth::user()->id}},"oldPass":_value,"newPass":$('#newPass').val(),"_token":"<?php echo csrf_token() ?>"};
+                        route="/agence/update-password";
+                        data={"oldPass":$("#oldPass").val(),"newPass":$('#newPass').val(),"_token":"<?php echo csrf_token() ?>"};
 
                     }
                     $this.button('loading');
@@ -250,7 +321,7 @@
                             $this.parent().addClass('hidden');
                             if(mtype==5)
                             {
-                                location.href="/mon-compte";
+                                location.href="/agence";
                             }
 
                         },

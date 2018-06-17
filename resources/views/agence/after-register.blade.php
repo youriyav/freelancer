@@ -5,31 +5,23 @@
 
 @section("main_content")
     <div class="row" >
-        <div class="col-md-8 col-md-offset-2" >
-            <div class="adbox-img center-block" >
-                <div id="transition-timer-carousel" class="carousel slide transition-timer-carousel " data-ride="carousel" style="height: 100px">
+        <div class="col-md-6 col-md-offset-3" style="max-height: 100px;">
+            <div class="adbox-img " >
+                <div id="transition-timer-carousel" class="carousel slide transition-timer-carousel " data-ride="carousel" style="min-height: 100px">
                     <div class="carousel-inner" style="">
                         <div class="item active">
                             <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
                         </div>
                         <div class="item">
                             <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
-
-                        </div>
-
-                        <div class="item">
-                            <img src="{{ url('/img/ban.png') }}" class="img-thumbnail" alt="Cinque Terre">
                         </div>
                         <div class="item">
-                            <img src="{{ url('/img/ban.png') }}" class="img-thumbnail" alt="Cinque Terre">
+                            <img src="/img/ban.png" class="img-thumbnail" alt="Cinque Terre">
                         </div>
                     </div>
-
-                    <!--img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre"-->
                 </div>
             </div>
         </div>
-
     </div>
     <section class="content row" style="background-color: #fafafa">
         <div class="row" style="margin-bottom: 10px;">

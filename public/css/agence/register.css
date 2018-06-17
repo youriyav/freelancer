@@ -14,3 +14,10 @@ legend.scheduler-border {
     padding:0 10px;
     border-bottom:none;
 }
+.form-group
+{
+    padding: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
