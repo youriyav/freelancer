@@ -1,32 +1,23 @@
 @extends('prestataire.layout2')
 @section("css")
-    <link rel="stylesheet" href="{{url('/css/prestataire/index.css')}}">
-    <link rel="stylesheet" href="{{url('/css/prestataire/modal.css')}}" />
 @endsection
 
 @section("main_content")
     <div class="row" >
-        <div class="col-md-8 col-md-offset-2" >
-            <div class="adbox-img center-block" >
-                <div id="transition-timer-carousel" class="carousel slide transition-timer-carousel " data-ride="carousel" style="height: 100px">
+        <div class="col-md-6 col-md-offset-3" style="max-height: 100px;">
+            <div class="adbox-img " >
+                <div id="transition-timer-carousel" class="carousel slide transition-timer-carousel " data-ride="carousel" style="min-height: 100px">
                     <div class="carousel-inner" style="">
                         <div class="item active">
                             <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
                         </div>
                         <div class="item">
                             <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
-
-                        </div>
-
-                        <div class="item">
-                            <img src="{{ url('/img/ban.png') }}" class="img-thumbnail" alt="Cinque Terre">
                         </div>
                         <div class="item">
-                            <img src="{{ url('/img/ban.png') }}" class="img-thumbnail" alt="Cinque Terre">
+                            <img src="/img/ban.png" class="img-thumbnail" alt="Cinque Terre">
                         </div>
                     </div>
-
-                    <!--img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre"-->
                 </div>
             </div>
         </div>
@@ -34,7 +25,6 @@
     </div>
     <section class="content row" style="background-color: #fafafa">
         <div class="row" style="margin-bottom: 10px;">
-            <h3 class="text-center text-primary" style="text-decoration: underline;margin-bottom: 20px">Créer un compte gratuitement</h3>
             <div class="col-lg-3 col-md-3 hidden-sm hidden-xs"style="padding: 5px" >
                 <div class="panel panel-primary" >
                     <div class="panel-title panel-heading">
@@ -50,9 +40,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-9" style="padding: 20px;padding-top: 0">
-                <div style="background-color: white" class="row">
-                    <form  id="registerForm" role="form" class="col-lg-8 col-lg-offset-2 form-horizontal" method="post" action="{{route('seConnecter')}}" >
+            <div class="col-lg-6 col-md-6" style="padding: 20px;padding-top: 0">
+                <div style="background-color: white;min-height: 400px" class="row">
+                    <h3 class="text-center text-primary" style="margin-bottom: 20px"><i class="fa fa-lock"></i> CONNEXION</h3>
+
+                    <form  id="registerForm" role="form" class="col-lg-6 col-lg-offset-3 form-horizontal" method="post" action="{{route('seConnecter')}}" >
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                         @isset($next)<input type="hidden" name="next" value="{{ $next }}">@endisset
                         <div class="form-group" style="padding: 0">
@@ -62,7 +54,8 @@
                         </div>
                         <div class="form-group" style="padding: 0">
                             <label>Mot de passe</label>
-                            <input required id="password" type="password" class="form-control"  placeholder="" name="password"  >
+                            <input required  id="password" type="password" class="form-control" placeholder="" name="password" >
+
                             <p style="color: red" id="erroPass">@isset($error){{$error}}@endisset</p>
                         </div>
 
@@ -101,36 +94,62 @@
             </div>
         </div>
     </section>
-    <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
 
-            <div class="loginmodal-container">
-                <h1>Réinitialier votre mot de passe</h1><br>
-
-                <div class="container" style="position: absolute;margin-left: 80px" id="laoder" hidden>
-                    <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                        <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
-                    </svg>
+    <div class="modal fade" tabindex="-1" role="dialog" id="login-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #3c8dbc;color: white;font-size: 1.5em;font-weight: bold">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white">&times;</span>
+                    </button>
+                    <h5 class="modal-title">Réinitialier votre mot de passe</h5><br>
                 </div>
-                <form method="post" action="" id="reinitForm">
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <input class="form-control" type="text" id="loginRenit" name="loginRenit" placeholder="email ou login" >
-                    <p style="color: red" id="errorLogin"></p>
-                    <input type="submit" id="btnReinitSubmit"  name="login" class="btn btn-lg btn-primary" value="Réinitianiser">
-                    <button type="button"  id="btnCancel" class="btn btn-lg btn-danger col-md-12 col-sm-12 col-xs-12" data-dismiss="modal">Annuler</button>
-                </form>
+                <div class="modal-body">
+                    <div class="container" style="position: absolute;margin-left: 80px" id="laoder" hidden>
+                        <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                            <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+                        </svg>
+                    </div>
+                    <form method="post" action="" id="reinitForm">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        <div class="form-group ">
+                            <div class="row">
+                                <div class="col-md-6 col-md-offset-3">
+                                    <input class="form-control " type="text" id="loginRenit" name="loginRenit" placeholder="email ou login" >
+                                    <p style="color: red" id="errorLogin"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button"  id="btnCancel" class="btn btn-danger " data-dismiss="modal">Annuler</button>
+                    <button type="button"  id="btnReinitSubmit" class="btn  btn-primary"  data-loading-text="<i class='fa fa-spinner fa-spin '></i>Réinitialisation...">Réinitianiser</button>
+
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
 
-            <div class="loginmodal-container">
+    <div class="modal fade" tabindex="-1" role="dialog" id="success-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #3c8dbc;color: white;font-size: 1.5em;font-weight: bold">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white">&times;</span>
+                    </button>
 
-                <p class="text-center text-primary"><i class="fa fa-check-circle fa-3x"></i></p>
-                <p class="text-center" id="succes-message"></p>
-                <p class="text-center"><button class="btn btn-primary btn-large" data-dismiss="modal">Ok</button></p>
+                </div>
+                <div class="modal-body">
+                    <p class="text-center text-primary"><i class="fa fa-check-circle fa-3x"></i></p>
+                    <p class="text-center" id="succes-message"></p>
+                </div>
+                <div class="modal-footer">
+                    <p class="text-center"><button class="btn btn-primary btn-large" data-dismiss="modal">Ok</button></p>
+                </div>
             </div>
         </div>
     </div>
@@ -153,10 +172,6 @@
                     $("#errorLogin").text("veuillez remplir ce champs");
                     return 0;
                 }
-                $("#laoder").show();
-                $('#btn-inscipt');
-                $("#btnReinitSubmit").prop('disabled','disabled');
-                $("#btnCancel").prop('disabled','disabled');
                 $('#reinitForm').submit();
             });
             $('#reinitForm').submit(function (e) {

@@ -236,6 +236,11 @@ class AgenceController extends Controller
         $agence=Auth::user()->agence;
         return view('agence.monagence.index',["agence"=>$agence]);
     }
+    public  function parametres(Input $input,Request $request)
+    {
+        $agence=Auth::user()->agence;
+        return view('agence.monagence.parametres',["agence"=>$agence]);
+    }
 
     public function updatePhone(Input $input,Request $request)
     {

@@ -19,7 +19,7 @@ class CreateOffresTable extends Migration
             $table->integer('user_id')->unsigned()->nullable()->index();
             $table->foreign('user_id')->references('id')->on('users');
             $table->integer('projet_id')->unsigned()->nullable()->index();
-            $table->foreign('projet_id')->references('id')->on('users');
+            $table->foreign('projet_id')->references('id')->on('projets');
             $table->string('prix');
             $table->string('duree');
             $table->text('description');

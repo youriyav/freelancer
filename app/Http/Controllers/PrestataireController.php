@@ -76,23 +76,35 @@ class PrestataireController extends Controller
             'listeOfTechnologies' => $listeOfTechnologies,
             'listeOfPlat' => $listeOfPlat
         ]);
-        return view('prestataire.index',['listeOfTechnologies'=>$listeOfTechnologies,'listeOfPlat'=>$listeOfPlat,"projets"=>$projets]);
+        $tmpListe=array();
+        $check=true;
+        return view('prestataire.index',['listeOfTechnologies'=>$listeOfTechnologies,'listeOfPlat'=>$listeOfPlat,"projets"=>$projets,"tmpListe"=>$tmpListe,"check"=>$check]);
     }
     public function detailProjetUser($slug)
     {
         $listeOfTechnologies=Technologie::where('isDeleted',0)->get();
         $listeOfPlat=plateforme::where('isDeleted',0)->get();
         $currentSlug=Slug::where(['content'=>$slug,])->first();
+        $tmpListe=array();
+        $check=true;
         if($currentSlug)
         {
             $projet=$currentSlug->projet;
-            $projet->nbrVue++;
-            $projet->save();
-            JavaScript::put([
-                'listeOfTechnologies' => $listeOfTechnologies,
-                'listeOfPlat' => $listeOfPlat
-            ]);
-            return view('prestataire.projet.detail',['listeOfPlat'=>$listeOfPlat,'projet'=>$projet,"listeOfTechnologies"=>$listeOfTechnologies]);
+            if($projet)
+            {
+                $projet->nbrVue++;
+                $projet->save();
+                JavaScript::put([
+                    'listeOfTechnologies' => $listeOfTechnologies,
+                    'listeOfPlat' => $listeOfPlat
+                ]);
+                return view('prestataire.projet.detail',['listeOfPlat'=>$listeOfPlat,'projet'=>$projet,"listeOfTechnologies"=>$listeOfTechnologies,"tmpListe"=>$tmpListe,"check"=>$check]);
+
+            }
+            else
+            {
+                abort(404, 'The resource you are looking for could not be found');
+            }
         }
         else
         {
@@ -808,8 +820,6 @@ public function updateDescription(Input $input,Request $request)
             $projet->budget()->associate($budget);
             $projet->demarrage()->associate($demarrage);
             $projet->user()->associate(Auth::user());
-            $projet->competences()->save(Auth::user());
-
             $slug="";
             $libelle2=str_replace('&',' ',$titre);
             $libelle2=str_replace('/',' ',$libelle2);
@@ -831,9 +841,10 @@ public function updateDescription(Input $input,Request $request)
             $slugObject=Slug::create(['content'=>$slug]);
             $projet->slug()->save($slugObject);
             $projet->save();
-            foreach ($description as $techno)
+            for($i=0;$i<count($description);$i++)
             {
-                $projet->competences()->attach($techno);
+                $projet->competences()->attach($description[$i]);
+                $projet->save();
             }
             $projet->save();
             return redirect()->route('mesProjets',["new"=>"1"]);

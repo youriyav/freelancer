@@ -12,10 +12,19 @@
                         </div>
                         <form role="form" method="post">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                            <label for="libelle">Libellé</label>
+
                             <div class="form-group ">
+                                <label for="libelle">Libellé</label>
                                 <input type="text" value="@isset($libelle){{$libelle}}@endisset" class="form-control" id="libelle" name="libelle">
                             </div>
+                            <div class="form-group ">
+                                <label for="libelle">Type</label>
+                                <select class="form-control" name="type">
+                                    <option value="1">Agence</option>
+                                    <option value="2">Prestataire</option>
+                                </select>
+                            </div>
+
                             <p class="help-block " style="color: red">@isset($errorLibelle){{$errorLibelle}}@endisset</p>
                             <div class="checkbox">
                                 <label>

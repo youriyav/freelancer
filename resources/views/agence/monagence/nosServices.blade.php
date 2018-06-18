@@ -1,7 +1,7 @@
 @extends('agence.monagence.layout')
 @section('menu')
     <ul class="nav nav-list" >
-        <li ><a href="{{route('indexAgence')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li ><a href="{{route('indexAgence')}}"><i class="fa fa-home"></i> Tableau de bord</a></li>
         <li><a href="{{route('nosProjets')}}"><i class="fa fa-briefcase"></i> Mes Projets</a></li>
         <li class="myActive"><a href="{{route('nosServices')}}"><i class="fa fa-briefcase"></i> Mes compétences</a></li>
     </ul>

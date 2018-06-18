@@ -50,25 +50,18 @@ class AdminController extends Controller
         //$this->middleware('AuthAdmin');
     }
 
-    public function index(Request $request,Input $input)
+
+    public function loginAdmin(Request $request,Input $input)
     {
         $next=$input->get('next');
+        $login=$input->get('login');
         if($request->getMethod()=="GET")
         {
-            if(Auth::check())
+            if ($login)
             {
-                $projets=Projet::whereDate('created_at', DB::raw('CURDATE()'))->get();
-                $commandes=Commande::where('statut',0)->get();
-               return view('admin.index',["projets"=>$projets,"commandes"=>$commandes]);
+                return view('admin.login',['next'=>$next,'login'=>$login,'error'=>"login ou mot de passe incorrect"]);
             }
-            else
-            {
-                if($next!=null)
-                {
-                    return view('admin.login',['next'=>$next]);
-                }
-                return view('admin.login');
-            }
+            return view('admin.login',['next'=>$next]);
         }
         else
         {
@@ -103,9 +96,16 @@ class AdminController extends Controller
             }
             else
             {
-                return view('admin.login',['error'=>'login ou mot de passe incorrect']);
+                return redirect()->route('loginAdmin',['login'=>/*'login ou mot de passe incorrect'*/$login]);
+                //return view('admin.login',['error'=>'login ou mot de passe incorrect']);
             }
         }
+    }
+    public function index(Request $request,Input $input)
+    {
+        $projets=Projet::whereDate('created_at', DB::raw('CURDATE()'))->get();
+        $commandes=Commande::where('statut',0)->get();
+        return view('admin.index',["projets"=>$projets,"commandes"=>$commandes]);
     }
     // logout method
     public function logout()
@@ -114,7 +114,7 @@ class AdminController extends Controller
         {
             Auth::logout();
         }
-        return redirect()->route("indexAdmin");
+        return redirect()->route("loginAdmin");
     }
 
     #-------------------------------- plateforme ----------------------------#
@@ -783,10 +783,12 @@ class AdminController extends Controller
         else
         {
             $libelle=$input->get('libelle');
+            $type=$input->get('type');
             if($libelle!="")
             {
                 $descriptio=new DescriptionFormule();
                 $descriptio->libelle=$libelle;
+                $descriptio->type=$type;
                 $descriptio->isDeleted=0;
                 $descriptio->save();
                 $next=$input->get('next');
@@ -815,19 +817,21 @@ class AdminController extends Controller
     }
     public function editerDescriptionFormule($id,Request $request,Input $input)
     {
-        $descritions=DescriptionFormule::findOrFail($id);
+        $descrition=DescriptionFormule::findOrFail($id);
         if($request->getMethod()=="GET")
         {
-            return view('admin.descriptionFormule.editer',['descritions'=>$descritions]);
+            return view('admin.descriptionFormule.editer',['descritions'=>$descrition]);
 
         }
         else
         {
             $libelle=$input->get('libelle');
+            $type=$input->get('type');
             if($libelle!="")
             {
-                $descritions->libelle=$libelle;
-                $descritions->save();
+                $descrition->libelle=$libelle;
+                $descrition->type=$type;
+                $descrition->save();
                 return redirect()->route("descriptFormule");
 
             }
@@ -868,13 +872,13 @@ class AdminController extends Controller
     public function validerCommande($id)
     {
         $commandes=Commande::where('statut',0)->paginate(10);
-            //$projets=Projet::whereDate('created_at', DB::raw('CURDATE()'))->paginate(10);
-            //dd($projets);
+        //$projets=Projet::whereDate('created_at', DB::raw('CURDATE()'))->paginate(10);
+        //dd($projets);
         return view('admin.commandes.index',['commandes'=>$commandes]);
     }
     public function detailProjet(Request $request,Input $input,$id)
     {
-       // dd($request);
+        // dd($request);
         $projet=Projet::findOrFail($id);
         if($projet)
         {
@@ -884,7 +888,7 @@ class AdminController extends Controller
     }
     public function ValiderProjet(Request $request,Input $input,$id)
     {
-       // dd($request);
+        // dd($request);
         $projet=Projet::findOrFail($id);
 
         if($projet)
@@ -898,7 +902,7 @@ class AdminController extends Controller
     }
     public function supprimerProjet(Request $request,Input $input,$id)
     {
-       // dd($request);
+        // dd($request);
         $projet=Projet::findOrFail($id);
 
         if($projet)

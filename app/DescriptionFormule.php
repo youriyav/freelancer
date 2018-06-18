@@ -3,7 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+#1=agence
+#2=freelance
 class DescriptionFormule extends Model
 {
     //

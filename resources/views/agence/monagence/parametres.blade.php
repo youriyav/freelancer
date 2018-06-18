@@ -1,12 +1,12 @@
 @extends('agence.monagence.layout')
 @section('menu')
     <ul class="nav nav-list" >
-        <li class="myActive"><a href="{{route('indexAgence')}}"><i class="fa fa-home"></i> Tableau de bord</a></li>
+        <li ><a href="{{route('indexAgence')}}"><i class="fa fa-home"></i> Tableau de bord</a></li>
         <li><a href="{{route('nosProjets')}}"><i class="fa fa-briefcase"></i> Nos Projets</a></li>
         <li><a href="{{route('nosServices')}}"><i class="fa fa-sitemap"></i> Nos Services</a></li>
         <li><a href="{{route('nosServices')}}"><i class="fa fa-envelope"></i> Mes messages</a></li>
         <li><a href="{{route('nosServices')}}"><i class="fa fa-hand-o-up"></i> Mes dévis</a></li>
-        <li><a href="{{route('parametres')}}"><i class="fa fa-gears"></i> Paramètre</a></li>
+        <li class="myActive"><a href="{{route('parametres')}}"><i class="fa fa-gears"></i> Paramètre</a></li>
         <li><a href="{{route('nosServices')}}"><i class="fa fa-power-off"></i> Déconnexion</a></li>
     </ul>
 @endsection()

@@ -18,11 +18,12 @@ class AuthAdmin
     {
         if(!Auth::check())
         {
-            return redirect()->guest(route('indexAdmin',["next"=>$request->getRequestUri()]));
+            return redirect()->guest(route('loginAdmin',["next"=>$request->getRequestUri()]));
         }
-        if(Auth::user()->isAdmin!=2)
+        if(Auth::user()->isAdmin!=1)
         {
-            return redirect()->guest(route('indexAdmin',["next"=>$request->getRequestUri()]));
+            Auth::logout();
+            return redirect()->guest(route('loginAdmin',["next"=>$request->getRequestUri()]));
         }
         return $next($request);
     }

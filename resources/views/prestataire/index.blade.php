@@ -117,14 +117,26 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6" style="padding-bottom: 10px;margin-top: 15px">
+        <div class="col-md-6" style="padding-bottom: 10px;margin-top: 5px">
 
             <div class="row" style="margin-top: 20px">
-                <h4>Derniers Projets en freelance</h4>
+                <!--h4>Derniers Projets en freelance</h4-->
                 @foreach($projets as $projet )
                     <div class="panel projet col-lg-10 col-lg-offset-1" style="padding-bottom: 10px;padding-top: 10px;border: solid 1px #428bca">
                         <div class="panel-heading" style="margin: 0;padding: 0;padding-left: 5px">
-                            <img src="/uploads/plateformes/plateforme_03.png" width="30" height="30"> <h4  class="text-primary inline"><a href="{{route('detailProjetUser',["slug"=>$projet->slug->content])}}">{{$projet->titre}}</a></h4>
+                            @foreach($projet->competences as $techno)
+                                <?php $check=true ?>
+                                @foreach($tmpListe as $tmp)
+                                    @if($tmp==$techno->plateforme->id)
+                                        {{ $check=false}}
+                                    @endif
+                                @endforeach
+                                @if($check==true)
+                                    <img src="/{{$techno->plateforme->logo->url}}" title="{{$techno->plateforme->libelle}}" width="20" height="20" style="margin-left: 0">
+                                    <?php array_push($tmpListe,$techno->plateforme->id) ?>
+                                @endif
+                            @endforeach
+                             <h4  class="text-primary inline"><a href="{{route('detailProjetUser',["slug"=>$projet->slug->content])}}">{{$projet->titre}}</a></h4>
                         </div>
                         <div class="panel-body" style="padding: 5px;color: black;">
                             <div class="text-summury">{{$projet->description}}</div>
@@ -134,28 +146,33 @@
                                     @foreach($projet->competences as $techno )
                                         <button class="alert alert-info" style="padding: 3px;margin: 0">{{$techno->libelle}} </button>
                                     @endforeach</div>
-
                             </div>
                         </div>
                         <div class="panel-footer">
-
                             <i class="fa fa-clock-o"></i>&nbsp;{{getDureeFromCarbone($projet->created_at)}}
-                            &nbsp;
                             <i class="fa fa-eye"></i> {{$projet->nbrVue}} vue(s)&nbsp;&nbsp;
                             <i class="fa fa-hand-o-up"> </i>&nbsp;&nbsp;{{count($projet->offres)}} offre(s)&nbsp;&nbsp;&nbsp;
                         </div>
                     </div>
+                    <?php $tmpListe=array() ?>
                 @endforeach
-
-
             </div>
         </div>
         <div class="col-md-3 " style="">
-            <p class="text-center">
-                <a href="{{route("nouvelleAgence")}}" class="btn " style="background-color: orange;color: white;font-size: 1.3em">Vous êtes une agence,<br>creer votre vitrine</a>
-            </p>
+            @if(!\Illuminate\Support\Facades\Auth::check())
+                    <p class="text-center"  >
+                        <a href="{{route("nouvelleAgence")}}" class="btn " style="background-color: orange;color: white;font-size: 1.3em;padding: 0">Vous êtes une agence,<br>creer votre vitrine</a>
+                    </p>
+                @else
+                    @if(\Illuminate\Support\Facades\Auth::user()->isAgencyAdmin!=1)
+                        <p class="text-center" style="padding: 0">
+                            <a href="{{route("nouvelleAgence")}}" class="btn " style="background-color: orange;color: white;font-size: 1.3em;padding: 0">Vous êtes une agence,<br>creer votre vitrine</a>
+                        </p>
+                    @endif
+            @endif
 
-            <div  style="border: solid 1px cornflowerblue;margin-top: 40px;min-height: 150px">
+
+            <div  style="border: solid 1px cornflowerblue;margin-top: 20px;min-height: 150px">
                 <p class="text-center " style="color: red;text-decoration: blink">votre publicité ici</p>
                 <p class="text-center"><img src="{{url('img/sen-delivery.png')}}" height="150"></p>
                 <p class="text-center " style="color: red;text-decoration: blink"><a href="" class="btn btn-primary"><i class=""></i> contacter nous pour vos pubs</a></p>

@@ -9,6 +9,7 @@
                     <thead>
                     <tr>
                         <th><i class=""></i>Libelle</th>
+                        <th><i class=""></i>Type</th>
 
                         <th></th>
                     </tr>
@@ -17,6 +18,13 @@
                     @foreach($listes as $object)
                         <tr>
                             <td class="libelle">{{$object->libelle}}</td>
+                            <td class="libelle">
+                                @if($object->type==1)Agence @endif
+                                @if($object->type==2)Prestataire @endif
+                            </td>
+
+
+
                             <td>
                                 <a href="{{route('editerDescriptionFormule',['id'=>$object->id])}}" class="btn btn-primary btn-xs"><i class="fa fa-pencil fa-2x"></i></a>
                                 <a class="btn btn-danger btn-xs" id="{{$object->id}}"><i class="fa fa-trash-o fa-2x"></i></a>

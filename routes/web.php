@@ -12,14 +12,12 @@
 */
 
 
-Route::get('admin','AdminController@index')->name('indexAdmin');
-Route::post('admin','AdminController@index')->name('indexAdmin');
-Route::get('admin/logout','AdminController@logout')->name('logoutAdmin');
-
-
-
+Route::get('admin/login','AdminController@loginAdmin')->name('loginAdmin');
+Route::post('admin/login','AdminController@loginAdmin')->name('loginAdmin');
 Route::middleware(['AuthAdmin'])->group(function () {
 #------------------------------- plateforme --------------------------------
+    Route::get('admin/logout','AdminController@logout')->name('logoutAdmin');
+    Route::get('admin','AdminController@index')->name('indexAdmin');
     Route::get('admin/plateforme','AdminController@plateforme')->name('indexPlateformeAdmin');
     Route::get('admin/nouvelle-plateforme','AdminController@creerPlateforme')->name('creerPlateforme');
     Route::post('admin/nouvelle-plateforme','AdminController@creerPlateforme')->name('creerPlateforme');
@@ -126,7 +124,7 @@ Route::middleware(['AuthUser'])->group(function () {
         Route::post('update-langues', 'PrestataireController@updateLangues')->name('updateLangues');
     #------------ end profil ----------"
     Route::get('mon-compte', 'PrestataireController@monCompte')->name('monCompte');
-    Route::get('mon-compte/abonnement', 'PrestataireController@abonnement')->name('abonnement');
+    Route::get('/abonnement', 'PrestataireController@abonnement')->name('abonnement');
     Route::post('abonnement/nouveau', 'PrestataireController@nouveauAbonnement')->name('nouveauAbonnement');
     Route::get('abonnement/commande/{numero}', 'PrestataireController@detailCommande')->name('detailCommande');
     Route::get('mes-projets', 'PrestataireController@mesProjets')->name('mesProjets');
@@ -160,6 +158,7 @@ Route::get('agence-afc', 'AgenceController@AfterCreation')->name('AfterCreation'
 
 Route::middleware(['AuthAdminAgence'])->group(function () {
     Route::get('agence', 'AgenceController@indexAgence')->name('indexAgence');
+    Route::get('parametres', 'AgenceController@parametres')->name('parametres');
     Route::post('agence/update-phone', 'AgenceController@updatePhone')->name('updatePhoneAgence');
     Route::post('agence/update-slogan', 'AgenceController@updateSlogan')->name('updateSlogan');
     Route::post('agence/update-bp', 'AgenceController@updateBoitePostale')->name('updateBoitePostale');
