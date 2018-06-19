@@ -21,9 +21,18 @@
                             <td class="">
                                 @if($object->type==1)Agence @endif
                                 @if($object->type==2)Prestataire @endif
+                                @if($object->type==3)Agence/Prestataire @endif
                             </td>
                             <td>
-                                {{$object->value}}
+                                @if($object->hasValue)
+                                    @foreach($formules as $formule)
+                                        <?php $currentFormuleValue=\App\FormuleDescriptionValue::where("description_formule_id",$object->id)->where("formule_id",$formule->id)->first() ?>
+                                        @if($currentFormuleValue)
+                                            {{"$formule->libelle:$currentFormuleValue->value "}}<br>
+                                        @endif
+                                    @endforeach
+
+                                @endif
                             </td>
                             <td>
                                 <button class="btn btn-info btnUp" id="up_{{$object->id}}" data-loading-text="<i class='fa fa-spinner fa-spin '></i> ..."><i class="fa fa-arrow-circle-up"></i></button>
@@ -73,8 +82,6 @@
                 currentRow=$this.parent().parent();
                 $position=parseInt(currentRow.prop('id').split('_')[1]);
                 $nestPsi=parseInt($position)+1;
-                //alert($position);
-                //alert($nestPsi);
                 console.log(currentRow);
                 $this.button('loading');
                 $.ajax({
@@ -82,12 +89,14 @@
                     type : "get",
                     success : function(json)
                     {
-                        console.log(json);
+                        _data=JSON.parse(json);
+                        console.log(_data);
+                        $position=_data.old;
+                        $nestPsi=_data.new;
                         $this.button('reset');
-
-                        $("#pos_"+(parseInt($position)+1)).after(currentRow);
+                        $("#pos_"+$nestPsi).after(currentRow);
                         currentRow.prop("id","pos_"+$nestPsi);
-                       $("#pos_"+(parseInt($position)+1)).prop("id","pos_"+(parseInt($position)));
+                       $("#pos_"+$nestPsi).prop("id","pos_"+(parseInt($position)));
                     },
                     error :function(xhr,errmsg,err)
                     {
@@ -95,15 +104,12 @@
                         console.log(xhr);
                     }
                 });
-
             });
             $(".btnUp").click(function (e) {
                 e.preventDefault();
                 $this=$(this);
                 currentId=$(this).prop('id').split('_')[1];
                 currentRow=$this.parent().parent();
-                $position=parseInt(currentRow.prop('id').split('_')[1]);
-                $nestPsi=parseInt($position)-1;
 
                 console.log(currentRow);
                 $this.button('loading');
@@ -112,10 +118,13 @@
                     type : "get",
                     success : function(json)
                     {
-                        console.log(json);
+                        _data=JSON.parse(json);
+                        console.log(_data);
+                        $position=_data.old;
+                        $nestPsi=_data.new;
                         $this.button('reset');
-                        $("#pos_"+(parseInt($position)-1)).before(currentRow);
-                        $("#pos_"+(parseInt($nestPsi))).prop("id","pos_"+$position);
+                        $("#pos_"+$nestPsi).before(currentRow);
+                        $("#pos_"+$nestPsi).prop("id","pos_"+$position);
                         currentRow.prop("id","pos_"+$nestPsi);
                     },
                     error :function(xhr,errmsg,err)

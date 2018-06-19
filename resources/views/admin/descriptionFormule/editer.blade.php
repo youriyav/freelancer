@@ -15,11 +15,13 @@
                             <div class="form-group">
                                 <label for="libelle">Libellé</label>
                                 <input type="text" value="@isset($descritions){{$descritions->libelle}}@endisset" class="form-control" id="libelle" name="libelle">
+                                <p style="color: red">@isset($tabError) {{$tabError[0]}}@endisset</p>
                             </div>
                             <div class="form-group ">
                                 <label for="libelle">Type</label>
                                 <select class="form-control" name="type">
-                                    <option value="1" >Agence</option>
+                                    <option value="3" >Tout</option>
+                                    <option value="1" @if($descritions->type==1) selected @endif>Agence</option>
                                     <option value="2" @if($descritions->type==2) selected @endif >Prestataire</option>
                                 </select>
                             </div>
@@ -37,6 +39,20 @@
 @section('js')
     <script>
         $(function () {
+            $("#hasValue").change(function ()
+            {
+                $this=$(this);
+                if($this.prop('checked')==true)
+                {
+                    $(".block-value").show();
+                }
+                else
+                {
+                    $(".block-value").hide();
+                }
+
+
+            });
             $('[data-toggle="tooltip"]').tooltip();
 
         });

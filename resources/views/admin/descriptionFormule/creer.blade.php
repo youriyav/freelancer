@@ -26,19 +26,6 @@
                                     <option value="2">Prestataire</option>
                                 </select>
                             </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="hasValue" @isset($valeur) checked @endisset name="hasValue" value="1"/>Définir une valeur
-                                </label>
-                            </div>
-
-                            <div class="form-group " id="block-value" @isset($tabError)  @else hidden @endisset>
-                                <label for="libelle">Valeur</label>
-                                <input type="text" value="@isset($valeur){{$valeur}}@endisset" class="form-control" id="valeur" name="valeur">
-                                <p style="color: red">@isset($tabError[1]) {{$tabError[1]}}@endisset</p>
-
-                            </div>
-
                             <p class="help-block " style="color: red">@isset($errorLibelle){{$errorLibelle}}@endisset</p>
                             <div class="checkbox">
                                 <label>
@@ -63,11 +50,11 @@
                 $this=$(this);
                 if($this.prop('checked')==true)
                 {
-                    $("#block-value").show();
+                    $(".block-value").show();
                 }
                 else
                 {
-                    $("#block-value").hide();
+                    $(".block-value").hide();
                 }
 
 

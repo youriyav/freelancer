@@ -11,4 +11,8 @@ class Formule extends Model
     {
         return $this->belongsToMany('App\DescriptionFormule');
     }
+    public function formuleDescripValue()
+    {
+        return $this->hasMany('App\FormuleDescriptionValue');
+    }
 }

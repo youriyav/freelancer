@@ -7,6 +7,7 @@ use App\Commande;
 use App\DemarrageProjet;
 use App\DescriptionFormule;
 use App\Formule;
+use App\FormuleDescriptionValue;
 use App\Langue;
 use App\Photo;
 use App\plateforme;
@@ -775,21 +776,22 @@ class AdminController extends Controller
     #-------------------------------- DESCRIPTION_FORMULE -------------------------#
     public function descriptFormule()
     {
+        $formules=Formule::all();
         $listes=DescriptionFormule::orderBy('position', 'ASC')->where('isDeleted',0)->get();
-        return view('admin.descriptionFormule.index',compact('listes'));
+        return view('admin.descriptionFormule.index',["formules"=>$formules,"listes"=>$listes]);
     }
     public function creerDescriptFormule(Request $request,Input $input)
     {
         if($request->getMethod()=="GET")
         {
-            return view('admin.descriptionFormule.creer');
+            $formule=Formule::all();
+            return view('admin.descriptionFormule.creer',["formule"=>$formule]);
         }
         else
         {
+            $formule=Formule::all();
             $libelle=$input->get('libelle');
             $type=$input->get('type');
-            $hasValue=$input->get('hasValue');
-            $valeur=$input->get('valeur');
             $isError=0;
             $tabError=array();
             if($libelle=="")
@@ -797,57 +799,15 @@ class AdminController extends Controller
                 $isError++;
                 $tabError[0]="Veuillez remplir ce champs";
             }
-            if($hasValue)
-            {
-                if($valeur=="")
-                {
-                    $isError++;
-                    $tabError[1]="Veuillez remplir ce champs";
-                }
-            }
-
             if($isError==0)
             {
                 $listes=DescriptionFormule::all();
-                if($type==3)
-                {
-                    $descriptio=new DescriptionFormule();
-                    $descriptio->libelle=$libelle;
-                    $descriptio->type=1;
-                    $descriptio->position=count($listes)+1;
-                    $descriptio->isDeleted=0;
-                    if($hasValue)
-                    {
-                        $descriptio->hasValue=1;
-                        $descriptio->value=$valeur;
-                    }
-                    $descriptio->save();
-                    $descriptio=new DescriptionFormule();
-                    $descriptio->libelle=$libelle;
-                    $descriptio->type=2;
-                    $descriptio->position=count($listes)+2;
-                    $descriptio->isDeleted=0;
-                    if($hasValue)
-                    {
-                        $descriptio->hasValue=1;
-                        $descriptio->value=$valeur;
-                    }
-                    $descriptio->save();
-                }
-                else
-                {
-                    $descriptio=new DescriptionFormule();
-                    $descriptio->libelle=$libelle;
-                    $descriptio->type=$type;
-                    $descriptio->position=count($listes)+1;
-                    $descriptio->isDeleted=0;
-                    if($hasValue)
-                    {
-                        $descriptio->hasValue=1;
-                        $descriptio->value=$valeur;
-                    }
-                    $descriptio->save();
-                }
+                $descriptio=new DescriptionFormule();
+                $descriptio->libelle=$libelle;
+                $descriptio->type=$type;
+                $descriptio->position=count($listes)+1;
+                $descriptio->isDeleted=0;
+                $descriptio->save();
                 $next=$input->get('next');
                 if($next!=null)
                 {
@@ -868,34 +828,37 @@ class AdminController extends Controller
     public function supprimerDescriptionFormule($id)
     {
         $descritions=DescriptionFormule::findOrFail($id);
-        $descritions->isDeleted=1;
-        $descritions->save();
+        $descritions->delete();
         return redirect()->route("descriptFormule");
     }
     public function editerDescriptionFormule($id,Request $request,Input $input)
     {
         $descrition=DescriptionFormule::findOrFail($id);
+        $formule=Formule::all();
         if($request->getMethod()=="GET")
         {
-            return view('admin.descriptionFormule.editer',['descritions'=>$descrition]);
-
+            return view('admin.descriptionFormule.editer',['descritions'=>$descrition,'formule'=>$formule]);
         }
         else
         {
             $libelle=$input->get('libelle');
             $type=$input->get('type');
-            if($libelle!="")
+            $isError=0;
+            $tabError=array("");
+            if($libelle=="")
             {
-                $descrition->libelle=$libelle;
-                $descrition->type=$type;
-                $descrition->save();
-                return redirect()->route("descriptFormule");
+                $isError++;
+                $tabError[0]="Veuillez remplir ce champs";
+            }
+            if($isError!=0)
+            {
+                return view('admin.descriptionFormule.editer',['descritions'=>$descrition,"tabError"=>$tabError,"libelle"=>$libelle]);
+            }
+            $descrition->libelle=$libelle;
+            $descrition->type=$type;
+            $descrition->save();
 
-            }
-            else
-            {
-                return view('admin.descriptionFormule.editer',["errorLibelle"=>"Veuillez remplir ce champs"]);
-            }
+            return redirect()->route("descriptFormule");
         }
 
     }
@@ -904,18 +867,48 @@ class AdminController extends Controller
         try
         {
             $descrition=DescriptionFormule::findOrFail($id);
+            $listes=DescriptionFormule::orderBy('position', 'ASC')->where('isDeleted',0)->get();
             if($descrition)
             {
                 $oldPosition=$descrition->position;
+                $check=true;
                 //down
                 if($type==1)
                 {
-                    $nextDescription=DescriptionFormule::where("position",$oldPosition+1)->first();
+                    $i=0;
+                    do
+                    {
+                        if($listes[$i]->id==$id)
+                        {
+                            $check=false;
+                            if($i+1<count($listes))
+                            {
+                                $nextDescription=$listes[$i+1];
+                                $new=$nextDescription->position;
+                            }
+                        }
+                        $i=$i+1;
+                    }while($i<count($listes) and $check==true);
+
                 }
                 //up
                 if($type==2)
                 {
-                    $nextDescription=DescriptionFormule::where("position",$oldPosition-1)->first();
+
+                    $i=0;
+                    do
+                    {
+                        if($listes[$i]->id==$id)
+                        {
+                            $check=false;
+                            if($i!=0)
+                            {
+                                $nextDescription=$listes[$i-1];
+                                $new=$nextDescription->position;
+                            }
+                        }
+                        $i=$i+1;
+                    }while($i<count($listes) and $check==true);
                 }
                 if ($nextDescription)
                 {
@@ -923,7 +916,7 @@ class AdminController extends Controller
                     $nextDescription->position=$oldPosition;
                     $descrition->save();
                     $nextDescription->save();
-                    return $descrition->position;
+                    return "{\"new\":$new,\"old\":$oldPosition}";
                 }
                 else
                 {
