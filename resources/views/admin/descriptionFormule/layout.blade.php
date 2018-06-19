@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@extends('admin.layout')
+
 
 
 @section('maim_menu')

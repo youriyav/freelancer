@@ -16,13 +16,27 @@
                             <div class="form-group ">
                                 <label for="libelle">Libellé</label>
                                 <input type="text" value="@isset($libelle){{$libelle}}@endisset" class="form-control" id="libelle" name="libelle">
+                                <p style="color: red">@isset($tabError) {{$tabError[0]}}@endisset</p>
                             </div>
                             <div class="form-group ">
                                 <label for="libelle">Type</label>
                                 <select class="form-control" name="type">
+                                    <option value="3">Tout</option>
                                     <option value="1">Agence</option>
                                     <option value="2">Prestataire</option>
                                 </select>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="hasValue" @isset($valeur) checked @endisset name="hasValue" value="1"/>Définir une valeur
+                                </label>
+                            </div>
+
+                            <div class="form-group " id="block-value" @isset($tabError)  @else hidden @endisset>
+                                <label for="libelle">Valeur</label>
+                                <input type="text" value="@isset($valeur){{$valeur}}@endisset" class="form-control" id="valeur" name="valeur">
+                                <p style="color: red">@isset($tabError[1]) {{$tabError[1]}}@endisset</p>
+
                             </div>
 
                             <p class="help-block " style="color: red">@isset($errorLibelle){{$errorLibelle}}@endisset</p>
@@ -44,6 +58,20 @@
 @section('js')
     <script>
         $(function () {
+            $("#hasValue").change(function ()
+            {
+                $this=$(this);
+                if($this.prop('checked')==true)
+                {
+                    $("#block-value").show();
+                }
+                else
+                {
+                    $("#block-value").hide();
+                }
+
+
+            });
             $('[data-toggle="tooltip"]').tooltip();
             $(".alert-success").fadeOut(5000);
 

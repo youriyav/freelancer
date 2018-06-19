@@ -10,22 +10,24 @@
                     <tr>
                         <th><i class=""></i>Libelle</th>
                         <th><i class=""></i>Type</th>
-
+                        <th><i class=""></i>Valeur</th>
                         <th></th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="table_content">
                     @foreach($listes as $object)
-                        <tr>
+                        <tr id="pos_{{$object->position}}">
                             <td class="libelle">{{$object->libelle}}</td>
-                            <td class="libelle">
+                            <td class="">
                                 @if($object->type==1)Agence @endif
                                 @if($object->type==2)Prestataire @endif
                             </td>
-
-
-
                             <td>
+                                {{$object->value}}
+                            </td>
+                            <td>
+                                <button class="btn btn-info btnUp" id="up_{{$object->id}}" data-loading-text="<i class='fa fa-spinner fa-spin '></i> ..."><i class="fa fa-arrow-circle-up"></i></button>
+                                <button class="btn btn-warning btnDown" id="down_{{$object->id}}" data-loading-text="<i class='fa fa-spinner fa-spin '></i> ..."><i class="fa fa-arrow-circle-down"></i></button>
                                 <a href="{{route('editerDescriptionFormule',['id'=>$object->id])}}" class="btn btn-primary btn-xs"><i class="fa fa-pencil fa-2x"></i></a>
                                 <a class="btn btn-danger btn-xs" id="{{$object->id}}"><i class="fa fa-trash-o fa-2x"></i></a>
                             </td>
@@ -64,6 +66,66 @@
 @section('js')
     <script>
         $(document).ready(function(){
+            $(".btnDown").click(function (e) {
+                e.preventDefault();
+                $this=$(this);
+                currentId=$(this).prop('id').split('_')[1];
+                currentRow=$this.parent().parent();
+                $position=parseInt(currentRow.prop('id').split('_')[1]);
+                $nestPsi=parseInt($position)+1;
+                //alert($position);
+                //alert($nestPsi);
+                console.log(currentRow);
+                $this.button('loading');
+                $.ajax({
+                    url :"/admin/update-descrip-position/"+currentId+"/1",
+                    type : "get",
+                    success : function(json)
+                    {
+                        console.log(json);
+                        $this.button('reset');
+
+                        $("#pos_"+(parseInt($position)+1)).after(currentRow);
+                        currentRow.prop("id","pos_"+$nestPsi);
+                       $("#pos_"+(parseInt($position)+1)).prop("id","pos_"+(parseInt($position)));
+                    },
+                    error :function(xhr,errmsg,err)
+                    {
+                        $this.button('reset');
+                        console.log(xhr);
+                    }
+                });
+
+            });
+            $(".btnUp").click(function (e) {
+                e.preventDefault();
+                $this=$(this);
+                currentId=$(this).prop('id').split('_')[1];
+                currentRow=$this.parent().parent();
+                $position=parseInt(currentRow.prop('id').split('_')[1]);
+                $nestPsi=parseInt($position)-1;
+
+                console.log(currentRow);
+                $this.button('loading');
+                $.ajax({
+                    url :"/admin/update-descrip-position/"+currentId+"/2",
+                    type : "get",
+                    success : function(json)
+                    {
+                        console.log(json);
+                        $this.button('reset');
+                        $("#pos_"+(parseInt($position)-1)).before(currentRow);
+                        $("#pos_"+(parseInt($nestPsi))).prop("id","pos_"+$position);
+                        currentRow.prop("id","pos_"+$nestPsi);
+                    },
+                    error :function(xhr,errmsg,err)
+                    {
+                        $this.button('reset');
+                        console.log(xhr);
+                    }
+                });
+
+            });
             $('[data-toggle="tooltip"]').tooltip();
             $('.btn-danger').click(function () {
                 $('.modal-body').text("Voulez supprimer la description "+$(this).parent().parent().find('.libelle').text()+"?");

@@ -87,6 +87,11 @@ Route::middleware(['AuthAdmin'])->group(function () {
     Route::get('admin/commande/{jour}','AdminController@indexCommande')->name('indexCommande');
     Route::get('admin/commande/valider/{id}','AdminController@validerCommande')->name('validerCommande')->where('id', '[0-9]+');
 #-------------------------------- END Commande ----------------------------------------
+#---------------------------------------- Ajax------------------------------------
+    Route::get('admin/update-descrip-position/{id}/{type}','AdminController@updateDescriptPosition')->name('updateDescriptPosition')->where('id', '[0-9]+')->where('type', '[0-9]+');
+#-------------------------------- END Ajax ----------------------------------------
+
+
 
 });
 

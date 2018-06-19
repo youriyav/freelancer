@@ -31,7 +31,7 @@
                             <p class="help-block " style="color: red">@isset($errorLibelle){{$errorLibelle}}@endisset</p>
                             <label for="libelle">Type</label>
                             <div class="form-group ">
-                                <select class="form-control" name="type">
+                                <select class="form-control" name="type" id="type">
                                     <option value="1">Agence</option>
                                     <option value="2">Prestataire</option>
                                 </select>
@@ -57,7 +57,7 @@
                                 <div class="col-lg-8"></div>
                                 <select id="description" name="description[]" required data-placeholder="ajouter des description"  class="form-control chzn-select" multiple="multiple" tabindex="4" style="height:50px;">
                                     @foreach($listes as $object)
-                                        <option value="{{$object->id}}">{{$object->libelle}}</option>
+                                        <option value="{{$object->id}}">{{$object->libelle}} @if($object->type==1)(Agence) @else (Prestataire) @endif</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -77,6 +77,7 @@
             </div><!-- /content-panel -->
         </div><!-- /col-md-12 -->
     </div>
+    @include("footer")
 @endsection
 @section('js')
 
@@ -99,6 +100,33 @@
     <script src="{{url('/js/assets/formsInit.js')}}"></script>
     <script>
         $(function () {
+           /* $("#type").change(function () {
+                _html="";
+                $value=$(this).val();
+               for (i=0;i<listes.length;i++)
+               {
+                   $item=listes[i];
+                   //agence
+                   if($value==1)
+                   {
+                       if($item.type==1)
+                       {
+                           _html+='<option value="'+$item.id+'">'+$item.libelle+'</option>';
+                       }
+                   }
+                   else//prestataire
+                   {
+                       if($item.type==2)
+                       {
+                           _html+='<option value="'+$item.id+'">'+$item.libelle+'</option>';
+                       }
+                   }
+               }
+               console.log(_html);
+                $(".chosen-container").remove();
+                $("#description").html(_html);
+                formInit();
+            });*/
             $('[data-toggle="tooltip"]').tooltip();
             $(".alert-success").fadeOut(5000);
             $("#cp1").change(function () {

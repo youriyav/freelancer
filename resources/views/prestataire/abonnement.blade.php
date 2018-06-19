@@ -12,19 +12,51 @@
 @section("main_content")
     <section class="content row" style="background-color: #fafafa">
         <div class="row" style="margin-bottom: 10px;">
-            @foreach($listeOffre as $formule)
-            <div class="col-lg-4 col-md-4"style="padding: 5px" >
+            @foreach($formules as $formule)
+            <div class="col-lg-3 col-md-3"style="padding: 5px" >
                 <div class="panel" style="border: solid 1px {{$formule->couleur}}" >
                     <div class="panel-title panel-heading" style="background-color: {{$formule->couleur}};color: white">
                         <h3 class="text-center" style="padding: 0;margin: 0px">{{$formule->libelle}}</h3>
                     </div>
                     <div class="panel-body ">
-                        <h2 class="text-center" style="color: {{$formule->couleur}};font-weight: bold;margin-top: 0">{{$formule->prix}} Fcfa / Mois</h2>
-                        <ul class="list-group">
-                            @foreach($formule->descriptions as $description)
-                                <li class="list-group-item" style="color: {{$formule->couleur}};border: solid 1px {{$formule->couleur}}"><i class="fa fa-check-circle fa-2x"  style="float: left"></i> <span style="font-weight: bold;font-size: 1.3em;margin-left: 5px">{{$description->libelle}}</span></li>
+                        <h3 class="text-center" style="font-weight: bold;margin-top: 0">{{$formule->prix}} Fcfa / Mois</h3>
+                        <table class="table">
+                            @foreach($descriptions as $description)
+                                <?php $check=false ?>
+                                <tr class="" style="padding: 5px">
+                                    <td class="" style="font-size: 1.3em;">{{$description->libelle}}</td>
+                                    <td class="pull-right">
+                                        @foreach($formule->descriptions as $descrip)
+                                            @if($descrip->id==$description->id) <?php $check=true ?> @endif
+                                        @endforeach
+                                        @if($check==true)
+                                            <i class="fa fa-check-circle fa-2x"  style="float: left;color: green"></i>
+                                        @else
+                                            <i class="fa fa-times-circle fa-2x"  style="float: left;color: red"></i>
+                                        @endif
+                                    </td>
+                                </tr>
                             @endforeach
-                        </ul>
+                        </table>
+                        <!--ul class="list-group">
+                            @foreach($descriptions as $description)
+                                <?php $check=false ?>
+                                <li class="list-group-item" style="border: solid 1px {{$formule->couleur}}">
+                                    <span class="" style="font-weight: bold;font-size: 1.3em;margin-left: 5px">{{$description->libelle}}</span>
+                                    <span class="pull-right">
+                                        @foreach($formule->descriptions as $descrip)
+                                            @if($descrip->id==$description->id) <?php $check=true ?> @endif
+                                        @endforeach
+                                        @if($check==true)
+                                                <i class="fa fa-check-circle fa-2x"  style="float: left;color: green"></i>
+                                        @else
+                                                <i class="fa fa-times-circle fa-2x"  style="float: left;color: red"></i>
+                                        @endif
+
+                                    </span>
+                                </li>
+                            @endforeach
+                        </ul-->
                         <p class="text-center"><button class="btn btn-lg btn-abn" id="{{$formule->id}}" style="background-color: {{$formule->couleur}};color: white">S'abonner</button></p>
                     </div>
                 </div>

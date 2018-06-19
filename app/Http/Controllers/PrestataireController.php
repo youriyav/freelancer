@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Budget;
 use App\Commande;
 use App\DemarrageProjet;
+use App\DescriptionFormule;
 use App\Formule;
 use App\Langue;
 use App\LigneCommande;
@@ -1153,12 +1154,26 @@ public function updateDescription(Input $input,Request $request)
     }
     public function abonnement(Input $input,Request $request)
     {
-        $listeOffre=Formule::all();
+        $user=Auth::user();
+        //$formules=Formule::all();
+        //agence
+        //$descriptions=DescriptionFormule::where("type",1)->get();
+
+        if($user->isAgencyAdmin==1)
+        {
+            $listeOffre=Formule::where("type",1)->get();
+            $descriptions=DescriptionFormule::where("type",1)->orderBy('position', 'ASC')->get();
+        }
+        else//prestataire
+        {
+            $listeOffre=Formule::where("type",2)->get();
+            $descriptions=DescriptionFormule::where("type",2)->orderBy('position', 'ASC')->get();
+           // $descriptions=DescriptionFormule::where("type",2)->get();
+        }
         JavaScript::put([
             'listeOffre' => $listeOffre,
         ]);
-
-        return view('prestataire.abonnement',["listeOffre"=>$listeOffre]);
+        return view('prestataire.abonnement',["listeOffre"=>$listeOffre,"formules"=>$listeOffre,"descriptions"=>$descriptions]);
     }
     public function nouveauAbonnement(Input $input,Request $request)
     {

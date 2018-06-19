@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\View;
+use JavaScript;
 
 
 class AdminController extends Controller
@@ -541,6 +542,9 @@ class AdminController extends Controller
         if($request->getMethod()=="GET")
         {
             $listes=DescriptionFormule::all();
+            JavaScript::put([
+                'listes' => $listes
+            ]);
             return view('admin.formule.creer',compact('listes'));
         }
         else
@@ -771,7 +775,7 @@ class AdminController extends Controller
     #-------------------------------- DESCRIPTION_FORMULE -------------------------#
     public function descriptFormule()
     {
-        $listes=DescriptionFormule::where('isDeleted',0)->get();
+        $listes=DescriptionFormule::orderBy('position', 'ASC')->where('isDeleted',0)->get();
         return view('admin.descriptionFormule.index',compact('listes'));
     }
     public function creerDescriptFormule(Request $request,Input $input)
@@ -784,13 +788,66 @@ class AdminController extends Controller
         {
             $libelle=$input->get('libelle');
             $type=$input->get('type');
-            if($libelle!="")
+            $hasValue=$input->get('hasValue');
+            $valeur=$input->get('valeur');
+            $isError=0;
+            $tabError=array();
+            if($libelle=="")
             {
-                $descriptio=new DescriptionFormule();
-                $descriptio->libelle=$libelle;
-                $descriptio->type=$type;
-                $descriptio->isDeleted=0;
-                $descriptio->save();
+                $isError++;
+                $tabError[0]="Veuillez remplir ce champs";
+            }
+            if($hasValue)
+            {
+                if($valeur=="")
+                {
+                    $isError++;
+                    $tabError[1]="Veuillez remplir ce champs";
+                }
+            }
+
+            if($isError==0)
+            {
+                $listes=DescriptionFormule::all();
+                if($type==3)
+                {
+                    $descriptio=new DescriptionFormule();
+                    $descriptio->libelle=$libelle;
+                    $descriptio->type=1;
+                    $descriptio->position=count($listes)+1;
+                    $descriptio->isDeleted=0;
+                    if($hasValue)
+                    {
+                        $descriptio->hasValue=1;
+                        $descriptio->value=$valeur;
+                    }
+                    $descriptio->save();
+                    $descriptio=new DescriptionFormule();
+                    $descriptio->libelle=$libelle;
+                    $descriptio->type=2;
+                    $descriptio->position=count($listes)+2;
+                    $descriptio->isDeleted=0;
+                    if($hasValue)
+                    {
+                        $descriptio->hasValue=1;
+                        $descriptio->value=$valeur;
+                    }
+                    $descriptio->save();
+                }
+                else
+                {
+                    $descriptio=new DescriptionFormule();
+                    $descriptio->libelle=$libelle;
+                    $descriptio->type=$type;
+                    $descriptio->position=count($listes)+1;
+                    $descriptio->isDeleted=0;
+                    if($hasValue)
+                    {
+                        $descriptio->hasValue=1;
+                        $descriptio->value=$valeur;
+                    }
+                    $descriptio->save();
+                }
                 $next=$input->get('next');
                 if($next!=null)
                 {
@@ -803,7 +860,7 @@ class AdminController extends Controller
             }
             else
             {
-                return view('admin.descriptionFormule.creer',["errorLibelle"=>"Veuillez remplir ce champs"]);
+                return view('admin.descriptionFormule.creer',["tabError"=>$tabError,"valeur"=>$valeur,"libelle"=>$libelle]);
             }
         }
 
@@ -840,6 +897,46 @@ class AdminController extends Controller
                 return view('admin.descriptionFormule.editer',["errorLibelle"=>"Veuillez remplir ce champs"]);
             }
         }
+
+    }
+    public function updateDescriptPosition($id,$type)
+    {
+        try
+        {
+            $descrition=DescriptionFormule::findOrFail($id);
+            if($descrition)
+            {
+                $oldPosition=$descrition->position;
+                //down
+                if($type==1)
+                {
+                    $nextDescription=DescriptionFormule::where("position",$oldPosition+1)->first();
+                }
+                //up
+                if($type==2)
+                {
+                    $nextDescription=DescriptionFormule::where("position",$oldPosition-1)->first();
+                }
+                if ($nextDescription)
+                {
+                    $descrition->position=$nextDescription->position;
+                    $nextDescription->position=$oldPosition;
+                    $descrition->save();
+                    $nextDescription->save();
+                    return $descrition->position;
+                }
+                else
+                {
+                    return response('cant change position', 403);
+                }
+
+            }
+        }
+        catch (\Exception $e)
+        {
+            return response('not found item', 404);
+        }
+
 
     }
 
