@@ -1162,7 +1162,7 @@ public function updateDescription(Input $input,Request $request)
         if($user->isAgencyAdmin==1)
         {
             $listeOffre=Formule::where("type",1)->get();
-            $descriptions=DescriptionFormule::where("type",1)->orderBy('position', 'ASC')->get();
+            $descriptions=DescriptionFormule::where("type",'<>',2)->orderBy('position', 'ASC')->get();
         }
         else//prestataire
         {

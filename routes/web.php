@@ -89,6 +89,7 @@ Route::middleware(['AuthAdmin'])->group(function () {
 #-------------------------------- END Commande ----------------------------------------
 #---------------------------------------- Ajax------------------------------------
     Route::get('admin/update-descrip-position/{id}/{type}','AdminController@updateDescriptPosition')->name('updateDescriptPosition')->where('id', '[0-9]+')->where('type', '[0-9]+');
+    Route::post('formule-descript-value','AdminController@updateDescriptFormuleValue')->name('updateDescriptFormuleValue');
 #-------------------------------- END Ajax ----------------------------------------
 
 

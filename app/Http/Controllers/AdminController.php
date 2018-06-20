@@ -862,7 +862,34 @@ class AdminController extends Controller
         }
 
     }
-    public function updateDescriptPosition($id,$type)
+    public function updateDescriptFormuleValue(Input $input)
+    {
+        $type=$input->get('type');
+        $idFormue=$input->get('idFormue');
+        $idDescript=$input->get('idDescript');
+        $value=$input->get('value');
+        $descrition=DescriptionFormule::findOrFail($idDescript);
+        $formule=Formule::findOrFail($idFormue);
+        if($type==1)
+        {
+            $formDescriptValu=new FormuleDescriptionValue();
+        }
+        else
+        {
+            $formDescriptValu=FormuleDescriptionValue::where("description_formule_id",$idDescript)->where("formule_id",$idFormue)->first();
+        }
+        $formDescriptValu->value=$value;
+        if($type==1)
+        {
+            $descrition->formuleDescripValue()->save($formDescriptValu);
+            $formule->formuleDescripValue()->save($formDescriptValu);
+            $descrition->hasValue=1;
+            $descrition->save();
+        }
+        $formDescriptValu->save();
+        return $formDescriptValu->id;
+    }
+    public function updateDescriptPosition(Input $input)
     {
         try
         {

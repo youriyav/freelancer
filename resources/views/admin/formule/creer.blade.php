@@ -100,6 +100,7 @@
     <script src="{{url('/js/assets/formsInit.js')}}"></script>
     <script>
         $(function () {
+
            /* $("#type").change(function () {
                 _html="";
                 $value=$(this).val();
@@ -135,6 +136,9 @@
             formInit();
             $("#description").change(function () {
                // alert('good');
+            });
+            $(".active-result").click(function () {
+                alert("good");
             });
         });
         $('#cp1').colorpicker().on('changeColor', function (ev) {

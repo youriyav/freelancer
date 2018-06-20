@@ -17,11 +17,30 @@
                     </thead>
                     <tbody>
                     @foreach($listes as $object)
-                        <tr>
+                        <tr id="form_{{$object->id}}">
                             <td class="libelle">{{$object->libelle}}</td>
                             <td class="">{{$object->prix}} Fcfa</td>
                             <td class="">@if($object->type==1) Agence @else Prestataire @endif </td>
-                            <td class="" style="width: 40%">@foreach($object->descriptions as $descript){{$descript->libelle}}, @endforeach</td>
+                            <td class="" style="width: 50%" >
+                                @foreach($object->descriptions()->orderBy('position', 'ASC')->get() as $descript)
+                                    <div class="row" style="margin: 0;padding: 0;margin-bottom: 5px">
+                                        {{$descript->libelle}}
+                                        @if($descript->hasValue==1)
+                                            <?php $currentFormuleValue=\App\FormuleDescriptionValue::where("description_formule_id",$descript->id)->where("formule_id",$object->id)->first() ?>
+                                                @if($currentFormuleValue)
+                                                    <span class="badge badge-primary " id="descriptValue_{{$descript->id}}_{{$object->id}}">{{"$currentFormuleValue->value)"}}</span>
+                                                @else
+                                                    <span class="badge" style="background-color: orange" id="descriptValue_{{$descript->id}}_{{$object->id}}">non défini</span>
+                                                @endif
+                                                <input @if($descript->hasValue==1) checked @endif type="checkbox" id="descript_{{$descript->id}}_{{$object->id}}" class="hasValue">
+                                                @if($descript->hasValue==1)
+                                                    <i id="edit_{{$descript->id}}_{{$object->id}}" class="btn fa fa-edit btnEditValue" style="padding: 0;margin-top: -5px"></i>
+                                                @endif
+                                            @else
+                                            <input type="checkbox" id="descript_{{$descript->id}}" class="hasValue">
+                                        @endif
+                                    </div> @endforeach
+                            </td>
                             <td>
                                 <a href="{{route('editerFormule',['id'=>$object->id])}}" class="btn btn-primary btn-xs"><i class="fa fa-pencil fa-2x"></i></a>
                                 <a class="btn btn-danger btn-xs" id="{{$object->id}}"><i class="fa fa-trash-o fa-2x"></i></a>
@@ -54,18 +73,124 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="valueModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #3c8dbc;color: white;font-size: 1.5em;font-weight: bold">
+                    <h5 class="modal-title">Définir la valeur</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="col-md-8 col-md-offset-2">
+                        <form class="">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="txtValue">
+                                <p style="color: red;" id="txtError" hidden>veuillez remplir ce champs</p>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="row">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button class="btn btn-primary btn-large" id="btnValidate"  data-loading-text="<i class='fa fa-spinner fa-spin '></i> Chargement...">Valider</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
 @endsection
 @section('js')
+    <script src="{{url('/js/assets/notify.min.js')}}"></script>
     <script>
+        var $idDescription;
+        var $idFormule;
+        var $type;
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
             $('.btn-danger').click(function () {
                 $('.modal-body').text("Voulez supprimer la formule "+$(this).parent().parent().find('.libelle').text()+"?");
                 $('#btnDelete').attr("href","/admin/supprimer-formule/"+$(this).attr('id'));
                 $("#deleteModal").modal('toggle');
+            });
+
+            $("#btnValidate").click(function () {
+                var $this = $(this);
+                $("#txtError").hide();
+
+                if($("#txtValue").val()=="")
+                {
+                    $("#txtError").show();
+                    return 0;
+                }
+                $this.button('loading');
+                _data={"type":$type,"idFormue":$idFormule,"idDescript":$idDescription,"value":$("#txtValue").val(),"_token":"<?php echo csrf_token() ?>"};
+                $.ajax({
+                    url :"/formule-descript-value",
+                    data:_data,
+                    type : "post",
+                    success : function(json)
+                    {
+                        console.log(json);
+                        $this.button('reset');
+                        $("#valueModal").modal('toggle');
+                        $.notify("Mise à jour éffectuée avec succès!", "info");
+                        if($type==1)
+                        {
+                            location.href="/admin/formule-d-abonnement";
+
+                        }
+                       // {
+                            $("#descriptValue_"+$idDescription+"_"+$idFormule).text($("#txtValue").val());
+                        //}
+                    },
+                    error :function(xhr,errmsg,err)
+                    {
+                        console.log(xhr);
+                        $this.button('reset');
+                        $("#valueModal").modal('toggle');
+                    }
+                });
+
+
+            });
+
+            $(".hasValue").change(function () {
+                $this=$(this);
+                if($this.prop('checked')==true)
+                {
+                    $idDescription=$this.prop('id').split('_')[1];
+                    $idFormule=$this.parent().parent().parent().prop('id').split('_')[1];
+                    $("#txtValue").val("");
+                    $type=1;
+                    $("#valueModal").modal('toggle');
+                }
+            });
+            $(".btnEditValue").click(function () {
+                $this=$(this);
+                $idDescription=$this.prop('id').split('_')[1];
+                $idFormule=$this.parent().parent().parent().prop('id').split('_')[1];
+                $("#txtValue").val("");
+                //alert($("#descriptValue_"+$idDescription+"_"+$idFormule).text());
+                if($("#descriptValue_"+$idDescription+"_"+$idFormule).text()=="non défini")
+                {
+                    $type=1;
+                }
+                else
+                {
+                    $type=2;
+                }
+                //alert($type);
+                $("#valueModal").modal('toggle');
+
             });
         });
     </script>
