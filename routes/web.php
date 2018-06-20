@@ -89,6 +89,8 @@ Route::middleware(['AuthAdmin'])->group(function () {
 #-------------------------------- END Commande ----------------------------------------
 #---------------------------------------- Ajax------------------------------------
     Route::get('admin/update-descrip-position/{id}/{type}','AdminController@updateDescriptPosition')->name('updateDescriptPosition')->where('id', '[0-9]+')->where('type', '[0-9]+');
+    Route::get('admin/update-formule-position/{id}/{type}','AdminController@updateFormulePosition')->name('updateFormulePosition')->where('id', '[0-9]+')->where('type', '[0-9]+');
+    Route::get('admin/remove-formule-descript-value/{idFormule}/{idDescription}','AdminController@removeDescriptPosition')->name('removeDescriptPosition')->where('idFormule', '[0-9]+')->where('idDescription', '[0-9]+');
     Route::post('formule-descript-value','AdminController@updateDescriptFormuleValue')->name('updateDescriptFormuleValue');
 #-------------------------------- END Ajax ----------------------------------------
 
@@ -115,7 +117,9 @@ Route::post('restaurer-compte/{key}', 'PrestataireController@restaurerCompte')->
 Route::post('send-message', 'PrestataireController@sendMessageText')->name('sendMessage');
 
 Route::get('test', 'PrestataireController@test')->name('test');
+Route::get('nos-tarifs', 'PrestataireController@noTarifs')->name('noTarifs');
 Route::post('inscription', 'PrestataireController@inscription')->name('inscription');
+Route::get('profil/{slug}', 'PrestataireController@profil')->name('profil');
 
 
 Route::middleware(['AuthUser'])->group(function () {
@@ -160,8 +164,6 @@ Route::middleware(['AuthUser'])->group(function () {
 Route::get('nouvelle-agence', 'AgenceController@nouvelleAgence')->name('nouvelleAgence');
 Route::post('nouvelle-agence', 'AgenceController@nouvelleAgence')->name('nouvelleAgence');
 Route::get('agence-afc', 'AgenceController@AfterCreation')->name('AfterCreation');
-
-
 Route::middleware(['AuthAdminAgence'])->group(function () {
     Route::get('agence', 'AgenceController@indexAgence')->name('indexAgence');
     Route::get('parametres', 'AgenceController@parametres')->name('parametres');

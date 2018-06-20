@@ -77,7 +77,13 @@
             </div>
             <div class="nav navbar-nav navbar-right hidden-xs" style="padding-right: 20px" >
                 <ul class="nav navbar-nav">
+
                     @yield('blingbling')
+                    <li class="dropdown notifications-menu">
+                        <a href="{{route('noTarifs')}}" >
+                            <i class="fa fa-money"></i> Nos Tarifs
+                        </a>
+                    </li>
                     @if(!Auth::check())
                         <li class="dropdown notifications-menu">
                             <a href="{{route('inscription')}}" >

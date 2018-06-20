@@ -194,7 +194,12 @@
                                                                                         {{$offre->user->agence->raisonSocial}} (Agence) <span class="badge badge-primary">Pro</span>
                                                                                     @endif
                                                                                 @else
-                                                                                    {{$offre->user->login}}
+                                                                                    @if($offre->user->isAgencyAdmin==1)
+                                                                                        {{$offre->user->agence->raisonSocial}} (Agence) <span class="badge badge-primary">Pro</span>
+                                                                                    @else
+                                                                                        {{$offre->user->login}} (freelancer) <span class="badge badge-primary">Pro</span>
+                                                                                    @endif
+
                                                                                 @endif
                                                                             @else
                                                                                 @if($offre->user->isAgencyAdmin==1)

@@ -81,6 +81,38 @@ class PrestataireController extends Controller
         $check=true;
         return view('prestataire.index',['listeOfTechnologies'=>$listeOfTechnologies,'listeOfPlat'=>$listeOfPlat,"projets"=>$projets,"tmpListe"=>$tmpListe,"check"=>$check]);
     }
+    public function noTarifs()
+    {
+        if(Auth::check())
+        {
+            $user=Auth::user();
+            if($user->isAgencyAdmin==1)
+            {
+                $listeOffre=Formule::where("type",1)->orderBy('position', 'ASC')->get();
+                $descriptions=DescriptionFormule::where("type",'<>',2)->orderBy('position', 'ASC')->get();
+            }
+            else//prestataire
+            {
+                $listeOffre=Formule::where("type",2)->get();
+                $descriptions=DescriptionFormule::where("type",'<>',1)->orderBy('position', 'ASC')->get();
+                // $descriptions=DescriptionFormule::where("type",2)->get();
+            }
+        }
+        else
+        {
+            $listeOffre=Formule::orderBy('position', 'ASC')->get();
+            $descriptions=DescriptionFormule::orderBy('position', 'ASC')->get();
+        }
+        JavaScript::put([
+            'listeOffre' => $listeOffre,
+        ]);
+
+        return view('prestataire.abonnement',["listeOffre"=>$listeOffre,"formules"=>$listeOffre,"descriptions"=>$descriptions]);
+    }
+    public function profil()
+    {
+        return view('prestataire.profil');
+    }
     public function detailProjetUser($slug)
     {
         $listeOfTechnologies=Technologie::where('isDeleted',0)->get();
@@ -1155,19 +1187,15 @@ public function updateDescription(Input $input,Request $request)
     public function abonnement(Input $input,Request $request)
     {
         $user=Auth::user();
-        //$formules=Formule::all();
-        //agence
-        //$descriptions=DescriptionFormule::where("type",1)->get();
-
         if($user->isAgencyAdmin==1)
         {
-            $listeOffre=Formule::where("type",1)->get();
+            $listeOffre=Formule::where("type",1)->orderBy('position', 'ASC')->get();
             $descriptions=DescriptionFormule::where("type",'<>',2)->orderBy('position', 'ASC')->get();
         }
         else//prestataire
         {
             $listeOffre=Formule::where("type",2)->get();
-            $descriptions=DescriptionFormule::where("type",2)->orderBy('position', 'ASC')->get();
+            $descriptions=DescriptionFormule::where("type",'<>',1)->orderBy('position', 'ASC')->get();
            // $descriptions=DescriptionFormule::where("type",2)->get();
         }
         JavaScript::put([

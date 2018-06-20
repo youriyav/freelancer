@@ -535,7 +535,7 @@ class AdminController extends Controller
     #-------------------------------- FORMULE -------------------------#
     public function formule()
     {
-        $listes=Formule::where('isDeleted',0)->get();
+        $listes=Formule::orderBy('position', 'ASC')->where('isDeleted',0)->get();
         return view('admin.formule.index',compact('listes'));
     }
     public function creerFormule(Request $request,Input $input)
@@ -550,6 +550,7 @@ class AdminController extends Controller
         }
         else
         {
+            $listes=Formule::all();
             $descriptions=$input->get('description');
             $libelle=$input->get('libelle');
             $color=$input->get('color');
@@ -563,6 +564,7 @@ class AdminController extends Controller
             $formule->couleur=$color;
             $formule->isDeleted=0;
             $formule->isActivated=0;
+            $formule->position=count($listes)+1;
             $formule->save();
             foreach ($descriptions as $descript)
             {
@@ -623,9 +625,76 @@ class AdminController extends Controller
     public function supprimerFormule($id)
     {
         $formule=Formule::findOrFail($id);
-        $formule->isDeleted=1;
-        $formule->save();
-        return redirect()->route("indexF");
+        $formule->delete();
+        return redirect()->route("indexFormuleAdmin");
+    }
+    public function updateFormulePosition(Input $input,$id,$type)
+    {
+        try
+        {
+            $formule=Formule::findOrFail($id);
+            $listes=Formule::orderBy('position', 'ASC')->get();
+            if($formule)
+            {
+                $oldPosition=$formule->position;
+                $check=true;
+                //down
+                if($type==1)
+                {
+                    $i = 0;
+                    do {
+                        if ($listes[$i]->id == $id) {
+                            $check = false;
+                            if ($i + 1 < count($listes)) {
+                                $tmp = $i + 1;
+
+                                $nextformule = $listes[$tmp];
+                                //dd($nextformule);
+                                $new = $nextformule->position;
+                            }
+                        }
+                        $i = $i + 1;
+                    } while ($i < count($listes) and $check == true);
+                }
+                //up
+                if($type==2)
+                {
+                    $i=0;
+                    do
+                    {
+                        if($listes[$i]->id==$id)
+                        {
+
+                            $check=false;
+                            if($i!=0)
+                            {
+                                $nextformule=$listes[$i-1];
+                                $new=$nextformule->position;
+                            }
+                        }
+                        $i=$i+1;
+                    }while($i<count($listes) and $check==true);
+                }
+                if ($nextformule)
+                {
+                    $nextformule->position=0;
+                    $nextformule->save();
+                    $formule->position=$new;
+                    $formule->save();
+                    $nextformule->position=$oldPosition;
+                    $nextformule->save();
+                    return "{\"new\":$new,\"old\":$oldPosition}";
+                }
+                else
+                {
+                    return response('cant change position', 403);
+                }
+            }
+        }
+        catch (\Exception $e)
+        {
+            return response('not found item', 404);
+        }
     }
 #------------------------------------------------------------------ end FORMULE -------------------------------------------#
 #----------------------------------------------------------------- LANGUES ---------------------------------------------------#
@@ -878,6 +947,7 @@ class AdminController extends Controller
         {
             $formDescriptValu=FormuleDescriptionValue::where("description_formule_id",$idDescript)->where("formule_id",$idFormue)->first();
         }
+
         $formDescriptValu->value=$value;
         if($type==1)
         {
@@ -889,7 +959,7 @@ class AdminController extends Controller
         $formDescriptValu->save();
         return $formDescriptValu->id;
     }
-    public function updateDescriptPosition(Input $input)
+    public function updateDescriptPosition(Input $input,$id,$type)
     {
         try
         {
@@ -916,12 +986,10 @@ class AdminController extends Controller
                         }
                         $i=$i+1;
                     }while($i<count($listes) and $check==true);
-
                 }
                 //up
                 if($type==2)
                 {
-
                     $i=0;
                     do
                     {
@@ -949,15 +1017,24 @@ class AdminController extends Controller
                 {
                     return response('cant change position', 403);
                 }
-
             }
         }
         catch (\Exception $e)
         {
             return response('not found item', 404);
         }
-
-
+    }
+    public function removeDescriptPosition($idFormule,$idDescription)
+    {
+        $formDescriptValu=FormuleDescriptionValue::where("description_formule_id",$idDescription)->where("formule_id",$idFormule)->first();
+        $description=DescriptionFormule::findOrFail($idDescription);
+        $description->hasValue=0;
+        $description->save();
+        if($formDescriptValu)
+        {
+            $formDescriptValu->delete();
+            return "good";
+        }
     }
 
     #-------------------------------- end DESCRIPTION_FORMULE -------------------------#
