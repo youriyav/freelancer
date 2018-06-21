@@ -28,4 +28,8 @@ class Prestataire extends Model
     {
         return $this->hasMany('App\Photo','realisation_id');
     }
+    public function slug()
+    {
+        return $this->hasOne('App\Slug','prestataire_id');
+    }
 }

@@ -184,10 +184,13 @@
                 </ul>
             </div>
         </nav>
-        @yield('mainEntete')
+
+            @yield('mainEntete')
+
+
     </header>
     <div class="row container-fluid">
-        <section class="content " style="background-color: #fafafa;padding-right: 18px">
+        <section class="content " style="background-color: #fafafa;padding-right: 18px;">
             @yield("main_content")
         </section>
     </div>

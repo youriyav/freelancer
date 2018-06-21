@@ -62,6 +62,7 @@ class AgenceController extends Controller
         ]);
         return view('prestataire.index',['listeOfTechnologies'=>$listeOfTechnologies,'listeOfPlat'=>$listeOfPlat,"projets"=>$projets]);
     }
+
     public function nouvelleAgence(Input $input,Request $request)
     {
         if($request->getMethod()=="GET")
@@ -172,7 +173,7 @@ class AgenceController extends Controller
             $agence->numero=$numero;
 
             $slug="";
-            $libelle2=str_replace('&',' ',$raisonSocial);
+            $libelle2=str_replace('&',' ',strtolower($raisonSocial));
             $libelle2=str_replace('/',' ',$libelle2);
             $cpt=0;
             do

@@ -1,9 +1,13 @@
 @extends('prestataire.moncompte.layout')
 @section('menu')
     <ul class="nav nav-list" >
-        <li class="myActive"><a href="{{route('monCompte')}}"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+        <li class="myActive"><a href="{{route('monCompte')}}"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
         <li><a href="{{route('mesProjets')}}"><i class="fa fa-briefcase"></i> Mes Projets</a></li>
         <li><a href="{{route('mesCompetences')}}"><i class="fa fa-sitemap"></i> Mes compétences</a></li>
+        <li><a href="{{route('nosServices')}}"><i class="fa fa-envelope"></i> Mes messages</a></li>
+        <li><a href="{{route('nosServices')}}"><i class="fa fa-hand-o-up"></i> Mes dévis</a></li>
+        <li><a href="{{route('parametres')}}"><i class="fa fa-gears"></i> Paramètre</a></li>
+        <li><a href="{{route('nosServices')}}"><i class="fa fa-power-off"></i> Déconnexion</a></li>
     </ul>
 @endsection()
 @section('main_content_compte')

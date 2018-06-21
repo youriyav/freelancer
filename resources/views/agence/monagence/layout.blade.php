@@ -13,29 +13,6 @@
 
 @section("main_content")
     <div class="" style="margin-top: -40px">
-        <!--div class="row">
-            <div class="row" >
-                <div class="col-md-10 col-md-offset-1" style="max-height: 100px;">
-                    <div class="adbox-img " >
-                        <div id="transition-timer-carousel" class="carousel slide transition-timer-carousel " data-ride="carousel" style="max-height: 100px">
-                            <div class="carousel-inner" style="">
-                                <div class="item active">
-                                    <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
-                                </div>
-                                <div class="item">
-                                    <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
-                                </div>
-                                <div class="item">
-                                    <img src="/img/ban.png" class="img-thumbnail" alt="Cinque Terre" style="border: solid;height: 90px;width: 728px">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div-->
         <div class="row"  style="">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xs-offset-0 col-sm-offset-0  " >
                 <div class="panel panel-info" style="border: none">

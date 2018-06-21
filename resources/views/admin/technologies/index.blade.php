@@ -11,6 +11,7 @@
                         <th><i class=""></i>Libelle</th>
                         <th><i class=""></i>Plateforme</th>
                         <th class="hidden-phone"><i class=""></i> Descrition</th>
+                        <th class="hidden-phone"><i class=""></i> Couleur</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -20,6 +21,7 @@
                             <td class="libelle">{{$object->libelle}}</td>
                             <td class="">{{$object->plateforme->libelle}}</td>
                             <td class="hidden-phone">@if($object->description!=null){{$object->description}}@endif</td>
+                            <td class=""><i class="fa fa-circle fa-2x" @if($object->coleur) style="color: {{$object->coleur}}"@endif></i></td>
 
                             <td>
                                 <a href="{{route('editerTechnologie',['id'=>$object->id])}}" class="btn btn-primary btn-xs"><i class="fa fa-pencil fa-2x"></i></a>

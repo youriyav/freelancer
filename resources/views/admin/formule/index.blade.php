@@ -11,7 +11,9 @@
                         <th><i class=""></i>Libelle</th>
                         <th><i class=""></i>Prix</th>
                         <th><i class=""></i>Type</th>
+                        <th class="hidden-phone"><i class=""></i> Couleur</th>
                         <th><i class="" style="width: 40%"></i>Description</th>
+
                         <th></th>
                     </tr>
                     </thead>
@@ -21,6 +23,7 @@
                             <td class="libelle">{{$object->libelle}}</td>
                             <td class="">{{$object->prix}} Fcfa</td>
                             <td class="">@if($object->type==1) Agence @else Prestataire @endif </td>
+                            <td class=""><i class="fa fa-circle fa-2x" @if($object->couleur) style="color: {{$object->couleur}}"@endif></i></td>
                             <td class="" style="width: 50%" >
                                 @foreach($object->descriptions()->orderBy('position', 'ASC')->get() as $descript)
                                     <div class="row" style="margin: 0;padding: 0;margin-bottom: 5px">
@@ -43,6 +46,7 @@
                                         @endif
                                     </div> @endforeach
                             </td>
+
                             <td>
                                 <button class="btn btn-info btnUp" id="up_{{$object->id}}" data-loading-text="<i class='fa fa-spinner fa-spin '></i> ..."><i class="fa fa-arrow-circle-up"></i></button>
                                 <button class="btn btn-warning btnDown" id="down_{{$object->id}}" data-loading-text="<i class='fa fa-spinner fa-spin '></i> ..."><i class="fa fa-arrow-circle-down"></i></button>

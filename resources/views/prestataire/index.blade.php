@@ -117,8 +117,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6" style="padding-bottom: 10px;margin-top: 5px">
-
+        <div class="col-md-6 col-sm-12 col-xs-12 " style="padding-bottom: 10px;margin-top: 5px">
             <div class="row" style="margin-top: 20px">
                 <!--h4>Derniers Projets en freelance</h4-->
                 @foreach($projets as $projet )
@@ -158,7 +157,47 @@
                 @endforeach
             </div>
         </div>
-        <div class="col-md-3 " style="">
+        <div class="hidden-md hidden-lg col-sm-12 col-xs-12" style="padding-bottom: 10px;">
+            <div class="row" style="padding: 8px">
+                <!--h4>Derniers Projets en freelance</h4-->
+                @foreach($projets as $projet )
+                    <div class="panel projet col-lg-10 col-lg-offset-1" style="padding-bottom: 10px;padding-top: 10px;border: solid 1px #428bca">
+                        <div class="panel-heading" style="margin: 0;padding: 0;padding-left: 5px">
+                            @foreach($projet->competences as $techno)
+                                <?php $check=true ?>
+                                @foreach($tmpListe as $tmp)
+                                    @if($tmp==$techno->plateforme->id)
+                                        {{ $check=false}}
+                                    @endif
+                                @endforeach
+                                @if($check==true)
+                                    <img src="/{{$techno->plateforme->logo->url}}" title="{{$techno->plateforme->libelle}}" width="20" height="20" style="margin-left: 0">
+                                    <?php array_push($tmpListe,$techno->plateforme->id) ?>
+                                @endif
+                            @endforeach
+                             <h4  class="text-primary inline"><a href="{{route('detailProjetUser',["slug"=>$projet->slug->content])}}">{{$projet->titre}}</a></h4>
+                        </div>
+                        <div class="panel-body" style="padding: 5px;color: black;">
+                            <div class="text-summury">{{$projet->description}}</div>
+                            <div class="competences">
+                                <h6>compétences requises</h6>
+                                <div style="margin-left: 15px">
+                                    @foreach($projet->competences as $techno )
+                                        <button class="alert alert-info" style="padding: 3px;margin: 0">{{$techno->libelle}} </button>
+                                    @endforeach</div>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <i class="fa fa-clock-o"></i>&nbsp;{{getDureeFromCarbone($projet->created_at)}}
+                            <i class="fa fa-eye"></i> {{$projet->nbrVue}} vue(s)&nbsp;&nbsp;
+                            <i class="fa fa-hand-o-up"> </i>&nbsp;&nbsp;{{count($projet->offres)}} offre(s)&nbsp;&nbsp;&nbsp;
+                        </div>
+                    </div>
+                    <?php $tmpListe=array() ?>
+                @endforeach
+            </div>
+        </div>
+        <div class="col-md-3 hidden-sm hidden-xs" style="">
             @if(!\Illuminate\Support\Facades\Auth::check())
                     <p class="text-center"  >
                         <a href="{{route("nouvelleAgence")}}" class="btn " style="background-color: orange;color: white;font-size: 1.3em;padding: 0">Vous êtes une agence,<br>creer votre vitrine</a>

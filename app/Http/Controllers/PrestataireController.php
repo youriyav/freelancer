@@ -109,9 +109,34 @@ class PrestataireController extends Controller
 
         return view('prestataire.abonnement',["listeOffre"=>$listeOffre,"formules"=>$listeOffre,"descriptions"=>$descriptions]);
     }
-    public function profil()
+    public function profil($slug)
     {
-        return view('prestataire.profil');
+        $currentSlug=Slug::where(['content'=>$slug,])->first();
+        if($currentSlug)
+        {
+            if($currentSlug->prestataire)
+            {
+                $listeOfTechnologies=Technologie::where('isDeleted',0)->get();
+                $listeOfPlat=plateforme::where('isDeleted',0)->get();
+                $currentSlug->prestataire->nbrVueProfil++;
+                $currentSlug->prestataire->save();
+                return view('prestataire.profil',['listeOfPlat'=>$listeOfPlat,"listeOfTechnologies"=>$listeOfTechnologies,"user"=>$currentSlug->prestataire->user,"type"=>2]);
+            }
+            if($currentSlug->agence)
+            {
+                $listeOfTechnologies=Technologie::where('isDeleted',0)->get();
+                $listeOfPlat=plateforme::where('isDeleted',0)->get();
+                $currentSlug->agence->nbrVueProfil++;
+                $currentSlug->agence->save();
+                return view('prestataire.profil',['listeOfPlat'=>$listeOfPlat,"listeOfTechnologies"=>$listeOfTechnologies,"type"=>1,"agence"=>$currentSlug->agence]);
+            }
+
+
+        }
+        else
+        {
+            abort(404, 'The resource you are looking for could not be found');
+        }
     }
     public function detailProjetUser($slug)
     {
@@ -372,6 +397,27 @@ class PrestataireController extends Controller
                 mkdir($folder.'/videos', 0777, true);
                 mkdir($folder.'/files', 0777, true);
             }
+
+            $slug="";
+            $libelle2=str_replace('&',' ',trim($login));
+            $libelle2=str_replace('/',' ',$libelle2);
+            $cpt=0;
+            do
+            {
+                if($cpt==0)
+                {
+                    $libelle2=$libelle2.' '.count(Auth::user()->projets).''.Auth::user()->id.' ';
+                    $slug=str_slug($libelle2, "-");
+                }
+                else
+                {
+                    $slug=str_slug($libelle2."-$cpt", "-");
+                }
+                $tmpSlug=Slug::where('content',$slug)->first();
+                $cpt++;
+            }while($tmpSlug!=null);
+            $slugObject=Slug::create(['content'=>$slug]);
+            $prestataire->slug()->save($slugObject);
             $validation=new Validation();
             $validation->key=hash('ripemd160',$email."free".$login);
             $validation->isValidate=0;
@@ -490,12 +536,34 @@ public  function seConnecter(Input $input,Request $request,$act=1)
                         {
                             return redirect($next);
                         }
+                        //agence
                         if(Auth::user()->isAgencyAdmin)
                         {
                             return redirect()->route('indexAgence');
                         }
+                        //prestataire
                         else
                         {
+                            /*$slug="";
+                            $libelle2=str_replace('&',' ',trim($user->login));
+                            $libelle2=str_replace('/',' ',$libelle2);
+                            $cpt=0;
+                            do
+                            {
+                                if($cpt==0)
+                                {
+                                    $libelle2=$libelle2.' '.count(Auth::user()->projets).''.Auth::user()->id.' ';
+                                    $slug=str_slug($libelle2, "-");
+                                }
+                                else
+                                {
+                                    $slug=str_slug($libelle2."-$cpt", "-");
+                                }
+                                $tmpSlug=Slug::where('content',$slug)->first();
+                                $cpt++;
+                            }while($tmpSlug!=null);
+                            $slugObject=Slug::create(['content'=>$slug]);
+                            $user->prestataire->slug()->save($slugObject);*/
                             return redirect()->route('monCompte');
                         }
 

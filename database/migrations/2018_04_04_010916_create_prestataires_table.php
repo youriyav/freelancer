@@ -23,7 +23,7 @@ class CreatePrestatairesTable extends Migration
             $table->string('skype');
             $table->string('facebook');
             $table->string('whatssap');
-            $table->string('nbrVueProfil');
+            $table->integer('nbrVueProfil');
             $table->string('endAbonnement');
             //$table->text('ville');
             //$table->text('pays');

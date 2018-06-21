@@ -299,8 +299,14 @@ class AdminController extends Controller
             $libelle=$input->get('libelle');
             $description=$input->get('description');
             $plateforme=$input->get('plateforme');
+            $color=$input->get('color');
             $errorDescript="";
             $errorLibelle="";
+            if(!$color)
+            {
+                $isError++;
+                $errorColor="veuillez remplir ce champs";
+            }
             if($libelle==null)
             {
                 $isError++;
@@ -321,6 +327,7 @@ class AdminController extends Controller
                     $plate=plateforme::findOrFail($plateforme);
                     $technologie= new Technologie();
                     $technologie->libelle=$libelle;
+                    $technologie->coleur=$color;
                     if($description!=null)
                     {
                         $technologie->description=$description;
@@ -364,7 +371,7 @@ class AdminController extends Controller
             }
             else
             {
-                return view('admin.technologies.creer',["errorLibelle"=>$errorLibelle,"errorDescript"=>$errorDescript,"listes"=>$listes,"plateforme"=>$plateforme,"libelle"=>$libelle]);
+                return view('admin.technologies.creer',["errorLibelle"=>$errorLibelle,"errorDescript"=>$errorDescript,"listes"=>$listes,"plateforme"=>$plateforme,"libelle"=>$libelle,"errorColor"=>$errorColor]);
             }
 
         }
@@ -384,8 +391,14 @@ class AdminController extends Controller
             $libelle=$input->get('libelle');
             $description=$input->get('description');
             $plateforme=$input->get('plateforme');
+            $color=$input->get('color');
             $errorDescript="";
             $errorLibelle="";
+            if(!$color)
+            {
+                $isError++;
+                $errorColor="veuillez remplir ce champs";
+            }
             if($libelle==null)
             {
                 $isError++;
@@ -401,9 +414,10 @@ class AdminController extends Controller
                 #$plateforme=plateforme::where('libelle',$libelle)->first();
 
                 $plate=plateforme::findOrFail($plateforme);
-                if($technologie->libelle!=$libelle)
+                //if($technologie->libelle!=$libelle)
                 {
                     $technologie->libelle=$libelle;
+                    $technologie->coleur=$color;
                     $cpt=0;
                     $slug="";
                     $libelle2=str_replace('&',' ',$libelle);
@@ -432,13 +446,15 @@ class AdminController extends Controller
                 {
                     $technologie->description=$description;
                 }
+                $technologie->coleur=$color;
+                $technologie->save();
                 $plate->technologies()->save($technologie);
                 return redirect()->route("indextechologiesAdmin");
 
             }
             else
             {
-                return view('admin.technologies.creer',["errorLibelle"=>$errorLibelle,"errorDescript"=>$errorDescript,"listes"=>$listes,"plateforme"=>$plateforme,"libelle"=>$libelle]);
+                return view('admin.technologies.creer',["errorLibelle"=>$errorLibelle,"errorDescript"=>$errorDescript,"listes"=>$listes,"plateforme"=>$plateforme,"libelle"=>$libelle,"errorColor"=>$errorColor]);
             }
 
         }

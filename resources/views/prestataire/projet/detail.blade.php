@@ -54,7 +54,7 @@
     @endif
 @endsection
 @section("mainEntete")
-    <div class="col-lg-12 col-md-12" style="background-color:  #3c8dbc;padding-top: 15px" >
+    <div class="col-lg-12 col-md-12" style="background-color:  #3c8dbc;padding-top: 15px;" >
         <div class=" top-filter tfilter-box bottom" style="">
             <div class="container ">
                 <form action="{{route('searchUser')}}" method="post"  class="text-center center-block">
@@ -89,7 +89,7 @@
         @endsection
         @section("main_content")
             <div class="row" style="margin-bottom: 10px;">
-                <div class="col-lg-3 col-md-3 hidden-sm hidden-xs" style="padding: 5px;margin-top: 15px" >
+                <div class="col-lg-3 col-md-3 hidden-sm hidden-xs" style="padding: 5px;margin-top: 15px;" >
                     <div class="panel panel-primary" >
                         <div class="panel-title panel-heading">
                             <h3 class=" text-center ">Catégorie des projets</h3>
@@ -118,8 +118,8 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-6 col-sm-12 col-xs-12" style="padding-bottom: 10px;margin-top: 20px;">
+                <!-- ordinateur -->
+                <div class="col-md-6 col-lg-6 hidden-sm hidden-xs" style="padding-bottom: 10px;margin-top: 20px;z-index: 2222222222222">
                     <div class="panel projet col-lg-12" style="padding-bottom: 10px;padding-top: 10px;border: solid 1px #428bca;margin-bottom: 0">
                         <div class="panel-heading" style="margin: 0;padding: 0;padding-left: 5px">
 
@@ -163,43 +163,33 @@
                                 <h3 class="text-primary" style="text-decoration: underline">Tout les dévis :</h3>
                                 <div style="max-height: 400px;overflow-y: scroll;overflow-x: hidden;padding: 8px">
                                     @foreach($projet->offres as $offre)
-
                                         <div class="row">
-                                                <div class="col-md-2" style="">
-                                                    <div class="col-md-11"></div>
-                                                        <a href="">
-                                                            <div class="">
-                                                                @if($offre->user->isAgencyAdmin!=1)
-                                                                    <img class="img-responsive img-circle "  src="@if($offre->user->profil)/{{$offre->user->profil->url}} @else {{url('img/avatar.png')}} @endif" alt="profile">
-                                                                @else
-                                                                    <img class="img-responsive img-circle"  src="@if($offre->user->agence->logo)/{{$offre->user->agence->logo->url}} @else {{url('img/avatar.png')}} @endif" alt="profile">
-                                                                @endif
-                                                            </div>
-                                                        </a>
-
-
-                                                </div>
-                                                <div class="col-md-10">
-                                                    <div class="mypanel panel panel-default">
-                                                        <div class="panel-heading" >
-                                                            <div class=" row" style="padding: 5px;padding-bottom: 0;padding-top: 0">
-                                                                <div class="pull-left">
-                                                                    <a href="">
-                                                                        <strong>
-                                                                            @if(\Illuminate\Support\Facades\Auth::check())
-                                                                                @if($offre->user->id==Auth::user()->id)
-                                                                                    @if($offre->user->isAgencyAdmin!=1)
+                                            <div class="col-md-2 col-xs-2 col-md-2" style="">
+                                                <div class="col-md-11"></div>
+                                                <a href="">
+                                                    <div class="">
+                                                        @if($offre->user->isAgencyAdmin!=1)
+                                                            <img class="img-responsive img-circle "  src="@if($offre->user->profil)/{{$offre->user->profil->url}} @else {{url('img/avatar.png')}} @endif" alt="profile">
+                                                        @else
+                                                            <img class="img-responsive img-circle"  src="@if($offre->user->agence->logo)/{{$offre->user->agence->logo->url}} @else {{url('img/avatar.png')}} @endif" alt="profile">
+                                                        @endif
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <!--ordi-->
+                                            <div class="col-md-10 hidden-xs hidden-sm">
+                                                <div class="mypanel panel panel-default">
+                                                    <div class="panel-heading" >
+                                                        <div class=" row" style="padding: 5px;padding-bottom: 0;padding-top: 0">
+                                                            <div class="pull-left">
+                                                                <a href="@if($offre->user->isAgencyAdmin==1){{route('profil',["slug"=>$offre->user->agence->raisonSocial])}}@else {{route('profil',["slug"=>$offre->user->prestataire->slug->content])}} @endif">
+                                                                    <strong>
+                                                                        @if(\Illuminate\Support\Facades\Auth::check())
+                                                                            @if($offre->user->id==Auth::user()->id)
+                                                                                @if($offre->user->isAgencyAdmin!=1)
                                                                                     Moi
-                                                                                    @else
-                                                                                        {{$offre->user->agence->raisonSocial}} (Agence) <span class="badge badge-primary">Pro</span>
-                                                                                    @endif
                                                                                 @else
-                                                                                    @if($offre->user->isAgencyAdmin==1)
-                                                                                        {{$offre->user->agence->raisonSocial}} (Agence) <span class="badge badge-primary">Pro</span>
-                                                                                    @else
-                                                                                        {{$offre->user->login}} (freelancer) <span class="badge badge-primary">Pro</span>
-                                                                                    @endif
-
+                                                                                    {{$offre->user->agence->raisonSocial}} (Agence) <span class="badge badge-primary">Pro</span>
                                                                                 @endif
                                                                             @else
                                                                                 @if($offre->user->isAgencyAdmin==1)
@@ -209,30 +199,265 @@
                                                                                 @endif
 
                                                                             @endif
-                                                                        </strong>
-                                                                        <p style="margin: 0">
-                                                                            <i style="color: #ffd740" class="fa fa-star"></i>
-                                                                            <i style="color: #ff851b" class="fa fa-star"></i>
-                                                                        </p>
-                                                                    </a>
+                                                                        @else
+                                                                            @if($offre->user->isAgencyAdmin==1)
+                                                                                {{$offre->user->agence->raisonSocial}} (Agence) <span class="badge badge-primary">Pro</span>
+                                                                            @else
+                                                                                {{$offre->user->login}} (freelancer) <span class="badge badge-primary">Pro</span>
+                                                                            @endif
+
+                                                                        @endif
+                                                                    </strong>
+                                                                    <p style="margin: 0">
+                                                                        <i style="color: #ffd740" class="fa fa-star"></i>
+                                                                        <i style="color: #ff851b" class="fa fa-star"></i>
+                                                                    </p>
+
                                                                     <span style="margin: 0" class="text-muted "><i class="fa fa-clock-o"></i> {{getDureeFromCarbone($offre->created_at)}}</span>
-                                                                </div>
-                                                                <div class="pull-right" >
+                                                            </div>
+                                                            <div class="pull-right" >
                                                                 <span class="">
                                                                      @if($offre->state==1)@endif<i class="fa fa-check-circle" style="color: green"></i> le client a consulté cette offre
                                                                 </span>
-                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div class="panel-body">
-                                                            <p class="text-summury" style="margin: 0;padding: 0">{{$offre->description}}</p>
-                                                        </div><!-- /panel-body -->
-                                                        <div class="panel-footer">
-                                                            <i class="fa fa-money" style="color: #3c8dbc"></i> <span style="font-weight: bold">Montant:</span> {{$offre->prix}} Fcfa &nbsp;<i style="color: #3c8dbc" class="fa fa-calendar-o"></i> <span style="font-weight: bold">Durée d'exécution:</span> {{$offre->duree}} Jours
-                                                        </div>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <p class="text-summury" style="margin: 0;padding: 0">{{$offre->description}}</p>
+                                                    </div><!-- /panel-body -->
+                                                    <div class="panel-footer">
+                                                        <i class="fa fa-money" style="color: #3c8dbc"></i> <span style="font-weight: bold">Montant:</span> {{$offre->prix}} Fcfa &nbsp;<i style="color: #3c8dbc" class="fa fa-calendar-o"></i> <span style="font-weight: bold">Durée d'exécution:</span> {{$offre->duree}} Jours
                                                     </div>
                                                 </div>
                                             </div>
+                                            <!--mobil-->
+                                            <div class="hidden-md hidden-lg col-xs-10 col-md-10">
+                                                <div class="mypanel panel panel-default" style="padding: 0">
+                                                    <div class="panel-heading" >
+                                                        <div class=" row" style="padding-bottom: 0;padding-top: 0">
+                                                            <div class="pull-left">
+
+                                                                <a href="@if($offre->user->isAgencyAdmin==1){{route('profil',["slug"=>$offre->user->agence->raisonSocial])}}@else {{route('profil',["slug"=>$offre->user->prestataire->slug->content])}} @endif">
+                                                                    <strong>
+                                                                        @if(\Illuminate\Support\Facades\Auth::check())
+                                                                            @if($offre->user->id==Auth::user()->id)
+                                                                                @if($offre->user->isAgencyAdmin!=1)
+                                                                                    Moi
+                                                                                @else
+                                                                                    {{$offre->user->agence->raisonSocial}} (Agence) <span class="badge badge-primary">Pro </span>
+                                                                                @endif
+                                                                            @else
+                                                                                @if($offre->user->isAgencyAdmin==1)
+                                                                                    {{$offre->user->agence->raisonSocial}} (Agence) <span class="badge badge-primary">Pro </span>
+                                                                                @else
+                                                                                    {{$offre->user->login}} (freelancer) <span class="badge badge-primary">Pro</span>
+                                                                                    <span class="pull-right">@if($offre->state==1)@endif<i class="fa fa-check-circle " style="color: green"></i></span>
+                                                                                @endif
+
+                                                                            @endif
+                                                                        @else
+                                                                            @if($offre->user->isAgencyAdmin==1)
+                                                                                {{$offre->user->agence->raisonSocial}} (Agence) <span class="badge badge-primary">Pro</span>
+                                                                            @else
+                                                                                {{$offre->user->login}} (freelancer) <span class="badge badge-primary">Pro</span>
+                                                                            @endif
+
+                                                                        @endif
+                                                                    </strong></a>
+                                                                <p style="margin: 0">
+                                                                    <i style="color: #ffd740" class="fa fa-star"></i>
+                                                                    <i style="color: #ff851b" class="fa fa-star"></i>
+                                                                </p>
+
+                                                                <span style="margin: 0" class="text-muted "><i class="fa fa-clock-o"></i> {{getDureeFromCarbone($offre->created_at)}}</span>
+                                                            </div>
+                                                            <div class="pull-right" >
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <p class="text-summury" style="margin: 0;padding: 0">{{$offre->description}}</p>
+                                                    </div><!-- /panel-body -->
+                                                    <div class="panel-footer">
+                                                        <i class="fa fa-money" style="color: #3c8dbc"></i> <span style="font-weight: bold">Montant:</span> {{$offre->prix}} Fcfa &nbsp;<i style="color: #3c8dbc" class="fa fa-calendar-o"></i> <span style="font-weight: bold">Durée d'exécution:</span> {{$offre->duree}} Jours
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <!-- mobil -->
+                <div class="col-sm-12 col-xs-12 hidden-lg hidden-md" style="padding-bottom: 10px;margin-top: 120px;z-index: 2222222222222">
+                    <div class="panel projet col-lg-12" style="padding-bottom: 10px;padding-top: 10px;border: solid 1px #428bca;margin-bottom: 0">
+                        <div class="panel-heading" style="margin: 0;padding: 0;padding-left: 5px">
+                            @foreach($projet->competences as $techno)
+                                <?php $check=true ?>
+                                @foreach($tmpListe as $tmp)
+                                    @if($tmp==$techno->plateforme->id)
+                                        {{ $check=false}}
+                                    @endif
+                                @endforeach
+                                @if($check==true)
+                                    <img src="/{{$techno->plateforme->logo->url}}" title="{{$techno->plateforme->libelle}}" width="20" height="20" style="margin-left: 0">
+                                    <?php array_push($tmpListe,$techno->plateforme->id) ?>
+                                @endif
+                            @endforeach
+                            <h4  class="text-primary inline">{{$projet->titre}}</h4>
+                        </div>
+                        <div class="panel-body" style="padding: 5px;color: black;">
+                            <div class="text-summury">{{$projet->description}}</div>
+
+                        </div>
+                        <div class="panel-footer" style="padding-top: 5px;padding-bottom: 5px">
+                            <div class="competences">
+                                <h6>compétences requises</h6>
+                                <div style="margin-left: 15px">
+                                    @foreach($projet->competences as $techno )
+                                        <button class="alert alert-info" style="padding: 3px;margin: 0">{{$techno->libelle}} </button>
+                                    @endforeach</div>
+                            </div>
+
+                        </div>
+                    </div>
+                    @if(count($projet->offres)!=0)
+                        <p class="text-center"><button class="btn btn-primary" id="btnOffre" style="margin-top: 10px"><i class="fa fa-hand-o-up"></i> Faire un dévis</button></p>
+                    @else
+                        <p class="text-center"><button class="btn btn-primary" id="btnOffre" style="margin-top: 10px"><i class="fa fa-hand-o-up"></i> soyez le 1er à faire un dévis</button></p>
+                    @endif
+                    <div class="row">
+                        <div class="container-fluid">
+                            @if(count($projet->offres)!=0)
+                                <h3 class="text-primary" style="text-decoration: underline">Tout les dévis :</h3>
+                                <div style="max-height: 400px;overflow-y: scroll;overflow-x: hidden;padding: 8px">
+                                    @foreach($projet->offres as $offre)
+                                        <div class="row">
+                                            <div class="col-md-2 col-xs-2 col-md-2" style="">
+                                                <div class="col-md-11"></div>
+                                                <a href="">
+                                                    <div class="">
+                                                        @if($offre->user->isAgencyAdmin!=1)
+                                                            <img class="img-responsive img-circle "  src="@if($offre->user->profil)/{{$offre->user->profil->url}} @else {{url('img/avatar.png')}} @endif" alt="profile">
+                                                        @else
+                                                            <img class="img-responsive img-circle"  src="@if($offre->user->agence->logo)/{{$offre->user->agence->logo->url}} @else {{url('img/avatar.png')}} @endif" alt="profile">
+                                                        @endif
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <!--ordi-->
+                                            <div class="col-md-10 hidden-xs hidden-sm">
+                                                <div class="mypanel panel panel-default">
+                                                    <div class="panel-heading" >
+                                                        <div class=" row" style="padding: 5px;padding-bottom: 0;padding-top: 0">
+                                                            <div class="pull-left">
+                                                                <a href="@if($offre->user->isAgencyAdmin==1){{route('profil',["slug"=>$offre->user->agence->slug->content])}}@else {{route('profil',["slug"=>$offre->user->prestataire->slug->content])}} @endif">
+                                                                    <strong>
+                                                                        @if(\Illuminate\Support\Facades\Auth::check())
+                                                                            @if($offre->user->id==Auth::user()->id)
+                                                                                @if($offre->user->isAgencyAdmin!=1)
+                                                                                    Moi
+                                                                                @else
+                                                                                    {{$offre->user->agence->raisonSocial}} (Agence) <span class="badge badge-primary">Pro</span>
+                                                                                @endif
+                                                                            @else
+                                                                                @if($offre->user->isAgencyAdmin==1)
+                                                                                    {{$offre->user->agence->raisonSocial}} (Agence) <span class="badge badge-primary">Pro</span>
+                                                                                @else
+                                                                                    {{$offre->user->login}} (freelancer) <span class="badge badge-primary">Pro</span>
+                                                                                @endif
+
+                                                                            @endif
+                                                                        @else
+                                                                            @if($offre->user->isAgencyAdmin==1)
+                                                                                {{$offre->user->agence->raisonSocial}} (Agence) <span class="badge badge-primary">Pro</span>
+                                                                            @else
+                                                                                {{$offre->user->login}} (freelancer) <span class="badge badge-primary">Pro</span>
+                                                                            @endif
+
+                                                                        @endif
+                                                                    </strong>
+                                                                    <p style="margin: 0">
+                                                                        <i style="color: #ffd740" class="fa fa-star"></i>
+                                                                        <i style="color: #ff851b" class="fa fa-star"></i>
+                                                                    </p>
+
+                                                                    <span style="margin: 0" class="text-muted "><i class="fa fa-clock-o"></i> {{getDureeFromCarbone($offre->created_at)}}</span>
+                                                            </div>
+                                                            <div class="pull-right" >
+                                                                <span class="">
+                                                                     @if($offre->state==1)@endif<i class="fa fa-check-circle" style="color: green"></i> le client a consulté cette offre
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <p class="text-summury" style="margin: 0;padding: 0">{{$offre->description}}</p>
+                                                    </div><!-- /panel-body -->
+                                                    <div class="panel-footer">
+                                                        <i class="fa fa-money" style="color: #3c8dbc"></i> <span style="font-weight: bold">Montant:</span> {{$offre->prix}} Fcfa &nbsp;<i style="color: #3c8dbc" class="fa fa-calendar-o"></i> <span style="font-weight: bold">Durée d'exécution:</span> {{$offre->duree}} Jours
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--mobil-->
+                                            <div class="hidden-md hidden-lg col-xs-10 col-md-10">
+                                                <div class="mypanel panel panel-default" style="padding: 0">
+                                                    <div class="panel-heading" >
+                                                        <div class=" row" style="padding-bottom: 0;padding-top: 0">
+                                                            <div class="pull-left">
+
+                                                                <a href="@if($offre->user->isAgencyAdmin==1){{route('profil',["slug"=>$offre->user->agence->slug->content])}}@else {{route('profil',["slug"=>$offre->user->prestataire->slug->content])}} @endif">
+                                                                    <strong>
+                                                                        @if(\Illuminate\Support\Facades\Auth::check())
+                                                                            @if($offre->user->id==Auth::user()->id)
+                                                                                @if($offre->user->isAgencyAdmin!=1)
+                                                                                    Moi
+                                                                                @else
+                                                                                    {{$offre->user->agence->raisonSocial}} (Agence) <span class="badge badge-primary">Pro </span>
+                                                                                @endif
+                                                                            @else
+                                                                                @if($offre->user->isAgencyAdmin==1)
+                                                                                    {{$offre->user->agence->raisonSocial}} (Agence) <span class="badge badge-primary">Pro </span>
+                                                                                @else
+                                                                                    {{$offre->user->login}} (freelancer) <span class="badge badge-primary">Pro</span>
+                                                                                    <span class="pull-right">@if($offre->state==1)@endif<i class="fa fa-check-circle " style="color: green"></i></span>
+                                                                                @endif
+
+                                                                            @endif
+                                                                        @else
+                                                                            @if($offre->user->isAgencyAdmin==1)
+                                                                                {{$offre->user->agence->raisonSocial}} (Agence) <span class="badge badge-primary">Pro</span>
+                                                                            @else
+                                                                                {{$offre->user->login}} (freelancer) <span class="badge badge-primary">Pro</span>
+                                                                            @endif
+
+                                                                        @endif
+                                                                    </strong></a>
+                                                                <p style="margin: 0">
+                                                                    <i style="color: #ffd740" class="fa fa-star"></i>
+                                                                    <i style="color: #ff851b" class="fa fa-star"></i>
+                                                                </p>
+
+                                                                <span style="margin: 0" class="text-muted "><i class="fa fa-clock-o"></i> {{getDureeFromCarbone($offre->created_at)}}</span>
+                                                            </div>
+                                                            <div class="pull-right" >
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <p class="text-summury" style="margin: 0;padding: 0">{{$offre->description}}</p>
+                                                    </div><!-- /panel-body -->
+                                                    <div class="panel-footer">
+                                                        <i class="fa fa-money" style="color: #3c8dbc"></i> <span style="font-weight: bold">Montant:</span> {{$offre->prix}} Fcfa &nbsp;<i style="color: #3c8dbc" class="fa fa-calendar-o"></i> <span style="font-weight: bold">Durée d'exécution:</span> {{$offre->duree}} Jours
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                     @endforeach
                                 </div>
@@ -242,7 +467,7 @@
                 </div>
 
 
-                <div class="col-md-3 " style="margin-top: 20px;">
+                <div class="col-md-3 hidden-sm hidden-xs" style="margin-top: 20px;">
                     <div class="row">
                         <div class="col-md-10 col-md-offset-1">
                             <div class="container-fluid">
@@ -260,7 +485,7 @@
                                                 <li class="list-group-item " style="border: none;margin: 0;padding: 0"><i class="fa fa-money" style="color: #428bca"></i> Budget : {{$projet->budget->libelle}} Fcfa</li>
                                                 <li class="list-group-item " style="border: none;margin: 0;padding: 0"><i class="fa fa-calendar-o" style="color: #428bca"></i> Démarrage : {{$projet->demarrage->libelle}} </li>
 
-                                                <li> <a href=""><img src="/img/avatar.png" class="img img-circle pull-left" width="60" height="60" >Publié par: <br> &nbsp;{{$projet->user->login}}</a></li>
+                                                <li> <a href="@if($projet->user->isAgencyAdmin==1){{route('profil',["slug"=>$projet->user->agence->slug->content])}}@else {{route('profil',["slug"=>$projet->user->prestataire->slug->content])}} @endif"><img src="/img/avatar.png" class="img img-circle pull-left" width="60" height="60" >Publié par: <br> &nbsp;{{$projet->user->login}}</a></li>
 
 
                                             </ul>

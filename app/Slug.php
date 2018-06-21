@@ -30,4 +30,12 @@ class Slug extends Model
     {
         return $this->belongsTo('App\Projet');
     }
+    public function prestataire()
+    {
+        return $this->belongsTo('App\Prestataire');
+    }
+    public function agence()
+    {
+        return $this->belongsTo('App\Agence');
+    }
 }
