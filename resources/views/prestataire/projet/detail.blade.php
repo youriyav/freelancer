@@ -119,7 +119,7 @@
                     </div>
                 </div>
                 <!-- ordinateur -->
-                <div class="col-md-6 col-lg-6 hidden-sm hidden-xs" style="padding-bottom: 10px;margin-top: 20px;z-index: 2222222222222">
+                <div class="col-md-6 col-lg-6 hidden-sm hidden-xs" style="padding-bottom: 10px;margin-top: 20px;">
                     <div class="panel projet col-lg-12" style="padding-bottom: 10px;padding-top: 10px;border: solid 1px #428bca;margin-bottom: 0">
                         <div class="panel-heading" style="margin: 0;padding: 0;padding-left: 5px">
 
@@ -293,7 +293,7 @@
                     </div>
                 </div>
                 <!-- mobil -->
-                <div class="col-sm-12 col-xs-12 hidden-lg hidden-md" style="padding-bottom: 10px;margin-top: 120px;z-index: 2222222222222">
+                <div class="col-sm-12 col-xs-12 hidden-lg hidden-md" style="padding-bottom: 10px;margin-top: 120px;">
                     <div class="panel projet col-lg-12" style="padding-bottom: 10px;padding-top: 10px;border: solid 1px #428bca;margin-bottom: 0">
                         <div class="panel-heading" style="margin: 0;padding: 0;padding-left: 5px">
                             @foreach($projet->competences as $techno)
@@ -631,7 +631,7 @@
 
 
 
-    <div class="modal fade" tabindex="-1" role="dialog" id="alert-modal">
+    <div class="modal fade"  role="dialog" id="alert-modal" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header" style="background-color: #3c8dbc;color: white;font-size: 1.5em;font-weight: bold;max-height: 20px;min-height: 60px">
@@ -655,17 +655,7 @@
     </div>
 
 
-    <div class="modal fade" id="" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
-            <div class="loginmodal-container">
 
-                <p class="text-center text-summury" id="succes-message">Pour faire une offre, vous devriez vous connecter</p>
-                <p class="text-center"><a href="{{route('seConnecter')}}" class="btn btn-primary " >Se connecter</a></p>
-                <p class="text-center"><a href="{{route('inscription')}}" class="btn btn-default">S'inscrire</a></p>
-                <p class="text-center"><button  class="btn btn-danger btn-large" data-dismiss="modal">Annuler</button></p>
-            </div>
-        </div>
-    </div>
 @endsection
 @include('footer')
 @section('js')

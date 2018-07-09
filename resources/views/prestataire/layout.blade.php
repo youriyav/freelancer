@@ -159,22 +159,7 @@
                                 <li>
                                     <!-- inner menu: contains the actual data -->
                                     <ul class="menu" id="menu-message">
-
-                                        @isset($Glog_messages)
-                                            @foreach($Glog_messages as $message)
-                                                <li class="receive-message">
-                                                    <a href="{{route('conversation',["slug"=>$message->offre->projet->slug->content,"user"=>$message->sender->id])}}">
-                                                        <div class="pull-left">
-                                                            <img src="@if($message->sender->profil)/{{$message->sender->profil->url}} @else {{url('img/avatar.png')}} @endif" class="img-circle" alt="User Image">
-                                                        </div>
-                                                        <h4>
-                                                            {{$message->sender->login}}
-                                                            <small><i class="fa fa-clock-o"></i>{{getDureeFromCarbone($message->created_at)}}</small>
-                                                        </h4>
-                                                        <p> {{$message->message}}</p>
-                                                    </a>
-                                                </li>
-                                            @endforeach @endisset
+                                        
                                     </ul>
                                 </li>
                             </ul>
@@ -216,6 +201,9 @@
 
                     </ul>
                 </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+
+                </div>
 
             </div>
             <div class="row">
@@ -232,6 +220,7 @@
             </div>
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">
+
                     <!--p>National Transaction Corporation is a Registered MSP/ISO of Elavon, Inc. Georgia [a wholly owned subsidiary of U.S. Bancorp, Minneapolis, MN]</p>
                     <p class="h6">&copy All right Reversed.<a class="text-green ml-2" href="https://www.sunlimetech.com" target="_blank">Sunlimetech</a></p-->
                 </div>

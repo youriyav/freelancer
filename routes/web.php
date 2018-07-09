@@ -120,6 +120,7 @@ Route::get('test', 'PrestataireController@test')->name('test');
 Route::get('nos-tarifs', 'PrestataireController@noTarifs')->name('noTarifs');
 Route::post('inscription', 'PrestataireController@inscription')->name('inscription');
 Route::get('profil/{slug}', 'PrestataireController@profil')->name('profil');
+Route::post('send-email-to', 'PrestataireController@sendEmailTo')->name('sendEmailTo');
 
 
 Route::middleware(['AuthUser'])->group(function () {
@@ -142,13 +143,16 @@ Route::middleware(['AuthUser'])->group(function () {
     Route::get('projets/{slug}/offres/{idOffre}', 'PrestataireController@detailOffre')->name('detailOffre');
     Route::get('update-notification-message/{lastNotificationId}/{lastMessageId}', 'PrestataireController@updateNotifMessage')->name('updateNotifMessage');
     Route::get('mes-comptences', 'PrestataireController@mesCompetences')->name('mesCompetences');
+    Route::get('mes-devis', 'PrestataireController@mesDevis')->name('mesDevis');
     Route::get('nouveau-projet', 'PrestataireController@nouveauProjet')->name('nouveauProjet');
     Route::Post('nouveau-projet', 'PrestataireController@nouveauProjet')->name('nouveauProjet');
+
     Route::get('/conversation/{slug}', 'PrestataireController@conversation')->name('conversation');
     Route::get('/attribuer-projet/{slug}/{user}', 'PrestataireController@attribuerProjetUser')->name('attribuerProjetUser');
     Route::get('/loadMessage/{slug}/{id_prestataire}', 'PrestataireController@loadMessage')->name('loadMessage')->where('id_prestataire', '[0-9]+');
     Route::get('/loadMessage-last/{slug}/{id_prestataire}/{lastMessageId}', 'PrestataireController@loadLastMessage')->name('loadLastMessage')->where('id_prestataire', '[0-9]+');
     Route::post('chatt-message', 'PrestataireController@chattMessage')->name('chattMessage');
+
     #---------------------------- competences --------------------------------------------------#
     Route::post('new-url', 'PrestataireController@AddUrl')->name('AddUrl');
     Route::post('edit-url', 'PrestataireController@editUrl')->name('editUrl');

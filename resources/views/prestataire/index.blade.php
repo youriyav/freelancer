@@ -118,7 +118,7 @@
             </div>
         </div>
         <div class="col-md-6 col-sm-12 col-xs-12 " style="padding-bottom: 10px;margin-top: 5px">
-            <div class="row" style="margin-top: 20px">
+            <div class="row" style="margin-top: 20px;max-height: 500px">
                 <!--h4>Derniers Projets en freelance</h4-->
                 @foreach($projets as $projet )
                     <div class="panel projet col-lg-10 col-lg-offset-1" style="padding-bottom: 10px;padding-top: 10px;border: solid 1px #428bca">
@@ -156,6 +156,7 @@
                     <?php $tmpListe=array() ?>
                 @endforeach
             </div>
+            <div class="pull-right">{{ $projets->links() }}</div>
         </div>
         <div class="hidden-md hidden-lg col-sm-12 col-xs-12" style="padding-bottom: 10px;">
             <div class="row" style="padding: 8px">
@@ -197,7 +198,7 @@
                 @endforeach
             </div>
         </div>
-        <div class="col-md-3 hidden-sm hidden-xs" style="">
+        <div class="col-md-3 hidden-sm hidden-xs" style="border-left: solid 1px #428bca">
             @if(!\Illuminate\Support\Facades\Auth::check())
                     <p class="text-center"  >
                         <a href="{{route("nouvelleAgence")}}" class="btn " style="background-color: orange;color: white;font-size: 1.3em;padding: 0">Vous êtes une agence,<br>creer votre vitrine</a>
@@ -209,13 +210,47 @@
                         </p>
                     @endif
             @endif
+            <div >
+                <h3 class="text-center">Les agences</h3>
+                <div class="col-md-10 col-md-offset-1" >
+                    <div class="col-md-12" >
+                        <div id="myCarousel" class="carousel slide" data-ride="carousel" style="border: solid;min-height: 200px" >
+                            <?php $indice=0 ?>
+                            <div class="carousel-inner">
+                                @foreach($agences as $agence)
+                                    @if($agence->logo)
+                                <div class="item @if($indice==0) active @endif">
+                                    <img src="/{{$agence->logo->url}}">
+                                    <div class="carousel-caption" >
+                                        <h4 ><a class="label-primary " style="padding: 5px" href="#">{{$agence->raisonSocial}}</a></h4>
+                                        <!--p class="text-center">
+                                            <a class="label label-primary" href="http://sevenx.de/demo/bootstrap-carousel/" target="_blank">Free Bootstrap Carousel Collection</a>
+                                        </p-->
+                                    </div>
+                                </div><!-- End Item -->
+                                    <?php $indice++ ?>
+                                    @endif
+                                @endforeach
+                            </div>
+                            <div class="carousel-controls">
+                                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                                    <span class="fa fa-chevron-left"></span>
+                                </a>
+                                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                                    <span class="fa fa-chevron-right"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
 
+                </div>
+            </div>
 
-            <div  style="border: solid 1px cornflowerblue;margin-top: 20px;min-height: 150px">
+            <!--div  style="border: solid 1px cornflowerblue;margin-top: 20px;min-height: 150px">
                 <p class="text-center " style="color: red;text-decoration: blink">votre publicité ici</p>
                 <p class="text-center"><img src="{{url('img/sen-delivery.png')}}" height="150"></p>
                 <p class="text-center " style="color: red;text-decoration: blink"><a href="" class="btn btn-primary"><i class=""></i> contacter nous pour vos pubs</a></p>
-            </div>
+            </div-->
         </div>
     </div>
     <div class="row" >

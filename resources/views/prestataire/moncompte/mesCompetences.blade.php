@@ -119,7 +119,7 @@
                                 </table>
                             </div>
                             <div class="panel-body">
-                                <div class="row" id="container-pictures">
+                                <div class="row" id=" container-pictures">
                                     @foreach(\Illuminate\Support\Facades\Auth::user()->prestataire->pictures as $picture)
                                         <div class=" col-md-4" id="bloc_{{$picture->id}}">
                                             <div class="thumbnail">

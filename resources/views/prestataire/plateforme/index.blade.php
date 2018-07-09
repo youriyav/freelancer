@@ -3,74 +3,46 @@
     <link rel="stylesheet" href="{{url('/css/prestataire/index.css')}}">
 @endsection
 @section("mainEntete")
-    <div class="col-lg-12 col-md-12" style="min-height: 120px;background: rgba(0,142 ,173 ,1) url('/img/back-header.png') repeat-x center top;" >
-        <h5 class="text-center hidden-xs" style="color: white">Bienvenue sur le</h5>
-        <h2 class="text-center hidden-xs" style="color: white;margin-bottom: 0;margin-top: 0">site N°1 de mise en relation porteur de projet </h2>
-        <h2 class="text-center hidden-xs" style="color: white;margin-top: 0">et prestataire informatique</h2>
-
-        <h5 class="text-center hidden-sm hidden-md hidden-lg" style="color: white">Bienvenue sur le</h5>
-        <h4 class="text-center hidden-sm hidden-md hidden-lg" style="color: white;margin-bottom: 0;margin-top: 0">site N°1 de mise en relation porteur de projet </h4>
-        <h4 class="text-center hidden-sm hidden-md hidden-lg" style="color: white;margin-top: 0">et prestataire informatique</h4>
-
-        <div class=" top-filter tfilter-box bottom" style="margin-bottom: 20px;">
+    <div class="col-lg-12 col-md-12 " style="max-height: 50px;background-color: #3c8dbc" >
+        <div class=" top-filter tfilter-box bottom " style="margin-bottom: 20px;">
             <div class="container ">
-                <form action="{{route('searchUser')}}" method="post" class="text-center center-block" >
+                <form action="{{route('searchUser')}}" method="post"  class="text-center center-block">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div   class="" >
-
                         <div class="col-sm-4 form-group-lg col-sm-offset-2" style="padding: 5px">
-                            <select data-toggle="tmp" class="form-control" name="rubrique" id="rubrique" style="font-weight: bold">
+                            <select data-toggle="tmp" class="form-control" name="slugPlat" id="rubrique">
                                 <option value="0">Toutes les Plateformes</option>
                                 @foreach($listeOfPlat as $plat)
-                                    <option value="{{$plat->id}}" @isset($currentPlateforme) @if($currentPlateforme->id==$plat->id) selected style="font-weight: bold" @endif  @endisset>{{$plat->libelle}}</option>
+                                    <option value="{{$plat->id}}" @if($currentPlateforme->id==$plat->id) selected @endif>{{$plat->libelle}}</option>
                                 @endforeach
 
                             </select>
                         </div>
                         <div class="col-sm-4 form-group-lg" style="padding: 5px">
-                            <select class="form-control" name="techno" id="techno">
+                            <select class="form-control" name="slugTechno" id="techno">
                                 <option value="0">Toutes les technologies</option>
                                 @foreach($listeOfTechnologies as $techno)
-                                    <option value="{{$techno->id}}">{{$techno->libelle}}</option>
+                                    @if($techno->plateforme->id==$currentPlateforme->id)
+                                        <option value="{{$techno->id}}" @if($currentPlateforme->id==$techno->id) selected @endif>{{$techno->libelle}}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="col-sm-12 col-lg-1 form-group-lg " style="">
-                            <button class="btn btn-lg btn-primary " style="" ><i class="fa fa-search"></i> Rechercher</button>
+                            <button class="btn btn-primary " style="" ><i class="fa fa-search"></i> Rechercher</button>
                         </div>
 
                     </div>
                 </form>
-
             </div>
-
-        </div>
-        <p style="background-color: white;padding-top: 8px" class="text-center">
-            <img height="40" width="150" src="{{ url('/img/play-store.png') }}"  alt="Cinque Terre">
-            <img height="40" width="150" src="{{ url('/img/App-Store.jpg') }}"  alt="Cinque Terre">
-        </p>
-        <div  class="row hidden-xs" style="background-color: white">
-            <div class="col-lg-4 col-md-4 col-sm-4 text-center" >
-                <h4 class="tmp"> <i class="fa fa-trophy"></i> 1ère communauté freelance du Sénégal</h4>
-                <h5 style="font-style: italic">plus de 142 757 freelances inscrits</h5>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 text-center" >
-                <h4 class="tmp"> <i class="fa fa-clock-o"></i> Demandez un devis rapide pour votre projet</h4>
-                <h5 style="font-style: italic">plus de 142 757 freelances inscrits</h5>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 text-center" >
-                <h4 class="tmp"> <i class="fa fa-institution"></i> Nos Agences Digitales</h4>
-                <h5 style="font-style: italic">Devenez agence en créant votre propre vitrine en ligne et profitez de nombreux avantages:</h5>
-            </div>
-
         </div>
     </div>
 @endsection
 
 @section("main_content")
     <div class="row" style="margin-bottom: 10px;">
-        <div class="col-lg-3 col-md-3 hidden-sm hidden-xs"style="padding: 5px" >
+        <div class="col-lg-3 col-md-3 hidden-sm hidden-xs" style="padding: 5px" >
             <div class="panel panel-primary" >
                 <div class="panel-title panel-heading">
                     <h3 class=" text-center ">Catégorie des projets</h3>
@@ -105,76 +77,86 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-7 col-md-9">
-            <div class="row">
-                <div class="adbox-img" >
-                    <div id="transition-timer-carousel" class="carousel slide transition-timer-carousel " data-ride="carousel" style="min-height: 100px">
-                        <div class="carousel-inner" style="">
-                            <div class="item active">
-                                <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
-                            </div>
-                            <div class="item">
-                                <img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre">
-
-                            </div>
-
-                            <div class="item">
-                                <img src="{{ url('/img/ban.png') }}" class="img-thumbnail" alt="Cinque Terre">
-                            </div>
-                            <div class="item">
-                                <img src="{{ url('/img/ban.png') }}" class="img-thumbnail" alt="Cinque Terre">
-                            </div>
-                        </div>
-
-                        <!--img src="https://moatsearch-data.s3.amazonaws.com/creative_screens/7b/f8/d4/7bf8d4dd35362e8a11a418d4c58bd59c.jpg" class="img-thumbnail" alt="Cinque Terre"-->
-                    </div>
-                </div>
-            </div>
+        <div class="col-md-6 col-sm-12 col-xs-12 " style="padding-bottom: 10px;margin-top: 5px">
             <div class="row" style="margin-top: 20px">
-                @if($currentPlateforme!=null)
-                    <div class="panel projet">
+                <!--h4>Derniers Projets en freelance</h4-->
+                @foreach($projets as $projet )
+                    <div class="panel projet col-lg-10 col-lg-offset-1" style="padding-bottom: 10px;padding-top: 10px;border: solid 1px #428bca">
                         <div class="panel-heading" style="margin: 0;padding: 0;padding-left: 5px">
-                            <h4 class="text-primary"><a href="">Primary Panel</a></h4>
+                            @foreach($projet->competences as $techno)
+                                <?php $check=true ?>
+                                @foreach($tmpListe as $tmp)
+                                    @if($tmp==$techno->plateforme->id)
+                                        {{ $check=false}}
+                                    @endif
+                                @endforeach
+                                @if($check==true)
+                                    <img src="/{{$techno->plateforme->logo->url}}" title="{{$techno->plateforme->libelle}}" width="20" height="20" style="margin-left: 0">
+                                    <?php array_push($tmpListe,$techno->plateforme->id) ?>
+                                @endif
+                            @endforeach
+                            <h4  class="text-primary inline"><a href="{{route('detailProjetUser',["slug"=>$projet->slug->content])}}">{{$projet->titre}}</a></h4>
                         </div>
                         <div class="panel-body" style="padding: 5px;color: black;">
-                            <div class="text-summury">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</div>
+                            <div class="text-summury">{{$projet->description}}</div>
                             <div class="competences">
-                                <button class="alert alert-info" style="padding: 0;margin: 0">Lorem </button>
+                                <h6>compétences requises</h6>
+                                <div style="margin-left: 15px">
+                                    @foreach($projet->competences as $techno )
+                                        <button class="alert alert-info" style="padding: 3px;margin: 0">{{$techno->libelle}} </button>
+                                    @endforeach</div>
                             </div>
                         </div>
                         <div class="panel-footer">
-                            <i class="fa fa-clock-o"> il y'a 5 min</i>&nbsp;&nbsp;
-                            <i class="fa fa-eye"> 5 vue(s)</i>&nbsp;&nbsp;
-                            <i class="fa fa-hand-o-up"> 5 offre(s)</i>&nbsp;&nbsp;
+                            <i class="fa fa-clock-o"></i>&nbsp;{{getDureeFromCarbone($projet->created_at)}}
+                            <i class="fa fa-eye"></i> {{$projet->nbrVue}} vue(s)&nbsp;&nbsp;
+                            <i class="fa fa-hand-o-up"> </i>&nbsp;&nbsp;{{count($projet->offres)}} offre(s)&nbsp;&nbsp;&nbsp;
                         </div>
                     </div>
-                    <hr style="border: solid 1px cornflowerblue">
-                    <div class="panel projet">
-                        <div class="panel-heading" style="margin: 0;padding: 0;padding-left: 5px">
-                            <img src="/uploads/plateformes/plateforme_03.png" width="30" height="30"> <h4  class="text-primary inline"><a href="">Primary Panel</a></h4>
-                        </div>
-                        <div class="panel-body" style="padding: 5px;color: black;">
-                            <div class="text-summury">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</div>
-                            <div class="competences">
-                                <button class="alert alert-info" style="padding: 0;margin: 0">Lorem </button>
-                            </div>
-                        </div>
-                        <div class="panel-footer">
-                            <i class="fa fa-clock-o"> il y'a 5 min</i>&nbsp;&nbsp;
-                            <i class="fa fa-eye"> 5 vue(s)</i>&nbsp;&nbsp;
-                            <i class="fa fa-hand-o-up"> 5 offre(s)</i>&nbsp;&nbsp;
-                        </div>
-                    </div>
-                @else
-                    <div class="panel projet">
-                        <img src="{{url('/img/search-icon.png')}}" width="100" height="100"><span style="color: red">0 projet trouvé par rapport à votre recherche</span>
-                        <div class="text-center"><a href="{{route('indexPrestataire')}}" class="btn btn-primary"><i class="fa fa-mail-reply"></i> Retour</a></div>
-                    </div>
-                @endif
+                    <?php $tmpListe=array() ?>
+                @endforeach
             </div>
+            <div class="pull-right">{{ $projets->links() }}</div>
         </div>
-        <div class="col-lg-2 hi" style="border: solid 1px cornflowerblue;margin-top: 100px;min-height: 150px">
-            <img src="{{url('img/sen-delivery.png')}}" height="150">
+        <div class="hidden-md hidden-lg col-sm-12 col-xs-12" style="padding-bottom: 10px;">
+            <div class="row" style="padding: 8px">
+                <!--h4>Derniers Projets en freelance</h4-->
+                @foreach($projets as $projet )
+                    <div class="panel projet col-lg-10 col-lg-offset-1" style="padding-bottom: 10px;padding-top: 10px;border: solid 1px #428bca">
+                        <div class="panel-heading" style="margin: 0;padding: 0;padding-left: 5px">
+                            @foreach($projet->competences as $techno)
+                                <?php $check=true ?>
+                                @foreach($tmpListe as $tmp)
+                                    @if($tmp==$techno->plateforme->id)
+                                        {{ $check=false}}
+                                    @endif
+                                @endforeach
+                                @if($check==true)
+                                    <img src="/{{$techno->plateforme->logo->url}}" title="{{$techno->plateforme->libelle}}" width="20" height="20" style="margin-left: 0">
+                                    <?php array_push($tmpListe,$techno->plateforme->id) ?>
+                                @endif
+                            @endforeach
+                            <h4  class="text-primary inline"><a href="{{route('detailProjetUser',["slug"=>$projet->slug->content])}}">{{$projet->titre}}</a></h4>
+                        </div>
+                        <div class="panel-body" style="padding: 5px;color: black;">
+                            <div class="text-summury">{{$projet->description}}</div>
+                            <div class="competences">
+                                <h6>compétences requises</h6>
+                                <div style="margin-left: 15px">
+                                    @foreach($projet->competences as $techno )
+                                        <button class="alert alert-info" style="padding: 3px;margin: 0">{{$techno->libelle}} </button>
+                                    @endforeach</div>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <i class="fa fa-clock-o"></i>&nbsp;{{getDureeFromCarbone($projet->created_at)}}
+                            <i class="fa fa-eye"></i> {{$projet->nbrVue}} vue(s)&nbsp;&nbsp;
+                            <i class="fa fa-hand-o-up"> </i>&nbsp;&nbsp;{{count($projet->offres)}} offre(s)&nbsp;&nbsp;&nbsp;
+                        </div>
+                    </div>
+                    <?php $tmpListe=array() ?>
+                @endforeach
+            </div>
         </div>
     </div>
 @endsection
@@ -222,6 +204,7 @@
             }
             else
             {
+                _html='<option value="0">Toutes les technologies</option>';
                 for(i=0;i<listeOfTechnologies.length;i++)
                 {
                     if(listeOfTechnologies[i].plateforme_id==$("#rubrique").val())

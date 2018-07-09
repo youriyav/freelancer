@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Agence;
 use App\Budget;
 use App\Commande;
 use App\DemarrageProjet;
@@ -72,14 +73,16 @@ class PrestataireController extends Controller
     {
         $listeOfTechnologies=Technologie::where('isDeleted',0)->get();
         $listeOfPlat=plateforme::where('isDeleted',0)->get();
-        $projets=Projet::where('state',1)->get();
+        $projets=Projet::where('state',1)->paginate(1);
+        $agences=Agence::all();
         JavaScript::put([
             'listeOfTechnologies' => $listeOfTechnologies,
             'listeOfPlat' => $listeOfPlat
         ]);
+        //$projets->withPath('custom/url');
         $tmpListe=array();
         $check=true;
-        return view('prestataire.index',['listeOfTechnologies'=>$listeOfTechnologies,'listeOfPlat'=>$listeOfPlat,"projets"=>$projets,"tmpListe"=>$tmpListe,"check"=>$check]);
+        return view('prestataire.index',['agences'=>$agences,'listeOfTechnologies'=>$listeOfTechnologies,'listeOfPlat'=>$listeOfPlat,"projets"=>$projets,"tmpListe"=>$tmpListe,"check"=>$check]);
     }
     public function noTarifs()
     {
@@ -200,6 +203,7 @@ class PrestataireController extends Controller
     public function indexPlateForme($slugPlateforme,Request $request,Input $input)
     {
         $currentPlateforme=null;
+        $projets=Projet::where('state',1)->paginate(1);
         if($request->method()=="GET")
         {
             $tmpSlug=Slug::where('content',$slugPlateforme)->first();
@@ -222,16 +226,21 @@ class PrestataireController extends Controller
         $listeOfPlat=plateforme::where('isDeleted',0)->get();
         JavaScript::put([
             'listeOfTechnologies' => $listeOfTechnologies,
-            'listeOfPlat' => $listeOfPlat
+            'listeOfPlat' => $listeOfPlat,
+            'currentPlateformeId' => $currentPlateforme->id
         ]);
+        $tmpListe=array();
+        $check=true;
 
-        return view('prestataire.plateforme.index',['listeOfTechnologies'=>$listeOfTechnologies,'listeOfPlat'=>$listeOfPlat,'currentPlateforme'=>$currentPlateforme]);
+        return view('prestataire.plateforme.index',['check'=>$check,'tmpListe'=>$tmpListe,'projets'=>$projets,'listeOfTechnologies'=>$listeOfTechnologies,'listeOfPlat'=>$listeOfPlat,'currentPlateforme'=>$currentPlateforme]);
     }
     public function indexTechnoUser($slugPlateforme,$slugTechno,Request $request,Input $input)
     {
-
         $currentPlateforme=null;
         $currentTechnologie=null;
+        $projets=Projet::where('state',1)->paginate(1);
+        $tmpListe=array();
+        $check=true;
         if($request->method()=="GET")
         {
             $tmpSlug=Slug::where('content',$slugPlateforme)->first();
@@ -244,7 +253,6 @@ class PrestataireController extends Controller
             {
                 $currentTechnologie=$tmpSlug->technologie;
             }
-
         }
         else
         {
@@ -267,25 +275,35 @@ class PrestataireController extends Controller
             'listeOfTechnologies' => $listeOfTechnologies,
             'listeOfPlat' => $listeOfPlat
         ]);
-        return view('prestataire.technologies.index',['listeOfTechnologies'=>$listeOfTechnologies,'listeOfPlat'=>$listeOfPlat,"currentPlateforme"=>$currentPlateforme,"currentTechnologie"=>$currentTechnologie]);
+        return view('prestataire.technologies.index',['check'=>$check,'tmpListe'=>$tmpListe,'projets'=>$projets,'listeOfTechnologies'=>$listeOfTechnologies,'listeOfPlat'=>$listeOfPlat,"currentPlateforme"=>$currentPlateforme,"currentTechnologie"=>$currentTechnologie]);
     }
     public function searchUser(Input $input)
     {
-        $slugPlat=$input->get('slugPlat');
-        $slugTechno=$input->get('slugTechno');
-        dd($slugPlat);
-        if($slugPlat!=0)
+        $idPlat=$input->get('slugPlat');
+        $idTechno=$input->get('slugTechno');
+        //dd($idPlat);
+        if($idPlat!=0)
         {
-            if($slugTechno!=0)
+            $platforme=plateforme::findOrFail($idPlat);
+            if($idTechno!=0)
             {
-
+                $techno=Technologie::findOrFail($idTechno);
+                return redirect()->route('indexTechnoUser',['slugPlateforme'=>$platforme->slug->content,'slugTechno'=>$techno->slug->content]);
+            }
+            else
+            {
+                return redirect()->route('indexPlateFormeUser',['slugPlateforme'=>$platforme->slug->content]);
             }
         }
         else
         {
-            if($slugTechno!=0)
+            if($idTechno!=0)
             {
+                $techno=Technologie::findOrFail($idTechno);
+                $platforme=$techno->plateforme;
+                return redirect()->route('indexTechnoUser',['slugPlateforme'=>$platforme->slug->content,'slugTechno'=>$techno->slug->content]);
             }
+            return redirect()->route('indexPrestataire');
         }
     }
     public function inscription(Input $input,Request $request)
@@ -595,6 +613,10 @@ public  function seConnecter(Input $input,Request $request,$act=1)
                         if($next!=null)
                         {
                             return redirect($next);
+                        }
+                        if(Auth::user()->isAgencyAdmin)
+                        {
+                            return redirect()->route('indexAgence');
                         }
                         return redirect()->route('monCompte');
                     }
@@ -1351,6 +1373,59 @@ public function updateDescription(Input $input,Request $request)
         //$user = Auth::user();
         //$user->prestataire->sites()->save($site);
         return "good";
+    }
+    function sendEmailTo(Input $input,Request $request)
+    {
+        $object=trim($input->get('object'));
+        $email=trim($input->get('email'));
+        $message=trim($input->get('message'));
+        $idUser=$input->get('idUser');
+        $check=false;
+        $code=200;
+        $tabError="{";
+        if($email=="")
+        {
+            $tabError.="\"errorEmail\":\"veuillez remplir ce champs\" ";
+            $code=202;
+            $check=true;
+        }
+        else
+        {
+            if (filter_var($email, FILTER_VALIDATE_EMAIL))
+            {
+                $tabError.="\"errorEmail\":\"good\"";
+            }
+            else
+            {
+                $tabError.="\"errorEmail\":\"adresse mail invalide\"";
+                $code=202;
+                $check=true;
+            }
+        }
+        if($message=="")
+        {
+            if($check)
+            {
+                $tabError.=",";
+            }
+            $tabError.="\"errorMessage\":\"veuillez remplir ce champsff\" ";
+            $code=202;
+        }
+        $tabError.=",\"code\":$code}";
+        if($check)
+        {
+            return $tabError;
+        }
+
+        $mess=new Message();
+        $mess->isReaded=0;
+        $mess->isChatt=0;
+        $mess->message="Titre:$object;<br>email:$email;<br>message:$message";
+        $user=User::findOrFail($idUser);
+        $mess->save();
+        $user->receiveMessage()->save($mess);
+        $mess->save();
+        return "{\"code\":$code}";
     }
 
     function importerImageRealisation(Input $input,Request $request)

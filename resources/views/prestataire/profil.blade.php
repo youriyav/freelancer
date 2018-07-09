@@ -106,10 +106,10 @@
                                     <br>
                                 </div>
                                 <div class="modal-footer">
-                                    <center>
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-envelope"></i> Envoyer un message</button>
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-comments"></i> Chatter</button>
-                                    </center>
+
+                                        <button type="button" class="btn btn-primary" id="btnSendMessage"><i class="fa fa-envelope"></i> Envoyer un message</button>
+                                        <!--button type="button" class="btn btn-primary"><i class="fa fa-comments"></i> Chatter</button-->
+
                                 </div>
                             </div>
                         </div>
@@ -154,10 +154,10 @@
                                     <br>
                                 </div>
                                 <div class="modal-footer">
-                                    <center>
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-envelope"></i> Envoyer un message</button>
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-comments"></i> Chatter</button>
-                                    </center>
+
+                                        <button type="button" class="btn btn-primary" id="btnSendMessage"><i class="fa fa-envelope"></i> Envoyer un message</button>
+                                        <!--button type="button" class="btn btn-primary" ><i class="fa fa-comments"></i> Chatter</button-->
+
                                 </div>
                             </div>
 
@@ -302,6 +302,43 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="send-message-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #3c8dbc;color: white;font-size: 1.5em;font-weight: bold">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white">&times;</span>
+                    </button>
+                    <h5 class="modal-title" id="tile-modal-location">Message</h5>
+                </div>
+                <div class="modal-body">
+                   <div class="form-    group">
+                       <label for="mail">Votre adresse mail<span style="color: red">*</span></label>
+                       <input type="text" class="form-control" id="mail" placeholder="contact@innov.com">
+                       <input type="hidden" value="{{$user->id}}" class="form-control" id="idUser">
+                       <p style="color: red" class="inputError" hidden>veuillez remplir ce champs</p>
+                   </div>
+                    <div class="form-group">
+                       <label for="titre">Objet du message <span style="color: red">*</span></label>
+                       <input type="text" class="form-control" id="titre">
+                        <p style="color: red" class="inputError" hidden>veuillez remplir ce champs</p>
+                   </div>
+                    <div class="form-group">
+                        <label for="message">Message <span style="color: red">*</span></label>
+                        <textarea class="form-control"  id="message" placeholder="votre message..."></textarea>
+                        <p style="color: red"  class="inputError" hidden >veuillez remplir ce champs</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button  class="btn btn-danger btn-large" data-dismiss="modal">Annuler</button>
+                    <button class="btn btn-primary btn-large" id="btn-send"  data-loading-text="<i class='fa fa-spinner fa-spin '></i>envoie..."><i class="fa fa-send"></i> Envoyer</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @include('footer')
 @section('js')
@@ -324,8 +361,69 @@
     <script src="{{url('/js/assets/formsInit.js')}}"></script>
     <script>
         $(function () {
+            $("#btn-send").click(function () {
+                $this=$(this);
+              $check=0;
 
+              $txtTitle=$("#titre").val();
+              $txtEmail=$("#mail").val();
+              $message=$("#message").val();
+              $txtUser=$("#idUser").val();
+              $txtError=$(".inputError");
+              $txtError.hide();
+              if($txtTitle=="")
+              {
+                  $check++;
+                  $txtError.eq(1).show();
+              }
+              if($txtEmail=="")
+              {
+                  $check++;
+                  $txtError.eq(0).show();
+              }
+              if($message=="")
+              {
+                  $check++;
+                  $txtError.eq(2).show();
+              }
+              if($check!=0)
+              {
+                 // return 0;
+              }
+                $this.button('loading');
+                $.ajax({
+                    url :"/send-email-to",
+                    type : "POST",
+                    data:{"idUser":$txtUser,"object":$txtTitle,"message":$message,"email":$txtEmail,"_token":"<?php echo csrf_token() ?>"},
+                    success : function(json)
+                    {
+                        $this.button('reset');
+                        console.log(json);
+                        _data=JSON.parse(json);
+                        console.log(_data);
+                        if(_data.code!=200)
+                        {
+                            console.log(_data.errorEmail);
+                            $txtError.eq(0).text(_data.errorEmail);
+                            //$txtError.eq(1).text(_data.errorMessage);
+                            $txtError.show();
+                            return 0;
+                        }
 
+                        $("#send-message-modal").modal('toggle');
+
+                    },
+                    error :function(xhr,errmsg,err)
+                    {
+                        console.log(xhr);
+                        $this.button('reset');
+                        $("#send-message-modal").modal('toggle');
+                    }
+                });
+            });
+            $("#btnSendMessage").click(function () {
+               $("#send-message-modal").modal('toggle');
+            });
             $(".btnBack").click(function () {
                 window.history.back();
             });
